@@ -17,6 +17,7 @@ public class SQLiteService implements IDataBaseService{
 
     public SQLiteService(){
         try {
+            Class.forName("org.sqlite.JDBC"); //remove if doesn't work
             File file = new File(this.dbPath);
             boolean exist = file.exists();
             dbConnection = DriverManager.getConnection(this.url + this.dbPath);
@@ -35,70 +36,64 @@ public class SQLiteService implements IDataBaseService{
      * date is YYY-MM-DD or DD/MM/YY  VARCHAR(12) 4-Year 2-Month 2-Day 2-Slashes
      * and 2 EXTRA*/
     public void CreateDB(){
-        String customersTable = "CREATE TABLE Customers(" +
-                "customerId INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "name VARCHAR(45)," +
-                "phone VARCHAR(45)," +
-                "carModel VARCHAR(45)," +
-                "invoiceId VARCHAR(45)" +
-                ");";
+        String customersTable = "CREATE TABLE Customers ("+
+                "customerId	INTEGER PRIMARY KEY AUTOINCREMENT,"+ 
+                "name VARCHAR(45)," + 
+                "phone VARCHAR(45),"+
+				"carModel VARCHAR(45),"+
+				"invoiceId VARCHAR(45),"+
+				"FOREIGN KEY(invoiceId) REFERENCES Invoices(invoiceId) ON DELETE CASCADE"+
+				");";
 
 
-        String usersTable = "CREATE TABLE Users(" +
-                "username VARCHAR(45) PRIMARY KEY NOT NULL," +
-                "password VARCHAR(45)," +
-                "role VARCHAR(45)" +
-                ");";
+        String usersTable = "CREATE TABLE Users("+ 
+                "username VARCHAR(45) PRIMARY KEY NOT NULL,"+
+				"password VARCHAR(45),"+
+				"role VARCHAR(45));";
 
-        String productTable = "CREATE TABLE Product(" +
-                "productId INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "name VARCHAR(65)," +
-                "range REAL NULL," +
-                "viscosity VARCHAR(45) NULL," +
-                "price REAL," +
-                "expiryDate VARCHAR(12)," + //YY-MM-DD or DD-MM-YY
-                "units INTEGER," +
-                "vendor VARCHAR(45)," +
-                "marketPrice REAL" +
-                ");";
+        String productTable = "CREATE TABLE Product("+
+                "productId INTEGER PRIMARY KEY AUTOINCREMENT,"+
+				"name VARCHAR(65),"+
+				"range REAL NULL,"+
+				"viscosity VARCHAR(45) NULL,"+
+				"price REAL,"+
+				"expiryDate VARCHAR(12),"+
+				"units INTEGER,"+
+				"vendor VARCHAR(45),"+
+				"marketPrice REAL);";
 
-        String invoicesTable = "CREATE TABLE Invoices(" +
-                "invoiceId INTEGER PRIMARY KEY Autoincrement," +
-                "customerId INTEGER," +
-                "username VARCHAR(45)," +
-                "totalAmount REAL," +
-                "date VARCHAR(12)," +
-                "FOREIGN KEY(username) REFERENCES Users(username)" +
-                ");";
+        String invoicesTable = "CREATE TABLE Invoices("+
+                "invoiceId INTEGER PRIMARY KEY Autoincrement,"+
+				"customerId INTEGER,"+
+				"username VARCHAR(45),"+
+				"totalAmount REAL,"+
+				"date VARCHAR(12),"+
+				"FOREIGN KEY(username) REFERENCES Users(username));";
 
-        String invoiceProductTable= "CREATE TABLE InvoiceProduct(" +
-                "invoiceId INTEGER PRIMARY KEY," +
-                "productId INTEGER," +
-                "FOREIGN KEY(invoiceId) REFERENCES Invoices(invoiceId)," +
-                "FOREIGN KEY(productId) REFERENCES Product(productId)" +
-                ");";
+        String invoiceProductTable= "CREATE TABLE InvoiceProduct("+
+                "invoiceId INTEGER PRIMARY KEY,"+
+				"productId INTEGER,"+
+				"FOREIGN KEY(invoiceId) REFERENCES Invoices(invoiceId),"+
+				"FOREIGN KEY(productId) REFERENCES Product(productId));";
 
-        String shelfProductTable = "CREATE TABLE ShelfProduct(" +
-                "productId INTEGER," +
-                "shelfNumber VARCHAR(45) PRIMARY KEY," +
-                "units INTEGER," +
-                "expiryDate VARCHAR(12) NULL," +
-                "FOREIGN KEY(productId) REFERENCES Product(productId)" +
-                ");";
+        String shelfProductTable = "CREATE TABLE ShelfProduct("+
+                "productId INTEGER,"+
+				"shelfNumber VARCHAR(45) PRIMARY KEY,"+
+				"units INTEGER,"+
+				"expiryDate VARCHAR(12) NULL,"+
+				"FOREIGN KEY(productId) REFERENCES Product(productId));";
 
-        String reportsTable = "CREATE TABLE Reports(" +
-                "date VARCHAR(12)," +
-                "username VARCAHR(45) PRIMARY KEY," +
-                "reportId INTEGER," +
-                "FOREIGN KEY(username) REFERENCES Users(username)" +
-                ");";
+        String reportsTable = "CREATE TABLE Reports("+
+                "date VARCHAR(12),"+
+				"username VARCAHR(45) PRIMARY KEY,"+
+				"reportId INTEGER,"+
+				"FOREIGN KEY(username) REFERENCES Users(username));";
 
 
-        String reportInvoicesTable = "CREATE TABLE ReportInvoices(" +
-                "reportId INTEGER PRIMARY KEY," +
-                "invoiceId INTEGER," +
-                "FOREIGN KEY(invoiceId) REFERENCES Invoices(invoiceId)" +
-                ");";
+        String reportInvoicesTable = "CREATE TABLE ReportInvoices("+
+            "reportId INTEGER PRIMARY KEY,"+
+				"invoiceId INTEGER,"+
+				"FOREIGN KEY(invoiceId) REFERENCES Invoices(invoiceId));";
         try {
             statement.execute(customersTable);
             statement.execute(usersTable);
@@ -141,7 +136,7 @@ public class SQLiteService implements IDataBaseService{
 
     @Override
     public User getUser(String username) {
-        String getUser = "SELECT * FROM Users WHERE username =?";
+        String getUser = "SELECT * FROM Users WHERE username = ?";
         try{
             PreparedStatement preparedStatement = dbConnection.prepareStatement(getUser);
             preparedStatement.setString(1,username);
