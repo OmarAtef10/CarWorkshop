@@ -6,12 +6,12 @@ import Model.User;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Objects;
 
 public class UserManager {
     private Hashtable<Action, ArrayList<Role>> permissions;
-    private User currentUser;
+    private User currentUser = null;
     private static UserManager userManager;
-
 
     private UserManager() {
         this.permissions = new Hashtable<>();
@@ -32,13 +32,18 @@ public class UserManager {
         }
         permissions.get(Action.VIEW_SHELF).add(Role.EMPLOYEE);
         permissions.get(Action.EDIT_SHELF).add(Role.EMPLOYEE);
-
     }
 
-//    public User login(String username, String password) {
-//        //TODO ht-login el user mn el DB
-//
-//    }
+    public User login(String username, String password) {
+        UserDao userDao = new UserDao();
+        User user = userDao.getUser(username);
+        if( user.getPassword().equals(password) ){
+            this.currentUser = user;
+        }else{
+            System.out.println("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+        }
+        return currentUser;
+    }
 
     public void register(String username, String password){
         User registered = new User(username,password);
