@@ -25,8 +25,10 @@ public interface IDataBaseService {
     public ArrayList<Report> getReportsByDate(String date);
     public Report getReportByUsernameDate(String userName, String date);
 
-    public boolean addInvoice(Invoice invoice);
-    public boolean removeInvoice(int Id);
+    public Invoice addInvoice(Invoice invoice);
+    public Invoice removeInvoice(int Id);
+    public Invoice updatInvoice(Invoice invoice);
+    public Invoice getInvoice(int id);
 
 
 }

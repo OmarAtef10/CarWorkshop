@@ -4,20 +4,21 @@ import Context.DBContext;
 import Model.User;
 
 public class UserDao {
-    public boolean addUser(User user) {
-        return false;
+    //TODO: Implement methods
+    public User addUser(User user) {
+        return null;
     }
 
     public User getUser(String username) {
         return DBContext.getDBContext().getDbService().getUser(username);
     }
 
-    public boolean updateUser(User user) {
-        return false;
+    public User updateUser(User user) {
+        return null;
     }
 
-    public boolean deleteUser(String username) {
-        return false;
+    public User deleteUser(String username) {
+        return null;
     }
 }
 

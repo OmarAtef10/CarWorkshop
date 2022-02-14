@@ -192,13 +192,25 @@ public class SQLiteService implements IDataBaseService{
 
     ///////////////////////////////////////////////////////////////////////////////////
     @Override
-    public boolean addInvoice(Invoice invoice) {
-        return false;
+    public Invoice addInvoice(Invoice invoice) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    @Override
+    public Invoice removeInvoice(int Id) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     @Override
-    public boolean removeInvoice(int Id) {
-        return false;
+    public Invoice updatInvoice(Invoice invoice) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    @Override
+    public Invoice getInvoice(int id) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }
 
