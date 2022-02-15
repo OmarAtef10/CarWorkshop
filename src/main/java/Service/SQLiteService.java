@@ -66,7 +66,7 @@ public class SQLiteService implements IDataBaseService{
 				"customerId INTEGER,"+
 				"username VARCHAR(45),"+
 				"totalAmount REAL,"+
-				"date VARCHAR(12),"+
+				"date VARCHAR(45),"+
 				"FOREIGN KEY(username) REFERENCES Users(username));";
 
         String invoiceProductTable = "CREATE TABLE InvoiceProduct("+
@@ -110,7 +110,6 @@ public class SQLiteService implements IDataBaseService{
         }
     }
 
-
     @Override
     public boolean addProduct(Product product) {
         return false;
@@ -133,6 +132,23 @@ public class SQLiteService implements IDataBaseService{
 /////////////////////////////////////////////////////////////////////////////
     @Override
     public boolean addUser(User user) {
+        String addUser = "INSERT INTO Users (username,password,role)" +
+                "VALUES(?,?,?);";
+
+        try {
+            if(getUser(user.getUserName()) != null){
+                //Username or User itself already exists.
+                return false;
+            }
+            PreparedStatement preparedStatement = dbConnection.prepareStatement(addUser);
+            preparedStatement.setString(1,user.getUserName());
+            preparedStatement.setString(2,user.getPassword());
+            preparedStatement.setString(3,user.getRole().toString());
+            preparedStatement.executeUpdate();
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return false;
     }
 
@@ -153,8 +169,21 @@ public class SQLiteService implements IDataBaseService{
     }
 
     @Override
-    public boolean updateUser(User user) {
-        return false;
+    public User updateUser(User user) {
+        String updateUser ="UPDATE Users SET password = ?,role = ?" +
+                "WHERE username = ?;";
+
+        try {
+            PreparedStatement preparedStatement = dbConnection.prepareStatement(updateUser);
+            preparedStatement.setString(1,user.getPassword());
+            preparedStatement.setString(2,user.getRole().toString());
+            preparedStatement.setString(3,user.getUserName());
+            preparedStatement.executeUpdate();
+            return user;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override

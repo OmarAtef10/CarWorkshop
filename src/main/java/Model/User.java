@@ -47,4 +47,9 @@ public class User {
     public Report getSessionReport() {
         return sessionReport;
     }
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }

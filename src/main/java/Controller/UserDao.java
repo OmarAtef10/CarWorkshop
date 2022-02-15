@@ -5,8 +5,8 @@ import Model.User;
 
 public class UserDao {
     //TODO: Implement methods
-    public User addUser(User user) {
-        return null;
+    public boolean addUser(User user) {
+        return DBContext.getDBContext().getDbService().addUser(user);
     }
 
     public User getUser(String username) {
@@ -14,7 +14,7 @@ public class UserDao {
     }
 
     public User updateUser(User user) {
-        return null;
+        return DBContext.getDBContext().getDbService().updateUser(user);
     }
 
     public User deleteUser(String username) {

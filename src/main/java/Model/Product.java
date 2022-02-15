@@ -2,7 +2,7 @@ package Model;
 
 public class Product {
 
-    public String getId() {
+    public Integer getId() {
         return null;
     }
 

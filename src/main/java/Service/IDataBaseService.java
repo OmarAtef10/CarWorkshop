@@ -15,7 +15,7 @@ public interface IDataBaseService {
 
     public boolean addUser(User user);
     public User getUser(String username);
-    public boolean updateUser(User user);
+    public User updateUser(User user);
     public boolean deleteUser(String username);
 
     public boolean addReport(Report report);

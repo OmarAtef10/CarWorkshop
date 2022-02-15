@@ -3,8 +3,11 @@ package Controller;
 import Model.Action;
 import Model.Role;
 import Model.User;
+import com.sun.istack.internal.NotNull;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Hashtable;
 import java.util.Objects;
 
@@ -12,8 +15,10 @@ public class UserManager {
     private Hashtable<Action, ArrayList<Role>> permissions;
     private User currentUser = null;
     private static UserManager userManager;
+    private UserDao userDao = null;
 
     private UserManager() {
+        this.userDao = new UserDao();
         this.permissions = new Hashtable<>();
         initPermissions();
     }
@@ -34,27 +39,30 @@ public class UserManager {
         permissions.get(Action.EDIT_SHELF).add(Role.EMPLOYEE);
     }
 
-    public User login(String username, String password) {
+    public User login(String username, String password) throws Exception {
+        LocalDateTime currentSessionStart = LocalDateTime.now();
+
         UserDao userDao = new UserDao();
         User user = userDao.getUser(username);
-        if( user.getPassword().equals(password) ){
+        if(user == null){
+            throw new Exception("User doesn't exist!");
+        }else if( user.getPassword().equals(password) ){
             this.currentUser = user;
         }else{
-            System.out.println("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+            throw new Exception("Wrong password!");
         }
         return currentUser;
     }
 
-    public void register(String username, String password){
-        User registered = new User(username,password);
-        //TODO ht-add el user fl DB
+    public User register(String username,String password){
+        User newRegistered = new User(username,password);
+        if(! this.userDao.addUser(newRegistered)){
+            return null;
+        }
+        return newRegistered;
     }
 
-    public static void main(String[] args) {
-
-        UserManager userManager = UserManager.getInstance();
-        System.out.println(userManager.permissions);
-
-
+    public User updateUser(User user){
+        return this.userDao.updateUser(user);
     }
 }
