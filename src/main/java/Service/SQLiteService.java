@@ -73,8 +73,8 @@ public class SQLiteService implements IDataBaseService{
                 "invoiceId INTEGER,"+
 				"productId INTEGER,"+
 				"FOREIGN KEY(invoiceId) REFERENCES Invoices(invoiceId),"+
-				"FOREIGN KEY(productId) REFERENCES Product(productId)),"+
-                "PRIMARY KEY(invoiceId, productId);";
+				"FOREIGN KEY(productId) REFERENCES Product(productId),"+
+                "PRIMARY KEY(invoiceId, productId));";
 
         String shelfProductTable = "CREATE TABLE ShelfProduct("+
                 "productId INTEGER,"+
