@@ -45,7 +45,6 @@ public class SQLiteService implements IDataBaseService{
 				"FOREIGN KEY(invoiceId) REFERENCES Invoices(invoiceId) ON DELETE CASCADE"+
 				");";
 
-
         String usersTable = "CREATE TABLE Users("+ 
                 "username VARCHAR(45) PRIMARY KEY NOT NULL,"+
 				"password VARCHAR(45),"+
@@ -70,11 +69,12 @@ public class SQLiteService implements IDataBaseService{
 				"date VARCHAR(12),"+
 				"FOREIGN KEY(username) REFERENCES Users(username));";
 
-        String invoiceProductTable= "CREATE TABLE InvoiceProduct("+
-                "invoiceId INTEGER PRIMARY KEY,"+
+        String invoiceProductTable = "CREATE TABLE InvoiceProduct("+
+                "invoiceId INTEGER,"+
 				"productId INTEGER,"+
 				"FOREIGN KEY(invoiceId) REFERENCES Invoices(invoiceId),"+
-				"FOREIGN KEY(productId) REFERENCES Product(productId));";
+				"FOREIGN KEY(productId) REFERENCES Product(productId)),"+
+                "PRIMARY KEY(invoiceId, productId);";
 
         String shelfProductTable = "CREATE TABLE ShelfProduct("+
                 "productId INTEGER,"+
@@ -85,14 +85,16 @@ public class SQLiteService implements IDataBaseService{
 
         String reportsTable = "CREATE TABLE Reports("+
                 "date VARCHAR(12),"+
-				"username VARCAHR(45) PRIMARY KEY,"+
+				"username VARCAHR(45),"+
 				"reportId INTEGER,"+
+                "PRIMARY KEY(username,date),"+
 				"FOREIGN KEY(username) REFERENCES Users(username));";
 
 
         String reportInvoicesTable = "CREATE TABLE ReportInvoices("+
-            "reportId INTEGER PRIMARY KEY,"+
+                "reportId INTEGER,"+
 				"invoiceId INTEGER,"+
+                "PRIMARY KEY(reportId, invoiceId),"+
 				"FOREIGN KEY(invoiceId) REFERENCES Invoices(invoiceId));";
         try {
             statement.execute(customersTable);
