@@ -239,7 +239,18 @@ public class SQLiteService implements IDataBaseService {
     }
 
     @Override
-    public boolean deleteProduct(int productId) {
+    public boolean deleteProduct(String productName, String manufacturer) {
+        String deleteProduct = "DELETE FROM Product WHERE name = ? AND vendor = ?; ";
+
+        try {
+            PreparedStatement preparedStatement = dbConnection.prepareStatement(deleteProduct);
+            preparedStatement.setString(1, productName);
+            preparedStatement.setString(2, manufacturer);
+            preparedStatement.executeUpdate();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
@@ -302,6 +313,19 @@ public class SQLiteService implements IDataBaseService {
 
     @Override
     public boolean deleteUser(String username) {
+        String deleteUser = "DELETE FROM Users WHERE username= ?; ";
+
+        try {
+            PreparedStatement preparedStatement = dbConnection.prepareStatement(deleteUser);
+            preparedStatement.setString(1, username);
+            preparedStatement.executeUpdate();
+            return true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
         return false;
     }
 
@@ -375,6 +399,11 @@ class Main {
         sqLiteService.updateProduct(oil);
         ServicePart servicePart = new ServicePart("some Filters", "Tifa", 110, 5, 6);
         sqLiteService.updateProduct(servicePart);
+        sqLiteService.deleteProduct("some Filters", "Tifa");
+
+        User user = new User("omar", "1010abab");
+        sqLiteService.addUser(user);
+        sqLiteService.deleteUser("omar");
 
 
     }

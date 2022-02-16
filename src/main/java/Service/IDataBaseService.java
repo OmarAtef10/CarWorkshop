@@ -11,7 +11,7 @@ public interface IDataBaseService {
     public boolean addProduct(Product product);
     public Product getProduct(String productName , String manufacturer);
     public boolean updateProduct(Product product);
-    public boolean deleteProduct(int productId);
+    public boolean deleteProduct(String productName, String manufacturer);
 
     public boolean addUser(User user);
     public User getUser(String username);

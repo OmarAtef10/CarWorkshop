@@ -17,8 +17,8 @@ public class ProductDao {
         return DBContext.getDBContext().getDbService().updateProduct(product);
     }
 
-    public boolean deleteProduct(int id){
-        return DBContext.getDBContext().getDbService().deleteProduct(id);
+    public boolean deleteProduct(String productName, String manufacturer){
+        return DBContext.getDBContext().getDbService().deleteProduct(productName,manufacturer);
     }
 
     public Product shelveProduct(int productId, String shelfId, int units){
