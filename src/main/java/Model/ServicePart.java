@@ -3,8 +3,8 @@ package Model;
 public class ServicePart extends Product{
     private String partName;
 
-    public ServicePart(String partName,String manufacturer, int units, double pricePerUnit, double marketPrice) {
-        super(manufacturer, units, pricePerUnit, marketPrice);
+    public ServicePart(String partName,String vendor, int units, double pricePerUnit, double marketPrice) {
+        super(vendor, units, pricePerUnit, marketPrice);
         this.partName=partName;
         this.setProductName(partName);
     }
