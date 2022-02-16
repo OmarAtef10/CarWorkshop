@@ -21,12 +21,12 @@ public class Cart {
     }
 
     public void addProduct(Product product, int units){
-        products.put(product.getId(), units);
+        products.put(product.getProductID(), units);
         setTotal(getTotal() + (product.getPricePerUnit() * units)); 
     }
 
     public void removeProduct(Product product){
-        int units = products.remove(product.getId());
+        int units = products.remove(product.getProductID());
         setTotal(getTotal() - (units * product.getPricePerUnit()));
     }
 }

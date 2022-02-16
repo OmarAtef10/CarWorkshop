@@ -1,19 +1,20 @@
 package Controller;
 
+import Context.DBContext;
 import Model.Product;
 
 public class ProductDao {
     //TODO: Implment methods
-    public Product addProduct(Product product){
-        return null;
+    public boolean addProduct(Product product){
+        return DBContext.getDBContext().getDbService().addProduct(product);
     };
     
-    public Product getProduct(int id){
-        return null;
+    public Product getProduct(String name , String vendor){
+        return DBContext.getDBContext().getDbService().getProduct(name, vendor);
     };
 
-    public Product updateProduct(Product product){
-        return null;
+    public boolean updateProduct(Product product){
+        return DBContext.getDBContext().getDbService().updateProduct(product);
     }
 
     public Product deleteProduct(int id){

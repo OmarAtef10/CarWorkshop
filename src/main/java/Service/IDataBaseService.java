@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public interface IDataBaseService {
     public boolean addProduct(Product product);
-    public Product getProduct(String productId);
+    public Product getProduct(String productName , String manufacturer);
     public boolean updateProduct(Product product);
     public boolean deleteProduct(String productId);
 
