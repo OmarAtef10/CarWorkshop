@@ -111,7 +111,7 @@ public class SQLiteService implements IDataBaseService {
 
     @Override
     public boolean addProduct(Product product) {
-        if (getProduct(product.getProductName(), product.getManufacturer()) != null) {
+        if (getProduct(product.getProductName(), product.getVendor()) != null) {
 
             return false;
         }
@@ -128,7 +128,7 @@ public class SQLiteService implements IDataBaseService {
                 preparedStatement.setDouble(4, product.getPricePerUnit());
                 preparedStatement.setString(5, ((Oil) product).getExpiryDate());
                 preparedStatement.setInt(6, product.getUnits());
-                preparedStatement.setString(7, product.getManufacturer());
+                preparedStatement.setString(7, product.getVendor());
                 preparedStatement.setDouble(8, product.getMarketPrice());
                 preparedStatement.executeUpdate();
                 return true;
@@ -139,7 +139,7 @@ public class SQLiteService implements IDataBaseService {
                 preparedStatement.setDouble(4, product.getPricePerUnit());
                 preparedStatement.setString(5, null);
                 preparedStatement.setInt(6, product.getUnits());
-                preparedStatement.setString(7, product.getManufacturer());
+                preparedStatement.setString(7, product.getVendor());
                 preparedStatement.setDouble(8, product.getMarketPrice());
                 preparedStatement.executeUpdate();
                 return true;
@@ -211,7 +211,7 @@ public class SQLiteService implements IDataBaseService {
                 preparedStatement.setInt(3, product.getUnits());
                 preparedStatement.setString(4, ((Oil) product).getExpiryDate());
                 preparedStatement.setString(5, product.getProductName());
-                preparedStatement.setString(6, product.getManufacturer());
+                preparedStatement.setString(6, product.getVendor());
                 preparedStatement.executeUpdate();
                 return true;
             } catch (Exception e) {
@@ -228,7 +228,7 @@ public class SQLiteService implements IDataBaseService {
                 preparedStatement.setDouble(2, product.getMarketPrice());
                 preparedStatement.setInt(3, product.getUnits());
                 preparedStatement.setString(4, product.getProductName());
-                preparedStatement.setString(5, product.getManufacturer());
+                preparedStatement.setString(5, product.getVendor());
                 preparedStatement.executeUpdate();
                 return true;
             } catch (Exception e) {
@@ -239,7 +239,7 @@ public class SQLiteService implements IDataBaseService {
     }
 
     @Override
-    public boolean deleteProduct(String productId) {
+    public boolean deleteProduct(int productId) {
         return false;
     }
 
@@ -307,13 +307,13 @@ public class SQLiteService implements IDataBaseService {
 
     ////////////////////////////////////////////////////////////////////////////
     @Override
-    public boolean addReport(Report report) {
-        return false;
+    public Report addReport(Report report) {
+        return null;
     }
 
     @Override
-    public boolean deleteReport(int reportId) {
-        return false;
+    public Report deleteReport(int reportId) {
+        return null;
     }
 
     @Override

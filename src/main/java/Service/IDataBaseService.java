@@ -11,15 +11,15 @@ public interface IDataBaseService {
     public boolean addProduct(Product product);
     public Product getProduct(String productName , String manufacturer);
     public boolean updateProduct(Product product);
-    public boolean deleteProduct(String productId);
+    public boolean deleteProduct(int productId);
 
     public boolean addUser(User user);
     public User getUser(String username);
     public User updateUser(User user);
     public boolean deleteUser(String username);
 
-    public boolean addReport(Report report);
-    public boolean deleteReport(int reportId);
+    public Report addReport(Report report);
+    public Report deleteReport(int reportId);
     public Report updateReport(Report report);
     public ArrayList<Report> getReportsByUsername(String userName);
     public ArrayList<Report> getReportsByDate(String date);

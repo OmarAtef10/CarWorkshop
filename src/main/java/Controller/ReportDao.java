@@ -1,22 +1,35 @@
 package Controller;
 
+import Context.DBContext;
 import Model.Report;
+import org.sqlite.core.DB;
+
+import java.util.ArrayList;
 
 public class ReportDao {
     //TODO: implment methods
     public Report addReport(Report report){
-        return null;
+        return DBContext.getDBContext().getDbService().addReport(report);
     };
-    
-    public Report getReport(int id){
-        return null;
-    };
+
+    public Report deleteReport(int reportId){
+        return DBContext.getDBContext().getDbService().deleteReport(reportId);
+    }
 
     public Report updateReport(Report report){
-        return null;
+        return DBContext.getDBContext().getDbService().updateReport(report);
     }
 
-    public Report deleteReport(int id){
-        return null;
+    public ArrayList<Report> getReportsByUsername(String userName){
+        return DBContext.getDBContext().getDbService().getReportsByUsername(userName);
     }
+
+    public ArrayList<Report> getReportsByDate(String date){
+        return DBContext.getDBContext().getDbService().getReportsByDate(date);
+    }
+
+    public Report getReportByUsernameDate(String userName, String date){
+        return DBContext.getDBContext().getDbService().getReportByUsernameDate(userName,date);
+    }
+
 }

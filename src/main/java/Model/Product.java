@@ -1,22 +1,19 @@
 package Model;
 
-import java.util.Hashtable;
-
 public abstract class Product {
-
     private String productName;
-    private String manufacturer;
+    private String vendor;
     private int units;
     private double pricePerUnit;
     private double marketPrice;
-    private int productID;
+    private int productId;
 
-
-    public Product(String manufacturer, int units, double pricePerUnit, double marketPrice) {
-        this.manufacturer = manufacturer;
+    public Product(String vendor, int units, double pricePerUnit, double marketPrice) {
+        this.vendor = vendor;
         this.units = units;
         this.pricePerUnit = pricePerUnit;
         this.marketPrice = marketPrice;
+        this.productId = -1;
     }
 
     public String getProductName() {
@@ -27,12 +24,12 @@ public abstract class Product {
         this.productName = productName;
     }
 
-    public String getManufacturer() {
-        return manufacturer;
+    public String getVendor() {
+        return vendor;
     }
 
-    public void setManufacturer(String manufacturer) {
-        this.manufacturer = manufacturer;
+    public void setVendor(String vendor) {
+        this.vendor = vendor;
     }
 
     public int getUnits() {
@@ -59,11 +56,11 @@ public abstract class Product {
         this.marketPrice = marketPrice;
     }
 
-    public int getProductID() {
-        return productID;
+    public int getProductId() {
+        return productId;
     }
 
-    public void setProductID(int productID) {
-        this.productID = productID;
+    public void setProductId(int productId) {
+        this.productId = productId;
     }
 }

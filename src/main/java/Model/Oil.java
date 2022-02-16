@@ -1,5 +1,7 @@
 package Model;
 
+import java.sql.ResultSet;
+
 public class Oil extends Product {
     private int mileage;
     private String viscosity;
@@ -7,15 +9,36 @@ public class Oil extends Product {
     private int containerPrice;
     private String expiryDate;
 
-    public Oil(String manufacturer, int units, double pricePerContainer, double marketPrice, String viscosity, int mileage, String expiryDate) {
-        super(manufacturer, units, pricePerContainer, marketPrice);
-        String productName = manufacturer + " " + mileage + " " + viscosity;
+
+    public Oil(String vendor, int units, double pricePerContainer, double marketPrice, String viscosity, int mileage, String expiryDate) {
+        super(vendor, units, pricePerContainer, marketPrice);
+        String productName = vendor + " " + mileage + " " + viscosity;
         this.setProductName(productName);
-        this.setMileage(mileage);
-        this.setViscosity(viscosity);
-        this.setPricePerContainer(pricePerContainer);
+        this.mileage = mileage;
+        this.viscosity = viscosity;
+        this.pricePerContainer = pricePerContainer;
         this.expiryDate = expiryDate;
 
+    }
+
+    public static Oil fromResultSet(ResultSet resultSet){
+        Oil oil = null;
+        try {
+            oil = new Oil(
+                    resultSet.getString("vendor"),
+                    resultSet.getInt("units"),
+                    resultSet.getDouble("price"),
+                    resultSet.getDouble("marketPrice"),
+                    resultSet.getString("viscosity"),
+                    resultSet.getInt("range"),
+                    resultSet.getString("expiryDate")
+            );
+            oil.setProductName(oil.getVendor()+" "+oil.getMileage()+" "+oil.getViscosity());
+            oil.setProductId( resultSet.getInt("productId") );
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return oil;
     }
 
     public int getMileage() {
@@ -61,7 +84,8 @@ public class Oil extends Product {
     @Override
     public String toString() {
         return "Oil{" +
-                "mileage=" + mileage +
+                "productId="+ getProductId() +
+                ", mileage=" + mileage +
                 ", viscosity='" + viscosity + '\'' +
                 ", pricePerContainer=" + pricePerContainer +
                 ", containerPrice=" + containerPrice +
