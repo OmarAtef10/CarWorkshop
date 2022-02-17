@@ -5,7 +5,6 @@ import java.sql.ResultSet;
 public class Oil extends Product {
     private int mileage;
     private String viscosity;
-    private double pricePerContainer;
     private int containerPrice;
     private String expiryDate;
 
@@ -16,9 +15,7 @@ public class Oil extends Product {
         this.setProductName(productName);
         this.mileage = mileage;
         this.viscosity = viscosity;
-        this.pricePerContainer = pricePerContainer;
         this.expiryDate = expiryDate;
-
     }
 
     public static Oil fromResultSet(ResultSet resultSet){
@@ -33,6 +30,7 @@ public class Oil extends Product {
                     resultSet.getInt("range"),
                     resultSet.getString("expiryDate")
             );
+
             oil.setProductName(oil.getVendor()+" "+oil.getMileage()+" "+oil.getViscosity());
             oil.setProductId( resultSet.getInt("productId") );
         }catch (Exception e){
@@ -57,14 +55,6 @@ public class Oil extends Product {
         this.viscosity = viscosity;
     }
 
-    public double getPricePerContainer() {
-        return pricePerContainer;
-    }
-
-    public void setPricePerContainer(double pricePerContainer) {
-        this.pricePerContainer = pricePerContainer;
-    }
-
     public int getContainerPrice() {
         return containerPrice;
     }
@@ -87,7 +77,6 @@ public class Oil extends Product {
                 "productId="+ getProductId() +
                 ", mileage=" + mileage +
                 ", viscosity='" + viscosity + '\'' +
-                ", pricePerContainer=" + pricePerContainer +
                 ", containerPrice=" + containerPrice +
                 ", expiryDate='" + expiryDate + '\'' +
                 '}';

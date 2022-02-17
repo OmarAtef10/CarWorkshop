@@ -1,26 +1,61 @@
 package Model;
 
+import java.sql.ResultSet;
+
 public class Customer {
-    private int userId;
+    private int customerId;
     private String name;
     private String mobileNumber;
     private String carModel;
     private Cart cart;
 
-    public Customer(int userId,String name,String mobileNumber,String carModel){
-        this.userId = userId;
+    public Customer(){}
+
+    public Customer(int customerId, String name, String mobileNumber, String carModel){
+        this.customerId = customerId;
         this.name = name;
         this.mobileNumber = mobileNumber;
         this.carModel=carModel;
         this.cart = new Cart();
     }
 
-    public Customer fromResultSet(){
-        return null;
+    public static Customer fromResultSet(ResultSet resultSet){
+        Customer customer = new Customer();
+
+        try {
+            customer.customerId = resultSet.getInt("customerId");
+            customer.name = resultSet.getString("name");
+            customer.mobileNumber = resultSet.getString("phone");
+            customer.carModel =  resultSet.getString("carModel");
+            customer.cart = new Cart();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return customer;
     }
 
-    //TODO
     public void checkOut(){
 
+    }
+
+    public int getCustomerId() {
+        return customerId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getMobileNumber() {
+        return mobileNumber;
+    }
+
+    public String getCarModel() {
+        return carModel;
+    }
+
+    public Cart getCart() {
+        return cart;
     }
 }

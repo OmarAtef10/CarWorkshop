@@ -1,9 +1,6 @@
 package Service;
 
-import Model.Invoice;
-import Model.Product;
-import Model.Report;
-import Model.User;
+import Model.*;
 
 import java.util.ArrayList;
 
@@ -27,8 +24,11 @@ public interface IDataBaseService {
 
     public Invoice addInvoice(Invoice invoice);
     public Invoice removeInvoice(int Id);
-    public Invoice updatInvoice(Invoice invoice);
+    public Invoice updateInvoice(Invoice invoice);
     public Invoice getInvoice(int id);
 
+    public boolean addCustomer(Customer customer);
+    public Customer getCustomer(int customerId);
+    public boolean deleteCustomer(int customerId);
 
 }

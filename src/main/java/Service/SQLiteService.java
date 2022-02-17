@@ -167,21 +167,21 @@ public class SQLiteService implements IDataBaseService {
                     String name = resultSet.getString("name");
                     int range = resultSet.getInt("range");
                     String viscosity = resultSet.getString("viscosity");
-                    Double price = resultSet.getDouble("price");
+                    double price = resultSet.getDouble("price");
                     String expiryDate = resultSet.getString("expiryDate");
                     int units = resultSet.getInt("units");
                     String vendor = resultSet.getString("vendor");
-                    Double marketPrice = resultSet.getDouble("marketPrice");
+                    double marketPrice = resultSet.getDouble("marketPrice");
 
                     Oil oil = new Oil(vendor, units, price, marketPrice, viscosity, range, expiryDate);
                     System.out.println(oil.toString());
                     return oil;
                 } else {
                     String name = resultSet.getString("name");
-                    Double price = resultSet.getDouble("price");
+                    double price = resultSet.getDouble("price");
                     int units = resultSet.getInt("units");
                     String vendor = resultSet.getString("vendor");
-                    Double marketPrice = resultSet.getDouble("marketPrice");
+                    double marketPrice = resultSet.getDouble("marketPrice");
 
                     ServicePart servicePart = new ServicePart(name, vendor, units, price, marketPrice);
                     System.out.println(servicePart.toString());
@@ -374,7 +374,7 @@ public class SQLiteService implements IDataBaseService {
     }
 
     @Override
-    public Invoice updatInvoice(Invoice invoice) {
+    public Invoice updateInvoice(Invoice invoice) {
         // TODO Auto-generated method stub
         return null;
     }
@@ -383,6 +383,54 @@ public class SQLiteService implements IDataBaseService {
     public Invoice getInvoice(int id) {
         // TODO Auto-generated method stub
         return null;
+    }
+    /////////////////////////////////////////////////////////////////////////
+
+    @Override
+    public boolean addCustomer(Customer customer) {
+        String addCustomer = "INSERT INTO Customers (customerId,name,phone,carModel) VALUES (?,?,?,?);";
+
+        try {
+            PreparedStatement preparedStatement = dbConnection.prepareStatement(addCustomer);
+            preparedStatement.setInt(1,customer.getCustomerId());
+            preparedStatement.setString(2,customer.getName());
+            preparedStatement.setString(3,customer.getMobileNumber());
+            preparedStatement.setString(4,customer.getCarModel());
+            preparedStatement.executeUpdate();
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public Customer getCustomer(int customerId) {
+        String getCustomer = "SELECT customerId,name,phone,carModel FROM Customers WHERE customerId = ?;";
+
+        try {
+            PreparedStatement preparedStatement = dbConnection.prepareStatement(getCustomer);
+            preparedStatement.setInt(1,customerId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return Customer.fromResultSet(resultSet);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public boolean deleteCustomer(int customerId) {
+        String deleteCustomer = "DELETE FROM Customers WHERE customerId = ?;";
+        try {
+            PreparedStatement preparedStatement = dbConnection.prepareStatement(deleteCustomer);
+            preparedStatement.setInt(1,customerId);
+            preparedStatement.executeUpdate();
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return false;
     }
 }
 
