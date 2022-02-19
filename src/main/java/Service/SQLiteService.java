@@ -164,37 +164,52 @@ public class SQLiteService implements IDataBaseService {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 if (resultSet.getString("viscosity") != null) {
-                    String name = resultSet.getString("name");
-                    int range = resultSet.getInt("range");
-                    String viscosity = resultSet.getString("viscosity");
-                    double price = resultSet.getDouble("price");
-                    String expiryDate = resultSet.getString("expiryDate");
-                    int units = resultSet.getInt("units");
-                    String vendor = resultSet.getString("vendor");
-                    double marketPrice = resultSet.getDouble("marketPrice");
 
-                    Oil oil = new Oil(vendor, units, price, marketPrice, viscosity, range, expiryDate);
+                    Oil oil = Oil.fromResultSet(resultSet);
                     System.out.println(oil.toString());
                     return oil;
                 } else {
-                    String name = resultSet.getString("name");
-                    double price = resultSet.getDouble("price");
-                    int units = resultSet.getInt("units");
-                    String vendor = resultSet.getString("vendor");
-                    double marketPrice = resultSet.getDouble("marketPrice");
-
-                    ServicePart servicePart = new ServicePart(name, vendor, units, price, marketPrice);
+                    ServicePart servicePart = ServicePart.fromResultSet(resultSet);
                     System.out.println(servicePart.toString());
                     return servicePart;
 
                 }
-
 
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return null;
+    }
+
+    @Override
+    public Product getOrNull(int productId) {
+
+        String getOrNull = "SELECT * FROM Product WHERE productId = ?";
+        try {
+            PreparedStatement preparedStatement = dbConnection.prepareStatement(getOrNull);
+            preparedStatement.setInt(1, productId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                if (resultSet.getString("viscosity") != null) {
+
+                    Oil oil = Oil.fromResultSet(resultSet);
+                    System.out.println(oil.toString());
+                    return oil;
+                } else {
+                    ServicePart servicePart = ServicePart.fromResultSet(resultSet);
+                    System.out.println(servicePart.toString());
+                    return servicePart;
+
+                }
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return null;
     }
 
@@ -363,19 +378,52 @@ public class SQLiteService implements IDataBaseService {
     ///////////////////////////////////////////////////////////////////////////////////
     @Override
     public Invoice addInvoice(Invoice invoice) {
-        // TODO Auto-generated method stub
+        String addInvoice = "INSERT INTO Invoices (customerId, username,totalAmount,date) VALUES (?,?,?,?)";
+        try {
+            PreparedStatement preparedStatement = dbConnection.prepareStatement(addInvoice);
+            preparedStatement.setInt(1, invoice.getCustomerID());
+            preparedStatement.setString(2, invoice.getUserName());
+            preparedStatement.setDouble(3, invoice.getTotalPaid());
+            preparedStatement.setString(4, invoice.getDate().toString());
+            preparedStatement.executeUpdate();
+            ResultSet resultSet = preparedStatement.executeQuery();
+            invoice.setInvoiceID(resultSet.getInt("invoiceId"));
+            return invoice;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
     @Override
-    public Invoice removeInvoice(int Id) {
-        // TODO Auto-generated method stub
-        return null;
+    public boolean removeInvoice(int Id) {
+        String removeInvoice = "DELETE FROM Invoices WHERE invoiceId = ?";
+        try {
+            PreparedStatement preparedStatement = dbConnection.prepareStatement(removeInvoice);
+            preparedStatement.setInt(1, Id);
+            preparedStatement.executeUpdate();
+            return true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 
     @Override
     public Invoice updateInvoice(Invoice invoice) {
-        // TODO Auto-generated method stub
+        String updateInvoice = "UPDATE Invoices SET totalAmount = ?  WHERE invoiceID = ?";
+        try {
+            PreparedStatement preparedStatement = dbConnection.prepareStatement(updateInvoice);
+            preparedStatement.setDouble(1, invoice.getTotalPaid());
+            preparedStatement.setInt(2, invoice.getInvoiceID());
+            preparedStatement.executeUpdate();
+            return invoice;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
@@ -392,13 +440,13 @@ public class SQLiteService implements IDataBaseService {
 
         try {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(addCustomer);
-            preparedStatement.setInt(1,customer.getCustomerId());
-            preparedStatement.setString(2,customer.getName());
-            preparedStatement.setString(3,customer.getMobileNumber());
-            preparedStatement.setString(4,customer.getCarModel());
+            preparedStatement.setInt(1, customer.getCustomerId());
+            preparedStatement.setString(2, customer.getName());
+            preparedStatement.setString(3, customer.getMobileNumber());
+            preparedStatement.setString(4, customer.getCarModel());
             preparedStatement.executeUpdate();
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
@@ -410,10 +458,10 @@ public class SQLiteService implements IDataBaseService {
 
         try {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(getCustomer);
-            preparedStatement.setInt(1,customerId);
+            preparedStatement.setInt(1, customerId);
             ResultSet resultSet = preparedStatement.executeQuery();
             return Customer.fromResultSet(resultSet);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -424,10 +472,10 @@ public class SQLiteService implements IDataBaseService {
         String deleteCustomer = "DELETE FROM Customers WHERE customerId = ?;";
         try {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(deleteCustomer);
-            preparedStatement.setInt(1,customerId);
+            preparedStatement.setInt(1, customerId);
             preparedStatement.executeUpdate();
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
@@ -451,7 +499,8 @@ class Main {
 
         User user = new User("omar", "1010abab");
         sqLiteService.addUser(user);
-        sqLiteService.deleteUser("omar");
+
+        sqLiteService.getOrNull(6);
 
 
     }

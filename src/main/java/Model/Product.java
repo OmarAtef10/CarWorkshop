@@ -1,5 +1,7 @@
 package Model;
 
+import java.sql.ResultSet;
+
 public abstract class Product {
     private String productName;
     private String vendor;
@@ -8,6 +10,10 @@ public abstract class Product {
     private double marketPrice;
     private int productId;
 
+
+
+    public Product(){};
+
     public Product(String vendor, int units, double pricePerUnit, double marketPrice) {
         this.vendor = vendor;
         this.units = units;
@@ -15,6 +21,11 @@ public abstract class Product {
         this.marketPrice = marketPrice;
         this.productId = -1;
     }
+
+
+
+
+
 
     public String getProductName() {
         return productName;

@@ -9,6 +9,7 @@ public interface IDataBaseService {
     public Product getProduct(String productName , String manufacturer);
     public boolean updateProduct(Product product);
     public boolean deleteProduct(String productName, String manufacturer);
+    public Product getOrNull(int productId);
 
     public boolean addUser(User user);
     public User getUser(String username);
@@ -23,7 +24,7 @@ public interface IDataBaseService {
     public Report getReportByUsernameDate(String userName, String date);
 
     public Invoice addInvoice(Invoice invoice);
-    public Invoice removeInvoice(int Id);
+    public boolean removeInvoice(int Id);
     public Invoice updateInvoice(Invoice invoice);
     public Invoice getInvoice(int id);
 
