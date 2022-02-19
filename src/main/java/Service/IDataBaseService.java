@@ -17,7 +17,7 @@ public interface IDataBaseService {
     public boolean deleteUser(String username);
 
     public Report addReport(Report report);
-    public Report deleteReport(int reportId);
+    public boolean deleteReport(int reportId);
     public Report updateReport(Report report);
     public ArrayList<Report> getReportsByUsername(String userName);
     public ArrayList<Report> getReportsByDate(String date);

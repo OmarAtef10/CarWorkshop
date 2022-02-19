@@ -153,10 +153,10 @@ public class SQLiteService implements IDataBaseService {
     }
 
 
-    @Override
+    @Override //TODO traga3 arraylist!!!!!!!
     public Product getProduct(String productName, String manufacturer) { //Edtaret a8yarha 7alyn y3ny ekmn el lw el name w el manifacturer dupliactes yb2a GG w azon homa yb2o el ID..... w 3ashan mkrarsh mwdo3 on dirver ta tany fl rides w keda
 
-        String getProduct = "SELECT * FROM Product where name=? AND vendor=?;";
+        String getProduct = "SELECT * FROM Product where name=? OR vendor=?;";
         try {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(getProduct);
             preparedStatement.setString(1, productName);
@@ -347,16 +347,36 @@ public class SQLiteService implements IDataBaseService {
     ////////////////////////////////////////////////////////////////////////////
     @Override
     public Report addReport(Report report) {
+        String addReport = "INSERT INTO Reports (date, username, reportId) VALUES(?,?,?)";
+        try {
+            PreparedStatement preparedStatement = dbConnection.prepareStatement(addReport);
+            preparedStatement.setString(1, report.getDate().toString());
+            preparedStatement.setString(2, report.getUserName());
+            preparedStatement.setInt(3, report.getReportId());
+            return report;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
     @Override
-    public Report deleteReport(int reportId) {
-        return null;
+    public boolean deleteReport(int reportId) {
+        String deleteReport = "DELETE FROM Reports WHERE reportId = ?";
+        try {
+            PreparedStatement preparedStatement = dbConnection.prepareStatement(deleteReport);
+            preparedStatement.setInt(1, reportId);
+            preparedStatement.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     @Override
     public Report updateReport(Report report) {
+
         return null;
     }
 
@@ -414,7 +434,7 @@ public class SQLiteService implements IDataBaseService {
 
     @Override
     public Invoice updateInvoice(Invoice invoice) {
-        String updateInvoice = "UPDATE Invoices SET totalAmount = ?  WHERE invoiceID = ?";
+        String updateInvoice = "UPDATE Invoices SET totalAmount = ?  WHERE invoiceId = ?";
         try {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(updateInvoice);
             preparedStatement.setDouble(1, invoice.getTotalPaid());
@@ -429,7 +449,17 @@ public class SQLiteService implements IDataBaseService {
 
     @Override
     public Invoice getInvoice(int id) {
-        // TODO Auto-generated method stub
+        String getInvoice = "SELECT * FROM Invoices WHERE invoiceId = ?";
+        try {
+            PreparedStatement preparedStatement = dbConnection.prepareStatement(getInvoice);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                Invoice invoice = Invoice.fromResultSet(resultSet);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return null;
     }
     /////////////////////////////////////////////////////////////////////////
