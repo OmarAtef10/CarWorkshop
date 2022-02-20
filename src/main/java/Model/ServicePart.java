@@ -42,7 +42,7 @@ public class ServicePart extends Product {
 
     @Override
     public String toString() {
-        return "ServicePart{" +
+        return "ServicePart {" +
                 "partName='" + partName + '\'' +
                 '}';
     }

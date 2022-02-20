@@ -21,14 +21,17 @@ public class Oil extends Product {
     public static Oil fromResultSet(ResultSet resultSet){
         Oil oil = null;
         try {
+            String vendor = resultSet.getString("vendor");
+            String viscosity = resultSet.getString("viscosity");
+            String expiryDate = resultSet.getString("expiryDate");
             oil = new Oil(
-                    resultSet.getString("vendor"),
+                    vendor == null? "": vendor,
                     resultSet.getInt("units"),
                     resultSet.getDouble("price"),
                     resultSet.getDouble("marketPrice"),
-                    resultSet.getString("viscosity"),
+                    viscosity == null? "": viscosity,
                     resultSet.getInt("range"),
-                    resultSet.getString("expiryDate")
+                    expiryDate == null? "": expiryDate
             );
 
             oil.setProductName(oil.getVendor()+" "+oil.getMileage()+" "+oil.getViscosity());
