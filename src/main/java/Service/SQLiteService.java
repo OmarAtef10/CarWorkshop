@@ -376,18 +376,49 @@ public class SQLiteService implements IDataBaseService {
 
     @Override
     public Report updateReport(Report report) {
-
+//        String updateReport = "UPDATE Reports SET  WHERE reportId = ?";
+//        try{
+//            PreparedStatement preparedStatement = dbConnection.prepareStatement(updateReport);
+//            preparedStatement.setInt(1,report.getReportId());
+//            ResultSet resultSet = preparedStatement.executeQuery();
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
         return null;
     }
 
     @Override
     public ArrayList<Report> getReportsByUsername(String userName) {
-        return null;
+        ArrayList<Report> reports = new ArrayList<>();
+        String getReportsByUsername = "SELECT * FROM Reports WHERE username = ?";
+        try {
+            PreparedStatement preparedStatement = dbConnection.prepareStatement(getReportsByUsername);
+            preparedStatement.setString(1, userName);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                reports.add(Report.fromResultSet(resultSet));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        return reports;
     }
 
     @Override
     public ArrayList<Report> getReportsByDate(String date) {
-        return null;
+        ArrayList<Report> reports = new ArrayList<Report>();
+        try {
+            String sqlString = "SELECT * FROM Reports where date = " + date + ";";
+            ResultSet rs = statement.executeQuery(sqlString);
+            while (rs.next())
+                reports.add(Report.fromResultSet(rs));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return reports;
+        }
+        return reports;
     }
 
     @Override
@@ -515,16 +546,16 @@ public class SQLiteService implements IDataBaseService {
 class Main {
     public static void main(String[] args) {
         SQLiteService sqLiteService = new SQLiteService();
-//        Oil oil = new Oil("shell", 69, 50, 10, "50/20W", 2000, "Bokra");
-//        ServicePart servicePart = new ServicePart("some Filters", "Tifa", 100, 55, 60);
-//        sqLiteService.addProduct(oil);
-//        sqLiteService.addProduct(servicePart);
+        Oil oil = new Oil("shell", 69, 50, 10, "50/20W", 2000, "Bokra");
+        ServicePart servicePart = new ServicePart("some Filters", "Tifa", 100, 55, 60);
+        sqLiteService.addProduct(oil);
+        sqLiteService.addProduct(servicePart);
         sqLiteService.getProduct("some Filters", "Tifa");
         sqLiteService.getProduct("shell 2000 50/20W", "shell");
-        Oil oil = new Oil("shell", 420, 69, 42, "50/20W", 2000, "b3d Bokra");
-        sqLiteService.updateProduct(oil);
-        ServicePart servicePart = new ServicePart("some Filters", "Tifa", 110, 5, 6);
-        sqLiteService.updateProduct(servicePart);
+        Oil Oil = new Oil("shell", 420, 69, 42, "50/20W", 2000, "b3d Bokra");
+        sqLiteService.updateProduct(Oil);
+        ServicePart ServicePart = new ServicePart("some Filters", "Tifa", 110, 5, 6);
+        sqLiteService.updateProduct(ServicePart);
         sqLiteService.deleteProduct("some Filters", "Tifa");
 
         User user = new User("omar", "1010abab");

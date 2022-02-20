@@ -29,7 +29,7 @@ public class Report {
         this.sessionEnd = sessionEnd;
     }
 
-    public Report fromResultSet(ResultSet resultSet){
+    public static Report fromResultSet(ResultSet resultSet){
         Report report = null;
         try {
             report = new Report(
