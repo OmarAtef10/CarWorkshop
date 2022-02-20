@@ -2,12 +2,13 @@ package Model;
 
 import java.sql.ResultSet;
 import java.util.Date;
+import java.util.UUID;
 
 public class Invoice {
-    private int invoiceID;
+    private String invoiceID;
     private String userName;
     private Cart cart; //TODO n5aleha hashmap of product ids w units (int/int)
-    private int customerID;
+    private String phone;
     private double totalPaid;
     private Date date;
 
@@ -15,19 +16,20 @@ public class Invoice {
     public Invoice() {
     }
 
-    public Invoice(String userName, Cart cart, int customerID, double totalPaid, Date date) {
+    public Invoice(String userName, Cart cart, String phone, double totalPaid, Date date) {
         this.userName = userName;
         this.cart = cart;
-        this.customerID = customerID;
+        this.phone = phone;
         this.totalPaid = totalPaid;
         this.date = date;
+        this.invoiceID = UUID.randomUUID().toString();
     }
 
     public static Invoice fromResultSet(ResultSet resultSet) {
         Invoice invoice = new Invoice();
         try {
-            invoice.setInvoiceID(resultSet.getInt("invoiceId"));
-            invoice.setCustomerID(resultSet.getInt("customerId"));
+            invoice.setInvoiceID(resultSet.getString("invoiceId"));
+            invoice.setCustomerID(resultSet.getString("phone"));
             invoice.setUserName(resultSet.getString("username"));
             invoice.setTotalPaid(resultSet.getDouble("totalAmount"));
             invoice.setDate(resultSet.getDate("date"));
@@ -39,11 +41,11 @@ public class Invoice {
         return null;
     }
 
-    public int getInvoiceID() {
+    public String getInvoiceID() {
         return invoiceID;
     }
 
-    public void setInvoiceID(int invoiceID) {
+    public void setInvoiceID(String invoiceID) {
         this.invoiceID = invoiceID;
     }
 
@@ -63,12 +65,12 @@ public class Invoice {
         this.cart = cart;
     }
 
-    public int getCustomerID() {
-        return customerID;
+    public String getCustomerID() {
+        return phone;
     }
 
-    public void setCustomerID(int customerID) {
-        this.customerID = customerID;
+    public void setCustomerID(String phone) {
+        this.phone = phone;
     }
 
     public double getTotalPaid() {

@@ -5,6 +5,7 @@ import Model.*;
 import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class SQLiteService implements IDataBaseService {
     private static Connection dbConnection;
@@ -36,12 +37,11 @@ public class SQLiteService implements IDataBaseService {
      */
     public void CreateDB() {
         String customersTable = "CREATE TABLE Customers (" +
-                "customerId	INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "name VARCHAR(45)," +
-                "phone VARCHAR(45)," +
-                "carModel VARCHAR(45)," +
-                "invoiceId VARCHAR(45)," +
-                "FOREIGN KEY(invoiceId) REFERENCES Invoices(invoiceId) ON DELETE CASCADE" +
+                "phone VARCHAR(45) PRIMARY KEY," +
+                "carModel VARCHAR(45)" +
+                //"invoiceId INTEGER," +
+                // "FOREIGN KEY(invoiceId) REFERENCES Invoices(invoiceId) ON DELETE CASCADE" +
                 ");";
 
         String usersTable = "CREATE TABLE Users(" +
@@ -70,16 +70,18 @@ public class SQLiteService implements IDataBaseService {
                 ");";
 
         String invoicesTable = "CREATE TABLE Invoices(" +
-                "invoiceId INTEGER PRIMARY KEY Autoincrement," +
-                "customerId INTEGER," +
+                "invoiceId VARCHAR(45) PRIMARY KEY ," +
+                "phone VARCHAR(45)," +
                 "username VARCHAR(45)," +
                 "totalAmount REAL," +
                 "date VARCHAR(45)," +
-                "FOREIGN KEY(username) REFERENCES Users(username));";
+                "FOREIGN KEY(username) REFERENCES Users(username)," +
+                "FOREIGN KEY (phone) REFERENCES  Customers(phone));";
 
-        String invoiceProductTable = "CREATE TABLE InvoiceProduct(" +
+        String invoiceProductTable = "CREATE TABLE InvoiceProduct(" + //insert -> for loop !?
                 "invoiceId INTEGER," +
                 "productId INTEGER," +
+                "units INTEGER," +
                 "FOREIGN KEY(invoiceId) REFERENCES Invoices(invoiceId)," +
                 "FOREIGN KEY(productId) REFERENCES Product(productId)," +
                 "PRIMARY KEY(invoiceId, productId));";
@@ -456,16 +458,15 @@ public class SQLiteService implements IDataBaseService {
     ///////////////////////////////////////////////////////////////////////////////////
     @Override
     public Invoice addInvoice(Invoice invoice) {
-        String addInvoice = "INSERT INTO Invoices (customerId, username,totalAmount,date) VALUES (?,?,?,?)";
+        String addInvoice = "INSERT INTO Invoices (phone, username,totalAmount,date,invoiceId) VALUES (?,?,?,?,?)";
         try {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(addInvoice);
-            preparedStatement.setInt(1, invoice.getCustomerID());
+            preparedStatement.setString(1, invoice.getCustomerID());
             preparedStatement.setString(2, invoice.getUserName());
             preparedStatement.setDouble(3, invoice.getTotalPaid());
             preparedStatement.setString(4, invoice.getDate().toString());
+            preparedStatement.setString(5, invoice.getInvoiceID());
             preparedStatement.executeUpdate();
-            ResultSet resultSet = preparedStatement.executeQuery();
-            invoice.setInvoiceID(resultSet.getInt("invoiceId"));
             return invoice;
 
         } catch (Exception e) {
@@ -496,7 +497,7 @@ public class SQLiteService implements IDataBaseService {
         try {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(updateInvoice);
             preparedStatement.setDouble(1, invoice.getTotalPaid());
-            preparedStatement.setInt(2, invoice.getInvoiceID());
+            preparedStatement.setString(2, invoice.getInvoiceID());
             preparedStatement.executeUpdate();
             return invoice;
         } catch (Exception e) {
@@ -520,18 +521,19 @@ public class SQLiteService implements IDataBaseService {
 
         return null;
     }
+
+
     /////////////////////////////////////////////////////////////////////////
 
     @Override
     public boolean addCustomer(Customer customer) {
-        String addCustomer = "INSERT INTO Customers (customerId,name,phone,carModel) VALUES (?,?,?,?);";
+        String addCustomer = "INSERT INTO Customers (name,phone,carModel) VALUES (?,?,?);";
 
         try {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(addCustomer);
-            preparedStatement.setInt(1, customer.getCustomerId());
-            preparedStatement.setString(2, customer.getName());
-            preparedStatement.setString(3, customer.getMobileNumber());
-            preparedStatement.setString(4, customer.getCarModel());
+            preparedStatement.setString(1, customer.getName());
+            preparedStatement.setString(2, customer.getMobileNumber());
+            preparedStatement.setString(3, customer.getCarModel());
             preparedStatement.executeUpdate();
             return true;
         } catch (Exception e) {
@@ -541,12 +543,12 @@ public class SQLiteService implements IDataBaseService {
     }
 
     @Override
-    public Customer getCustomer(int customerId) {
-        String getCustomer = "SELECT customerId,name,phone,carModel FROM Customers WHERE customerId = ?;";
+    public Customer getCustomer(String phone) {
+        String getCustomer = "SELECT name,phone,carModel FROM Customers WHERE phone = ?;";
 
         try {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(getCustomer);
-            preparedStatement.setInt(1, customerId);
+            preparedStatement.setString(1, phone);
             ResultSet resultSet = preparedStatement.executeQuery();
             return Customer.fromResultSet(resultSet);
         } catch (Exception e) {
@@ -556,16 +558,26 @@ public class SQLiteService implements IDataBaseService {
     }
 
     @Override
-    public boolean deleteCustomer(int customerId) {
-        String deleteCustomer = "DELETE FROM Customers WHERE customerId = ?;";
+    public boolean deleteCustomer(String phone) {
+        String deleteCustomer = "DELETE FROM Customers WHERE phone = ?;";
         try {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(deleteCustomer);
-            preparedStatement.setInt(1, customerId);
+            preparedStatement.setString(1, phone);
             preparedStatement.executeUpdate();
             return true;
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return false;
+    }
+
+    @Override  //TODO
+    public boolean addProductHistory(ProductHistoryItem productHistoryItem) {
+        return false;
+    }
+
+    @Override  //TODO
+    public boolean addInvoiceProduct(Invoice invoice, Cart cart) {
         return false;
     }
 }
@@ -589,6 +601,10 @@ class Main {
         sqLiteService.addUser(user);
 
         sqLiteService.getOrNull(6);
+
+//        String date = "12/12";
+//        Invoice invoice = new Invoice("omar", null, "012", 100, null);
+//        sqLiteService.addInvoice(invoice);
 
 
     }

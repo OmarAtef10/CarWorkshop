@@ -11,6 +11,7 @@ public interface IDataBaseService {
     public boolean deleteProduct(String productName, String manufacturer);
     public Product getOrNull(int productId);
     public ArrayList<ProductHistoryItem> getHistory(int productId);
+    public boolean addProductHistory(ProductHistoryItem productHistoryItem);
 
     public boolean addUser(User user);
     public User getUser(String username);
@@ -24,13 +25,18 @@ public interface IDataBaseService {
     public ArrayList<Report> getReportsByDate(String date);
     public Report getReportByUsernameDate(String userName, String date);
 
+
     public Invoice addInvoice(Invoice invoice);
     public boolean removeInvoice(int Id);
     public Invoice updateInvoice(Invoice invoice);
     public Invoice getInvoice(int id);
 
+    public boolean addInvoiceProduct(Invoice invoice , Cart cart);
+
+
+
     public boolean addCustomer(Customer customer);
-    public Customer getCustomer(int customerId);
-    public boolean deleteCustomer(int customerId);
+    public Customer getCustomer(String phone);
+    public boolean deleteCustomer(String phone);
 
 }

@@ -23,6 +23,14 @@ public class Cart {
         return cart;
     }
 
+    public HashMap<Integer, Integer> getProducts() {
+        return products;
+    }
+
+    public void setProducts(HashMap<Integer, Integer> products) {
+        this.products = products;
+    }
+
     public double getTotal() {
         return total;
     }

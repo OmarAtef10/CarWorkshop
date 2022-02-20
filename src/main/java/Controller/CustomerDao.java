@@ -9,11 +9,11 @@ public class CustomerDao {
         return DBContext.getDBContext().getDbService().addCustomer(customer);
     }
 
-    public Customer getCustomer(int customerId){
-        return DBContext.getDBContext().getDbService().getCustomer(customerId);
+    public Customer getCustomer(String phone){
+        return DBContext.getDBContext().getDbService().getCustomer(phone);
     }
 
-    public boolean deleteCustomer(int customerId){
-        return DBContext.getDBContext().getDbService().deleteCustomer(customerId);
+    public boolean deleteCustomer(String phone){
+        return DBContext.getDBContext().getDbService().deleteCustomer(phone);
     }
 }
