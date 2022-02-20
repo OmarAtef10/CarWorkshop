@@ -22,11 +22,6 @@ public abstract class Product {
         this.productId = -1;
     }
 
-
-
-
-
-
     public String getProductName() {
         return productName;
     }

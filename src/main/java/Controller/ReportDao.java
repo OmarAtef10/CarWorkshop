@@ -2,7 +2,6 @@ package Controller;
 
 import Context.DBContext;
 import Model.Report;
-import org.sqlite.core.DB;
 
 import java.util.ArrayList;
 
@@ -12,7 +11,7 @@ public class ReportDao {
         return DBContext.getDBContext().getDbService().addReport(report);
     };
 
-    public Report deleteReport(int reportId){
+    public boolean deleteReport(int reportId){
         return DBContext.getDBContext().getDbService().deleteReport(reportId);
     }
 

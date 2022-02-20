@@ -17,8 +17,8 @@ public class UserDao {
         return DBContext.getDBContext().getDbService().updateUser(user);
     }
 
-    public User deleteUser(String username) {
-        return null;
+    public boolean deleteUser(String username) {
+        return DBContext.getDBContext().getDbService().deleteUser(username);
     }
 }
 

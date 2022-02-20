@@ -9,8 +9,6 @@ public class ServicePart extends Product {
         super();
     }
 
-    ;
-
     public ServicePart(String partName, String vendor, int units, double pricePerUnit, double marketPrice) {
         super(vendor, units, pricePerUnit, marketPrice);
         this.partName = partName;

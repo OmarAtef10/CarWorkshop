@@ -65,4 +65,9 @@ public class UserManager {
     public User updateUser(User user){
         return this.userDao.updateUser(user);
     }
+
+    public boolean deleteUser(String username){
+        return userDao.deleteUser(username);
+    }
+
 }
