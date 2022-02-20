@@ -1,6 +1,9 @@
 package Model;
 
+import Controller.ProductDao;
+
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 public abstract class Product {
     private String productName;
@@ -9,10 +12,13 @@ public abstract class Product {
     private double pricePerUnit;
     private double marketPrice;
     private int productId;
+    private ArrayList<ProductHistoryItem> productHistory;
 
 
+    public Product() {
+    }
 
-    public Product(){};
+    ;
 
     public Product(String vendor, int units, double pricePerUnit, double marketPrice) {
         this.vendor = vendor;
@@ -68,5 +74,18 @@ public abstract class Product {
 
     public void setProductId(int productId) {
         this.productId = productId;
+    }
+
+    public ArrayList<ProductHistoryItem> getProductHistory() {
+        return productHistory;
+    }
+
+    public void setProductHistory(ArrayList<ProductHistoryItem> productHistory) {
+        this.productHistory = productHistory;
+    }
+
+    public void loadHistory() {
+        ProductDao productDao = new ProductDao();
+        productHistory = productDao.getHistory(this.productId);
     }
 }

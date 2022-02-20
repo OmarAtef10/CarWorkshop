@@ -2,6 +2,9 @@ package Controller;
 
 import Context.DBContext;
 import Model.Product;
+import Model.ProductHistoryItem;
+
+import java.util.ArrayList;
 
 public class ProductDao {
     //TODO: Implment methods
@@ -19,6 +22,10 @@ public class ProductDao {
 
     public boolean deleteProduct(String productName, String manufacturer){
         return DBContext.getDBContext().getDbService().deleteProduct(productName,manufacturer);
+    }
+
+    public ArrayList<ProductHistoryItem> getHistory(int productId){
+        return DBContext.getDBContext().getDbService().getHistory(productId);
     }
 
     public Product shelveProduct(int productId, String shelfId, int units){

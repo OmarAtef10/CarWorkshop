@@ -60,6 +60,15 @@ public class SQLiteService implements IDataBaseService {
                 "vendor VARCHAR(45)," +
                 "marketPrice REAL);";
 
+        String productHistoryTable = "CREATE TABLE ProductHistory(" +
+                "productId INTEGER," +
+                "timeStamp VARCHAR(45)," +
+                "units INTEGER," +
+                "action VARCHAR(45)," +
+                "PRIMARY KEY (productId,timeStamp)," +
+                "FOREIGN KEY (productId) REFERENCES Product (productId)" +
+                ");";
+
         String invoicesTable = "CREATE TABLE Invoices(" +
                 "invoiceId INTEGER PRIMARY KEY Autoincrement," +
                 "customerId INTEGER," +
@@ -99,6 +108,7 @@ public class SQLiteService implements IDataBaseService {
             statement.execute(customersTable);
             statement.execute(usersTable);
             statement.execute(productTable);
+            statement.execute(productHistoryTable);
             statement.execute(invoicesTable);
             statement.execute(invoiceProductTable);
             statement.execute(shelfProductTable);
@@ -206,6 +216,23 @@ public class SQLiteService implements IDataBaseService {
 
             }
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    @Override
+    public ArrayList<ProductHistoryItem> getHistory(int productId) {
+        ArrayList<ProductHistoryItem> productHistory = new ArrayList<>();
+        String getHistory = "SELECT * FROM ProductHistory WHERE productId = " + productId;
+        try {
+            ResultSet resultSet = statement.executeQuery(getHistory);
+            while (resultSet.next()) {
+                productHistory.add(ProductHistoryItem.fromResultSet(resultSet));
+            }
+            return productHistory;
         } catch (Exception e) {
             e.printStackTrace();
         }

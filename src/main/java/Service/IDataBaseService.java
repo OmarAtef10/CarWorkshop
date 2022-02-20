@@ -10,6 +10,7 @@ public interface IDataBaseService {
     public boolean updateProduct(Product product);
     public boolean deleteProduct(String productName, String manufacturer);
     public Product getOrNull(int productId);
+    public ArrayList<ProductHistoryItem> getHistory(int productId);
 
     public boolean addUser(User user);
     public User getUser(String username);
