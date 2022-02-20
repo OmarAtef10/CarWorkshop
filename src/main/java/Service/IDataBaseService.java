@@ -27,9 +27,9 @@ public interface IDataBaseService {
 
 
     public Invoice addInvoice(Invoice invoice);
-    public boolean removeInvoice(int Id);
+    public boolean removeInvoice(String Id);
     public Invoice updateInvoice(Invoice invoice);
-    public Invoice getInvoice(int id);
+    public Invoice getInvoice(String  id);
 
     public boolean addInvoiceProduct(Invoice invoice , Cart cart);
 

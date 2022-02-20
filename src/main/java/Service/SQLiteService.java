@@ -435,6 +435,8 @@ public class SQLiteService implements IDataBaseService {
         return reports;
     }
 
+
+
     @Override
     public ArrayList<Report> getReportsByDate(String date) {
         ArrayList<Report> reports = new ArrayList<Report>();
@@ -476,11 +478,11 @@ public class SQLiteService implements IDataBaseService {
     }
 
     @Override
-    public boolean removeInvoice(int Id) {
+    public boolean removeInvoice(String Id) {
         String removeInvoice = "DELETE FROM Invoices WHERE invoiceId = ?";
         try {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(removeInvoice);
-            preparedStatement.setInt(1, Id);
+            preparedStatement.setString(1, Id);
             preparedStatement.executeUpdate();
             return true;
 
@@ -507,8 +509,8 @@ public class SQLiteService implements IDataBaseService {
     }
 
     @Override
-    public Invoice getInvoice(int id) {
-        String getInvoice = "SELECT * FROM Invoices WHERE invoiceId = ?";
+    public Invoice getInvoice(String id) {
+        String getInvoice = "SELECT * FROM Invoices WHERE invoiceId = "+id;
         try {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(getInvoice);
             ResultSet resultSet = preparedStatement.executeQuery();
