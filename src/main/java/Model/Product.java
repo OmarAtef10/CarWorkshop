@@ -12,13 +12,19 @@ public abstract class Product {
     private double pricePerUnit;
     private double marketPrice;
     private int productId;
+    private String location; // R#S#
     private ArrayList<ProductHistoryItem> productHistory;
 
+    public Product() {}
 
-    public Product() {
+    public Product(String vendor, int units, double pricePerUnit, double marketPrice,String location) {
+        this.vendor = vendor;
+        this.units = units;
+        this.pricePerUnit = pricePerUnit;
+        this.marketPrice = marketPrice;
+        this.productId = -1;
+        this.location = location;
     }
-
-    ;
 
     public Product(String vendor, int units, double pricePerUnit, double marketPrice) {
         this.vendor = vendor;
@@ -26,6 +32,7 @@ public abstract class Product {
         this.pricePerUnit = pricePerUnit;
         this.marketPrice = marketPrice;
         this.productId = -1;
+        this.location = "Inventory";
     }
 
     public String getProductName() {

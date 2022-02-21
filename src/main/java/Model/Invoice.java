@@ -1,38 +1,37 @@
 package Model;
 
 import java.sql.ResultSet;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class Invoice {
     private String invoiceID;
     private String userName;
-    private Cart cart; //TODO n5aleha hashmap of product ids w units (int/int)
+    private Cart cart;
     private String phone;
     private double totalPaid;
-    private Date date;
+    private String date;
 
 
-    public Invoice() {
-    }
+    public Invoice() {}
 
-    public Invoice(String userName, Cart cart, String phone, double totalPaid, Date date) {
+    public Invoice(String userName, Cart cart, String phone, double totalPaid) {
         this.userName = userName;
         this.cart = cart;
         this.phone = phone;
         this.totalPaid = totalPaid;
-        this.date = date;
-        this.invoiceID = UUID.randomUUID().toString();
+        this.date = getCurrentDate();
+        this.invoiceID = generateId();
     }
 
     public static Invoice fromResultSet(ResultSet resultSet) {
-        Invoice invoice = new Invoice();
         try {
+            Invoice invoice = new Invoice();
             invoice.setInvoiceID(resultSet.getString("invoiceId"));
             invoice.setCustomerID(resultSet.getString("phone"));
             invoice.setUserName(resultSet.getString("username"));
             invoice.setTotalPaid(resultSet.getDouble("totalAmount"));
-            invoice.setDate(resultSet.getDate("date"));
+            invoice.setDate(resultSet.getString("date"));
 
             return invoice;
         } catch (Exception e) {
@@ -41,54 +40,64 @@ public class Invoice {
         return null;
     }
 
-    public String getInvoiceID() {
-        return invoiceID;
-    }
-
     public void setInvoiceID(String invoiceID) {
         this.invoiceID = invoiceID;
-    }
-
-    public String getUserName() {
-        return userName;
     }
 
     public void setUserName(String userName) {
         this.userName = userName;
     }
 
-    public Cart getCart() {
-        return cart;
-    }
-
     public void setCart(Cart cart) {
         this.cart = cart;
-    }
-
-    public String getCustomerID() {
-        return phone;
     }
 
     public void setCustomerID(String phone) {
         this.phone = phone;
     }
 
-    public double getTotalPaid() {
-        return totalPaid;
-    }
 
     public void setTotalPaid(double totalPaid) {
         this.totalPaid = totalPaid;
     }
 
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
+    public String getInvoiceID() {
+        return invoiceID;
+    }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public Cart getCart() {
+        return cart;
+    }
+
+    public String getCustomerID() {
+        return phone;
+    }
+
+    public double getTotalPaid() {
+        return totalPaid;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public String getCurrentDate(){
+        LocalDateTime dateTime = LocalDateTime.now();
+        //YY/MM/DD
+        return dateTime.getYear()+"/"+dateTime.getMonthValue()+"/"+dateTime.getDayOfMonth()
+                +" :: "+dateTime.getHour()+":"+dateTime.getMinute();
+    }
+
+    public String generateId(){
+        return UUID.randomUUID().toString().substring(0,8);
+    }
 }
 

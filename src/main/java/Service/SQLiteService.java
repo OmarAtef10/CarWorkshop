@@ -1,5 +1,6 @@
 package Service;
 
+import Controller.InvoiceDao;
 import Model.*;
 
 import java.io.File;
@@ -298,6 +299,21 @@ public class SQLiteService implements IDataBaseService {
         return false;
     }
 
+    @Override
+    public boolean addProductShelf(Product product) {
+        return false;
+    }
+
+    @Override
+    public Product getProductShelf(String productName, String manufacturer) {
+        return null;
+    }
+
+    @Override
+    public boolean updateProductShelf(Product product) {
+        return false;
+    }
+
     /////////////////////////////////////////////////////////////////////////////
     @Override
     public boolean addUser(User user) {
@@ -466,7 +482,7 @@ public class SQLiteService implements IDataBaseService {
             preparedStatement.setString(1, invoice.getCustomerID());
             preparedStatement.setString(2, invoice.getUserName());
             preparedStatement.setDouble(3, invoice.getTotalPaid());
-            preparedStatement.setString(4, invoice.getDate().toString());
+            preparedStatement.setString(4, invoice.getDate());
             preparedStatement.setString(5, invoice.getInvoiceID());
             preparedStatement.executeUpdate();
             return invoice;
@@ -478,28 +494,29 @@ public class SQLiteService implements IDataBaseService {
     }
 
     @Override
-    public boolean removeInvoice(String Id) {
+    public boolean deleteInvoice(String Id) {
         String removeInvoice = "DELETE FROM Invoices WHERE invoiceId = ?";
         try {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(removeInvoice);
             preparedStatement.setString(1, Id);
             preparedStatement.executeUpdate();
             return true;
-
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return false;
     }
 
     @Override
     public Invoice updateInvoice(Invoice invoice) {
-        String updateInvoice = "UPDATE Invoices SET totalAmount = ?  WHERE invoiceId = ?";
+        String updateInvoice = "UPDATE Invoices SET username = ?,phone = ?,date = ?,totalAmount = ?  WHERE invoiceId = ?";
         try {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(updateInvoice);
-            preparedStatement.setDouble(1, invoice.getTotalPaid());
-            preparedStatement.setString(2, invoice.getInvoiceID());
+            preparedStatement.setString(1, invoice.getUserName());
+            preparedStatement.setString(2, invoice.getCustomerID());
+            preparedStatement.setString(3, invoice.getDate());
+            preparedStatement.setDouble(4, invoice.getTotalPaid());
+            preparedStatement.setString(5, invoice.getInvoiceID());
             preparedStatement.executeUpdate();
             return invoice;
         } catch (Exception e) {
@@ -510,22 +527,23 @@ public class SQLiteService implements IDataBaseService {
 
     @Override
     public Invoice getInvoice(String id) {
-        String getInvoice = "SELECT * FROM Invoices WHERE invoiceId = "+id;
+        String getInvoice = "SELECT * FROM Invoices WHERE invoiceId = ?";
         try {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(getInvoice);
+            preparedStatement.setString(1,id);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                Invoice invoice = Invoice.fromResultSet(resultSet);
+                return Invoice.fromResultSet(resultSet);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return null;
     }
 
 
-    /////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////
 
     @Override
     public boolean addCustomer(Customer customer) {
@@ -579,7 +597,8 @@ public class SQLiteService implements IDataBaseService {
     }
 
     @Override  //TODO
-    public boolean addInvoiceProduct(Invoice invoice, Cart cart) {
+    public boolean addInvoiceProduct(Invoice invoice) {
+
         return false;
     }
 }
@@ -587,27 +606,13 @@ public class SQLiteService implements IDataBaseService {
 class Main {
     public static void main(String[] args) {
         SQLiteService sqLiteService = new SQLiteService();
-        Oil oil = new Oil("shell", 69, 50, 10, "50/20W", 2000, "Bokra");
-        ServicePart servicePart = new ServicePart("some Filters", "Tifa", 100, 55, 60);
-        sqLiteService.addProduct(oil);
-        sqLiteService.addProduct(servicePart);
-        sqLiteService.getProduct("some Filters", "Tifa");
-        sqLiteService.getProduct("shell 2000 50/20W", "shell");
-        Oil Oil = new Oil("shell", 420, 69, 42, "50/20W", 2000, "b3d Bokra");
-        sqLiteService.updateProduct(Oil);
-        ServicePart ServicePart = new ServicePart("some Filters", "Tifa", 110, 5, 6);
-        sqLiteService.updateProduct(ServicePart);
-        sqLiteService.deleteProduct("some Filters", "Tifa");
 
-        User user = new User("omar", "1010abab");
-        sqLiteService.addUser(user);
+        InvoiceDao invoiceDao = new InvoiceDao();
 
-        sqLiteService.getOrNull(6);
+        Invoice invoice = invoiceDao.getInvoice("dff6142b");
 
-//        String date = "12/12";
-//        Invoice invoice = new Invoice("omar", null, "012", 100, null);
-//        sqLiteService.addInvoice(invoice);
-
+        invoice.setTotalPaid(1234.12);
+        sqLiteService.updateInvoice(invoice);
 
     }
 }

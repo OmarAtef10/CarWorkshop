@@ -3,7 +3,7 @@ package Model;
 import java.sql.ResultSet;
 
 public class Customer {
-    private int customerId;
+
     private String name;
     private String mobileNumber;
     private String carModel;
@@ -11,8 +11,7 @@ public class Customer {
 
     public Customer(){}
 
-    public Customer(int customerId, String name, String mobileNumber, String carModel){
-        this.customerId = customerId;
+    public Customer( String name, String mobileNumber, String carModel){
         this.name = name;
         this.mobileNumber = mobileNumber;
         this.carModel=carModel;
@@ -23,7 +22,6 @@ public class Customer {
         Customer customer = new Customer();
 
         try {
-            customer.customerId = resultSet.getInt("customerId");
             customer.name = resultSet.getString("name");
             customer.mobileNumber = resultSet.getString("phone");
             customer.carModel =  resultSet.getString("carModel");
@@ -39,9 +37,6 @@ public class Customer {
 
     }
 
-    public int getCustomerId() {
-        return customerId;
-    }
 
     public String getName() {
         return name;

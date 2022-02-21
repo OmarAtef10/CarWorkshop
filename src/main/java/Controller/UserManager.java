@@ -40,7 +40,7 @@ public class UserManager {
     }
 
     public User login(String username, String password) throws Exception {
-        LocalDateTime currentSessionStart = LocalDateTime.now();
+        String currentSessionStart = getCurrentDate();
 
         UserDao userDao = new UserDao();
         User user = userDao.getUser(username);
@@ -68,6 +68,13 @@ public class UserManager {
 
     public boolean deleteUser(String username){
         return userDao.deleteUser(username);
+    }
+
+
+    public String getCurrentDate(){
+        LocalDateTime dateTime = LocalDateTime.now();
+        //YY/MM/DD
+        return dateTime.getYear()+"/"+dateTime.getMonthValue()+"/"+dateTime.getDayOfMonth()+"/"+dateTime.getHour();
     }
 
 }

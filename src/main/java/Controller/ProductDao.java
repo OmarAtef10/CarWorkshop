@@ -31,4 +31,8 @@ public class ProductDao {
     public Product shelveProduct(int productId, String shelfId, int units){
         return null;
     }
+
+    public boolean addProductHistory(ProductHistoryItem productHistoryItem){
+        return DBContext.getDBContext().getDbService().addProductHistory(productHistoryItem);
+    }
 }

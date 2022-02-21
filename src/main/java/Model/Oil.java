@@ -18,6 +18,16 @@ public class Oil extends Product {
         this.expiryDate = expiryDate;
     }
 
+    public Oil(String vendor, int units, double pricePerContainer, double marketPrice, String viscosity,
+               int mileage, String expiryDate,String location) {
+        super(vendor, units, pricePerContainer, marketPrice,location);
+        String productName = vendor + " " + mileage + " " + viscosity;
+        this.setProductName(productName);
+        this.mileage = mileage;
+        this.viscosity = viscosity;
+        this.expiryDate = expiryDate;
+    }
+
     public static Oil fromResultSet(ResultSet resultSet){
         Oil oil = null;
         try {
