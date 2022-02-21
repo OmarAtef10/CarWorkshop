@@ -1,11 +1,12 @@
 package Service;
 
 import Controller.InvoiceDao;
+import Controller.ProductDao;
 import Model.*;
 
 import java.io.File;
 import java.sql.*;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.Date;
 
 public class SQLiteService implements IDataBaseService {
@@ -179,11 +180,9 @@ public class SQLiteService implements IDataBaseService {
                 if (resultSet.getString("viscosity") != null) {
 
                     Oil oil = Oil.fromResultSet(resultSet);
-                    System.out.println(oil.toString());
                     return oil;
                 } else {
                     ServicePart servicePart = ServicePart.fromResultSet(resultSet);
-                    System.out.println(servicePart.toString());
                     return servicePart;
 
                 }
@@ -485,6 +484,7 @@ public class SQLiteService implements IDataBaseService {
             preparedStatement.setString(4, invoice.getDate());
             preparedStatement.setString(5, invoice.getInvoiceID());
             preparedStatement.executeUpdate();
+            addInvoiceProduct(invoice);
             return invoice;
 
         } catch (Exception e) {
@@ -541,9 +541,83 @@ public class SQLiteService implements IDataBaseService {
         return null;
     }
 
+    @Override
+    public boolean addInvoiceProduct(Invoice invoice) {
+        String addInvoiceProduct = "INSERT INTO InvoiceProduct(invoiceId, productId,units) VALUES(?,?,?);";
+        HashMap<Integer,Integer> products = invoice.getCart().getProducts();
+        try {
+            PreparedStatement preparedStatement = dbConnection.prepareStatement(addInvoiceProduct);
+            if(products.size() > 0){
+                for(Integer key : products.keySet()){
+                    preparedStatement.setString(1,invoice.getInvoiceID());
+                    preparedStatement.setInt(2,key);
+                    preparedStatement.setInt(3,products.get(key));
+                    preparedStatement.executeUpdate();
+                }
+                return true;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return false;
+    }
 
+    @Override
+    public Cart getCart(Invoice invoice) {
+        String getCart = "SELECT productId,units FROM InvoiceProduct WHERE invoiceId = ?;";
+        Cart cart = new Cart();
+        HashMap<Integer,Integer> products = new HashMap<>();
+        try {
+            PreparedStatement preparedStatement = dbConnection.prepareStatement(getCart);
+            preparedStatement.setString(1,invoice.getInvoiceID());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return Cart.fromResultSet(resultSet);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
 
-/////////////////////////////////////////////////////////////////////////
+    @Override
+    public ArrayList<Invoice> getDailyUserInvoices(String username, String date) {
+        String reformedDate = date.substring(0,date.indexOf("::"));
+        System.out.println(reformedDate);
+        ArrayList<Invoice> invoices = new ArrayList<>();
+        String getDailyUserInvoices = "SELECT * FROM Invoices WHERE username = ?" +
+                "AND date LIKE '" + reformedDate +"%';";
+        try {
+            PreparedStatement preparedStatement = dbConnection.prepareStatement(getDailyUserInvoices);
+            preparedStatement.setString(1,username);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                invoices.add( Invoice.fromResultSet(resultSet) );
+            }
+            System.out.println(invoices);
+            return invoices;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public ArrayList<Invoice> getDailyInvoices(String date) {
+        String reformedDate = date.substring(0,date.indexOf("::"));
+        ArrayList<Invoice> invoices = new ArrayList<>();
+        String getDailyInvoices = "SELECT * FROM Invoices WHERE date LIKE '" + reformedDate +"%';";
+        try {
+            ResultSet resultSet = statement.executeQuery(getDailyInvoices);
+            while (resultSet.next()){
+                invoices.add( Invoice.fromResultSet(resultSet) );
+            }
+            System.out.println(invoices);
+            return invoices;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+    /////////////////////////////////////////////////////////////////////////
 
     @Override
     public boolean addCustomer(Customer customer) {
@@ -596,23 +670,11 @@ public class SQLiteService implements IDataBaseService {
         return false;
     }
 
-    @Override  //TODO
-    public boolean addInvoiceProduct(Invoice invoice) {
 
-        return false;
-    }
 }
 
 class Main {
     public static void main(String[] args) {
         SQLiteService sqLiteService = new SQLiteService();
-
-        InvoiceDao invoiceDao = new InvoiceDao();
-
-        Invoice invoice = invoiceDao.getInvoice("dff6142b");
-
-        invoice.setTotalPaid(1234.12);
-        sqLiteService.updateInvoice(invoice);
-
     }
 }

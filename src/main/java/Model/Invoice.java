@@ -1,5 +1,7 @@
 package Model;
 
+import Controller.InvoiceDao;
+
 import java.sql.ResultSet;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -11,7 +13,6 @@ public class Invoice {
     private String phone;
     private double totalPaid;
     private String date;
-
 
     public Invoice() {}
 
@@ -25,6 +26,7 @@ public class Invoice {
     }
 
     public static Invoice fromResultSet(ResultSet resultSet) {
+        InvoiceDao invoiceDao = new InvoiceDao();
         try {
             Invoice invoice = new Invoice();
             invoice.setInvoiceID(resultSet.getString("invoiceId"));
@@ -32,7 +34,7 @@ public class Invoice {
             invoice.setUserName(resultSet.getString("username"));
             invoice.setTotalPaid(resultSet.getDouble("totalAmount"));
             invoice.setDate(resultSet.getString("date"));
-
+            invoice.setCart( invoiceDao.getCart(invoice) );
             return invoice;
         } catch (Exception e) {
             e.printStackTrace();

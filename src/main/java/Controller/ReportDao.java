@@ -6,7 +6,6 @@ import Model.Report;
 import java.util.ArrayList;
 
 public class ReportDao {
-    //TODO: implment methods
     public Report addReport(Report report){
         return DBContext.getDBContext().getDbService().addReport(report);
     };

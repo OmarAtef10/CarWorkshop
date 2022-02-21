@@ -1,6 +1,7 @@
 package Controller;
 
 import Model.Action;
+import Model.Report;
 import Model.Role;
 import Model.User;
 
@@ -62,6 +63,12 @@ public class UserManager {
         return newRegistered;
     }
 
+    public void logout(){
+        Report userReport = new Report(currentUser.getUserName(),getCurrentDate());
+
+        currentUser = null;
+    }
+
     public User updateUser(User user){
         return this.userDao.updateUser(user);
     }
@@ -74,7 +81,8 @@ public class UserManager {
     public String getCurrentDate(){
         LocalDateTime dateTime = LocalDateTime.now();
         //YY/MM/DD
-        return dateTime.getYear()+"/"+dateTime.getMonthValue()+"/"+dateTime.getDayOfMonth()+"/"+dateTime.getHour();
+        return dateTime.getYear()+"/"+dateTime.getMonthValue()+"/"+dateTime.getDayOfMonth()
+                +" :: "+dateTime.getHour()+":"+dateTime.getMinute();
     }
 
 }
