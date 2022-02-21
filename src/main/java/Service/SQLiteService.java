@@ -312,14 +312,60 @@ public class SQLiteService implements IDataBaseService {
 
     @Override
     public boolean addProductShelf(Product product) {
+        String addProductShelf = "INSERT INTO ShelfProduct(productId, shelfNumber, units, expiryDate) VALUES(?,?,?,?);";
+        Hashtable<String,Integer> locations = product.getLocations();
+        try{
+            PreparedStatement preparedStatement = dbConnection.prepareStatement(addProductShelf);
+            for(String loc : locations.keySet()){
+                preparedStatement.setInt(1,product.getProductId());
+                preparedStatement.setString(2,loc);
+                preparedStatement.setInt(3,locations.get(loc));
+                if(product instanceof Oil){
+                    Oil prod = (Oil) product;
+                    preparedStatement.setString(4,prod.getExpiryDate());
+                }else{
+                    preparedStatement.setString(4,null);
+                }
+                preparedStatement.executeUpdate();
+            }
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return false;
     }
 
     @Override
-    public Product getProductShelf(String productName, String manufacturer) {
+    public Product getProductShelf(String productName, String vendor) {
+        Product product = getProduct(productName,vendor);
+        String expDate ="";
+
+        String getProductShelf = "SELECT * FROM ShelfProduct WHERE productId = ?;";
+
+        Hashtable<String,Integer> locations = new Hashtable<>();
+        int totalUnits =0 ;
+
+        try{
+            PreparedStatement preparedStatement = dbConnection.prepareStatement(getProductShelf);
+            preparedStatement.setInt(1,product.getProductId());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                totalUnits += resultSet.getInt("units");
+                locations.put(resultSet.getString("shelfNumber"), resultSet.getInt("units"));
+                expDate = resultSet.getString("expiryDate");
+            }
+            product.setLocations(locations);
+            if(product instanceof Oil){
+                ((Oil) product) .setExpiryDate( expDate);
+            }
+            return product;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
         return null;
     }
-
+//TODO
     @Override
     public boolean updateProductShelf(Product product) {
         return false;

@@ -42,4 +42,11 @@ public class ProductDao {
         return DBContext.getDBContext().getDbService().addProductHistoryEdit(productHistoryItem);
     }
 
+    public boolean addProductShelf(Product product){
+        return DBContext.getDBContext().getDbService().addProductShelf(product);
+    }
+    public Product getProductShelf(String productName , String vendor){
+        return DBContext.getDBContext().getDbService().getProductShelf(productName,vendor);
+    }
+
 }

@@ -34,6 +34,7 @@ public class ServicePart extends Product {
         ServicePart servicePart = new ServicePart();
 
         try {
+            servicePart.setProductId( resultSet.getInt("productId") );
             servicePart.partName = resultSet.getString("name");
             servicePart.setPricePerUnit(resultSet.getDouble("price"));
             servicePart.setUnits(resultSet.getInt("units"));

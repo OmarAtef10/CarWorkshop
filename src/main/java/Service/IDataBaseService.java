@@ -18,7 +18,7 @@ public interface IDataBaseService {
 
 
     public boolean addProductShelf(Product product);
-    public Product getProductShelf(String productName , String manufacturer);
+    public Product getProductShelf(String productName , String vendor);
     public boolean updateProductShelf(Product product);
 
 

@@ -12,7 +12,7 @@ public abstract class Product {
     private double pricePerUnit;
     private double marketPrice;
     private int productId;  //TODO n5aleh UUID
-    protected Hashtable<String,Integer> locations; // R# S#
+    protected Hashtable<String,Integer> locations; // R# S# - units
     private ArrayList<ProductHistoryItem> productHistory;
 
     public Product() {}
