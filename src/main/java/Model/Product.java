@@ -11,7 +11,7 @@ public abstract class Product {
     private int units;
     private double pricePerUnit;
     private double marketPrice;
-    private int productId;
+    private int productId;  //TODO n5aleh UUID
     protected Hashtable<String,Integer> locations; // R# S#
     private ArrayList<ProductHistoryItem> productHistory;
 

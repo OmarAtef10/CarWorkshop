@@ -145,6 +145,9 @@ public class SQLiteService implements IDataBaseService {
                 preparedStatement.setString(7, product.getVendor());
                 preparedStatement.setDouble(8, product.getMarketPrice());
                 preparedStatement.executeUpdate();
+
+                ProductHistoryItem productHistoryItem = new ProductHistoryItem(product.getProductId(),product.getUnits(),null);
+                addProductHistoryCreate(productHistoryItem);
                 return true;
             } else {
                 preparedStatement.setString(1, product.getProductName());
@@ -156,6 +159,9 @@ public class SQLiteService implements IDataBaseService {
                 preparedStatement.setString(7, product.getVendor());
                 preparedStatement.setDouble(8, product.getMarketPrice());
                 preparedStatement.executeUpdate();
+
+                ProductHistoryItem productHistoryItem = new ProductHistoryItem(product.getProductId(),product.getUnits(),null);
+                addProductHistoryCreate(productHistoryItem);
                 return true;
             }
 
@@ -257,6 +263,9 @@ public class SQLiteService implements IDataBaseService {
                 preparedStatement.setString(5, product.getProductName());
                 preparedStatement.setString(6, product.getVendor());
                 preparedStatement.executeUpdate();
+
+                ProductHistoryItem productHistoryItem = new ProductHistoryItem(product.getProductId(),product.getUnits(),null);
+                addProductHistoryEdit(productHistoryItem);
                 return true;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -274,6 +283,9 @@ public class SQLiteService implements IDataBaseService {
                 preparedStatement.setString(4, product.getProductName());
                 preparedStatement.setString(5, product.getVendor());
                 preparedStatement.executeUpdate();
+
+                ProductHistoryItem productHistoryItem = new ProductHistoryItem(product.getProductId(),product.getUnits(),null);
+                addProductHistoryEdit(productHistoryItem);
                 return true;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -553,6 +565,9 @@ public class SQLiteService implements IDataBaseService {
                     preparedStatement.setInt(2,key);
                     preparedStatement.setInt(3,products.get(key));
                     preparedStatement.executeUpdate();
+
+                    ProductHistoryItem productHistoryItem = new ProductHistoryItem(key,products.get(key),null);
+                    addProductHistorySell(productHistoryItem);
                 }
                 return true;
             }
@@ -666,11 +681,58 @@ public class SQLiteService implements IDataBaseService {
     }
 
     @Override  //TODO
-    public boolean addProductHistory(ProductHistoryItem productHistoryItem) {
+    public boolean addProductHistoryCreate(ProductHistoryItem productHistoryItem) {
+        productHistoryItem.setAction("Create");
+        String addProductActionHistory = "INSERT INTO ProductHistory (productId,timeStamp,units,action) VALUES (?,?,?,?) ";
+        try {
+            PreparedStatement preparedStatement = dbConnection.prepareStatement(addProductActionHistory);
+            preparedStatement.setInt(1,productHistoryItem.getProductId());
+            preparedStatement.setString(2,productHistoryItem.getTimeStamp());
+            preparedStatement.setInt(3,productHistoryItem.getUnits());
+            preparedStatement.setString(4,productHistoryItem.getAction());
+            preparedStatement.executeUpdate();
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return false;
     }
 
+    @Override
+    public boolean addProductHistoryEdit(ProductHistoryItem productHistoryItem) {
+        productHistoryItem.setAction("Edit");
+        String addProductActionHistory = "INSERT INTO ProductHistory (productId,timeStamp,units,action) VALUES (?,?,?,?) ";
+        try {
+            PreparedStatement preparedStatement = dbConnection.prepareStatement(addProductActionHistory);
+            preparedStatement.setInt(1,productHistoryItem.getProductId());
+            preparedStatement.setString(2,productHistoryItem.getTimeStamp());
+            preparedStatement.setInt(3,productHistoryItem.getUnits());
+            preparedStatement.setString(4,productHistoryItem.getAction());
+            preparedStatement.executeUpdate();
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return false;
+    }
 
+    @Override
+    public boolean addProductHistorySell(ProductHistoryItem productHistoryItem) {
+        productHistoryItem.setAction("Sale");
+        String addProductActionHistory = "INSERT INTO ProductHistory (productId,timeStamp,units,action) VALUES (?,?,?,?) ";
+        try {
+            PreparedStatement preparedStatement = dbConnection.prepareStatement(addProductActionHistory);
+            preparedStatement.setInt(1,productHistoryItem.getProductId());
+            preparedStatement.setString(2,productHistoryItem.getTimeStamp());
+            preparedStatement.setInt(3,productHistoryItem.getUnits());
+            preparedStatement.setString(4,productHistoryItem.getAction());
+            preparedStatement.executeUpdate();
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
 
 class Main {

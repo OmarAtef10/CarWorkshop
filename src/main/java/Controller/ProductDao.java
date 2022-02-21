@@ -32,7 +32,14 @@ public class ProductDao {
         return null;
     }
 
-    public boolean addProductHistory(ProductHistoryItem productHistoryItem){
-        return DBContext.getDBContext().getDbService().addProductHistory(productHistoryItem);
+    public boolean addProductHistoryCreate(ProductHistoryItem productHistoryItem){
+        return DBContext.getDBContext().getDbService().addProductHistoryCreate(productHistoryItem);
     }
+    public boolean addProductHistoryEdit(ProductHistoryItem productHistoryItem){
+        return DBContext.getDBContext().getDbService().addProductHistoryEdit(productHistoryItem);
+    }
+    public boolean addProductHistorySell(ProductHistoryItem productHistoryItem){
+        return DBContext.getDBContext().getDbService().addProductHistoryEdit(productHistoryItem);
+    }
+
 }

@@ -11,7 +11,11 @@ public interface IDataBaseService {
     public boolean deleteProduct(String productName, String manufacturer);
     public Product getOrNull(int productId);
     public ArrayList<ProductHistoryItem> getHistory(int productId);
-    public boolean addProductHistory(ProductHistoryItem productHistoryItem);
+
+    public boolean addProductHistoryCreate(ProductHistoryItem productHistoryItem);
+    public boolean addProductHistoryEdit(ProductHistoryItem productHistoryItem);
+    public boolean addProductHistorySell(ProductHistoryItem productHistoryItem);
+
 
     public boolean addProductShelf(Product product);
     public Product getProductShelf(String productName , String manufacturer);
@@ -33,7 +37,7 @@ public interface IDataBaseService {
 
     public Invoice addInvoice(Invoice invoice);
     public Invoice updateInvoice(Invoice invoice);
-    public Invoice getInvoice(String  id);
+    public Invoice getInvoice(String id);
     public boolean deleteInvoice(String id);
     public boolean addInvoiceProduct(Invoice invoice);
     public ArrayList<Invoice> getDailyUserInvoices(String username,String date);

@@ -15,11 +15,11 @@ public class ServicePart extends Product {
         this.setProductName(partName);
     }
 
-    public ServicePart(String partName, String vendor, int units, double pricePerUnit, double marketPrice,String location) {
-        super(vendor, units, pricePerUnit, marketPrice,location);
-        this.partName = partName;
-        this.setProductName(partName);
-    }
+//    public ServicePart(String partName, String vendor, int units, double pricePerUnit, double marketPrice,String location) {
+//        super(vendor, units, pricePerUnit, marketPrice,location);
+//        this.partName = partName;
+//        this.setProductName(partName);
+//    }
 
     public String getPartName() {
         return partName;
