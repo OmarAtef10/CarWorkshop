@@ -44,7 +44,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<TabPane styleClass="background" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<TabPane styleClass="background" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.MainWindowController">
    <tabs>
       <Tab text="Inventory">
          <content>
@@ -61,7 +61,7 @@
                               </TitledPane>
                               <VBox alignment="CENTER" styleClass="background" VBox.vgrow="ALWAYS">
                                  <children>
-                                    <Button mnemonicParsing="false" prefHeight="28.0" prefWidth="225.0" text="Create Product">
+                                    <Button fx:id="createProdcutBtn" mnemonicParsing="false" onAction="#createBtnPressed" prefHeight="28.0" prefWidth="225.0" text="Create Product">
                                        <VBox.margin>
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                        </VBox.margin>

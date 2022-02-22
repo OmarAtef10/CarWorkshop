@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 
 import Context.Context;
 import View.MainWindow;
+import View.ProductWindow;
 import javafx.fxml.FXMLLoader;
 
 public class WindowLoader {
@@ -20,6 +21,7 @@ public class WindowLoader {
         //isntead of creating a new loader each time we want to see the window
         loaders = new HashMap<String, FXMLLoader>(){{
             put(MainWindow.FXML_NAME, createLoader(MainWindow.FXML_NAME, currLocale));
+            put(ProductWindow.FXML_NAME, createLoader(ProductWindow.FXML_NAME, currLocale));
         }};
     }
 
