@@ -368,6 +368,19 @@ public class SQLiteService implements IDataBaseService {
 //TODO
     @Override
     public boolean updateProductShelf(Product product) {
+        String updateQuery = "UPDATE ShelfProduct SET shelfNumber = ? WHERE productId = ?;";
+        Hashtable<String,Integer> locations = product.getLocations();
+        try {
+            PreparedStatement preparedStatement = dbConnection.prepareStatement(updateQuery);
+            for(String key : locations.keySet()){
+                preparedStatement.setString(1,key);
+                preparedStatement.setInt(2,product.getProductId());
+                preparedStatement.executeUpdate();
+            }
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return false;
     }
 

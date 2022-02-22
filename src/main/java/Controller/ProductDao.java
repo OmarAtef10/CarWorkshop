@@ -49,4 +49,8 @@ public class ProductDao {
         return DBContext.getDBContext().getDbService().getProductShelf(productName,vendor);
     }
 
+    public boolean updateProductShelf(Product product){
+       return DBContext.getDBContext().getDbService().updateProductShelf(product);
+    }
+
 }
