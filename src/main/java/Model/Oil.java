@@ -1,6 +1,9 @@
 package Model;
 
+import Controller.ProductDao;
+
 import java.sql.ResultSet;
+import java.util.Hashtable;
 
 public class Oil extends Product {
     private int mileage;
@@ -36,6 +39,7 @@ public class Oil extends Product {
 
             oil.setProductName(oil.getVendor()+" "+oil.getMileage()+" "+oil.getViscosity());
             oil.setProductId( resultSet.getString("productId") );
+
         }catch (Exception e){
             e.printStackTrace();
         }

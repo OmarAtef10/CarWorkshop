@@ -157,6 +157,7 @@ public class SQLiteService implements IDataBaseService {
 
             ProductHistoryItem productHistoryItem = new ProductHistoryItem(product.getProductId(),product.getUnits(),null);
             addProductHistoryCreate(productHistoryItem);
+
             return true;
 
         } catch (Exception e) {
@@ -201,13 +202,11 @@ public class SQLiteService implements IDataBaseService {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()){
                 if (resultSet.getString("viscosity") != null) {
-                    return (Oil.fromResultSet(resultSet));
+                     return (Oil.fromResultSet(resultSet));
                 } else {
                     return (ServicePart.fromResultSet(resultSet));
                 }
             }
-
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -345,7 +344,7 @@ public class SQLiteService implements IDataBaseService {
     }
 
     @Override
-    public Product getProductShelf(String productName, String vendor) {
+    public Hashtable<String,Integer> getProductShelf(String productName, String vendor) {
         Product product = getProduct(productName);
         String expDate ="";
 
@@ -367,30 +366,12 @@ public class SQLiteService implements IDataBaseService {
             if(product instanceof Oil){
                 ((Oil) product) .setExpiryDate( expDate);
             }
-            return product;
+            return locations;
         }catch (Exception e){
             e.printStackTrace();
         }
 
         return null;
-    }
-//TODO
-    @Override
-    public boolean updateProductShelf(Product product) {
-        String updateQuery = "UPDATE ShelfProduct SET shelfNumber = ? WHERE productId = ?;";
-        Hashtable<String,Integer> locations = product.getLocations();
-        try {
-            PreparedStatement preparedStatement = dbConnection.prepareStatement(updateQuery);
-            for(String key : locations.keySet()){
-                preparedStatement.setString(1,key);
-                preparedStatement.setString(2,product.getProductId());
-                preparedStatement.executeUpdate();
-            }
-            return true;
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return false;
     }
 
     /////////////////////////////////////////////////////////////////////////////

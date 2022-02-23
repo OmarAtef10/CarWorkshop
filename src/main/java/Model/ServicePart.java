@@ -1,7 +1,10 @@
 package Model;
 
-import java.sql.ResultSet;
+import Controller.ProductDao;
 
+import java.sql.ResultSet;
+import java.util.Hashtable;
+//TODO init locations from shelfproduct table when getting from resultset
 public class ServicePart extends Product {
     private String partName;
 
@@ -40,7 +43,6 @@ public class ServicePart extends Product {
             servicePart.setUnits(resultSet.getInt("units"));
             servicePart.setVendor(resultSet.getString("vendor"));
             servicePart.setMarketPrice(resultSet.getDouble("marketPrice"));
-
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,10 +1,12 @@
 package Controller;
 
 import Context.DBContext;
+import Model.Oil;
 import Model.Product;
 import Model.ProductHistoryItem;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 public class ProductDao {
     //TODO: Implment methods
@@ -17,7 +19,9 @@ public class ProductDao {
     }
 
     public Product getProduct(String name){
-        return DBContext.getDBContext().getDbService().getProduct(name);
+        Product oil = DBContext.getDBContext().getDbService().getProduct(name);
+        oil.setLocations( getProductShelf(name, oil.getVendor()) );
+        return oil;
     }
 
     public boolean updateProduct(Product product){
@@ -53,12 +57,9 @@ public class ProductDao {
     public boolean addProductShelf(Product product){
         return DBContext.getDBContext().getDbService().addProductShelf(product);
     }
-    public Product getProductShelf(String productName , String vendor){
+    public Hashtable<String, Integer> getProductShelf(String productName , String vendor){
         return DBContext.getDBContext().getDbService().getProductShelf(productName,vendor);
     }
 
-    public boolean updateProductShelf(Product product){
-       return DBContext.getDBContext().getDbService().updateProductShelf(product);
-    }
 
 }

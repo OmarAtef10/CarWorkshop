@@ -3,6 +3,8 @@ package Service;
 import Model.*;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
+
 //TODO
 public interface IDataBaseService {
     public boolean addProduct(Product product);
@@ -19,9 +21,7 @@ public interface IDataBaseService {
 
 
     public boolean addProductShelf(Product product);
-    public Product getProductShelf(String productName , String vendor);
-    public boolean updateProductShelf(Product product);
-
+    public Hashtable<String,Integer> getProductShelf(String productName , String vendor);
 
     public boolean addUser(User user);
     public User getUser(String username);

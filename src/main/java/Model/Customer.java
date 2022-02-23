@@ -33,6 +33,7 @@ public class Customer {
         return customer;
     }
 
+    //TODO
     public void checkOut(){
 
     }
