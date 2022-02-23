@@ -2,6 +2,7 @@ package Model;
 
 import Controller.InvoiceDao;
 import CustomizedUtilities.TimeUtility;
+import CustomizedUtilities.UUID_Utility;
 
 import java.sql.ResultSet;
 import java.util.UUID;
@@ -22,7 +23,7 @@ public class Invoice {
         this.phone = phone;
         this.totalPaid = totalPaid;
         this.date = TimeUtility.getCurrentDate();
-        this.invoiceID = generateId();
+        this.invoiceID = UUID_Utility.generateId();
     }
 
     public static Invoice fromResultSet(ResultSet resultSet) {
@@ -91,8 +92,5 @@ public class Invoice {
         return date;
     }
 
-    public String generateId(){
-        return UUID.randomUUID().toString().substring(0,8);
-    }
 }
 

@@ -12,23 +12,31 @@ public class ProductDao {
         return DBContext.getDBContext().getDbService().addProduct(product);
     };
     
-    public Product getProduct(String name , String vendor){
+    public ArrayList<Product> getProduct(String name , String vendor){
         return DBContext.getDBContext().getDbService().getProduct(name, vendor);
-    };
+    }
+
+    public Product getProduct(String name){
+        return DBContext.getDBContext().getDbService().getProduct(name);
+    }
 
     public boolean updateProduct(Product product){
         return DBContext.getDBContext().getDbService().updateProduct(product);
+    }
+
+    public Product getOrNull(String productId){
+        return DBContext.getDBContext().getDbService().getOrNull(productId);
     }
 
     public boolean deleteProduct(String productName, String manufacturer){
         return DBContext.getDBContext().getDbService().deleteProduct(productName,manufacturer);
     }
 
-    public ArrayList<ProductHistoryItem> getHistory(int productId){
+    public ArrayList<ProductHistoryItem> getHistory(String productId){
         return DBContext.getDBContext().getDbService().getHistory(productId);
     }
 
-    public Product shelveProduct(int productId, String shelfId, int units){
+    public Product shelveProduct(String productId, String shelfId, int units){
         return null;
     }
 

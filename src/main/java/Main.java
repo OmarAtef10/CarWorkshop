@@ -1,44 +1,32 @@
 import Context.DBContext;
-import Controller.CustomerDao;
-import Controller.InvoiceDao;
-import Controller.ProductDao;
-import Controller.WindowLoader;
+import Controller.*;
 import Model.*;
 import Service.SQLiteService;
-import View.MainWindow;
 
+import java.util.ArrayList;
+
+//YY MM DD
 public class Main {
     public static void main(String[] args) throws Exception {
         DBContext.getDBContext().setDbService(new SQLiteService());
-        WindowLoader.initLoaders();
+
+        ProductDao productDao = new ProductDao();
+        ReportDao reportDao = new ReportDao();
+        InvoiceDao invoiceDao = new InvoiceDao();
 
 
-        MainWindow window = new MainWindow();
-        window.view();
-        // ProductDao productDao = new ProductDao();
-        // CustomerDao customerDao = new CustomerDao();
-        // InvoiceDao invoiceDao = new InvoiceDao();
-/*
-        Product product = productDao.getProduct("shell 2000 50/20W","shell");
-        Customer customer = new Customer("jack","015","camaro");
-        customerDao.addCustomer(customer);
-
-        customer.getCart().addProduct(product,5);
-
-        Invoice invoice = new Invoice("omar",customer.getCart(),
-                customer.getMobileNumber(),customer.getCart().getTotal());
-
-        invoiceDao.addInvoice(invoice);
-*/
-       // System.out.println(invoiceDao.getCart( invoiceDao.getInvoice("0a89cc9d") ).toString());
-        // invoiceDao.getDailyUserInvoices("omar","2022/2/21 :: 11:4");
-        // invoiceDao.getDailyInvoices("2022/2/20 :: 11:4");
-
-        // ServicePart servicePart = new ServicePart("filters","TifaLTD",69,105,100);
-        // productDao.addProduct(servicePart);
-
-        // ServicePart servicePartt = new ServicePart("filters","TifaLTD",60,105,100);
-        // productDao.updateProduct(servicePartt);
 
     }
 }
+
+
+
+
+//        productDao.addProduct(new Oil("Shell",12,2.55,1.22,"100V",1100,
+//                "2022/2/21"));
+//
+//        productDao.addProduct(new Oil("Toros",22,3.99,2.15,"100V",1200,
+//                "2022/2/25"));
+//
+//        productDao.addProduct(new ServicePart("Air Filter","JKM",6,2.66,1.44));
+//        productDao.addProduct(new ServicePart("Gas Filter","GMC",22,600_000,7.3));

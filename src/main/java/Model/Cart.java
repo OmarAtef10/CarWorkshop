@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 
 public class Cart {
-    private HashMap<Integer, Integer> products; // productId,Units
+    private HashMap<String, Integer> products; // productId,Units
     private double total;
 
     public Cart(){
@@ -17,10 +17,10 @@ public class Cart {
 
     public static Cart fromResultSet(ResultSet resultSet){
         Cart cart = new Cart();
-        HashMap<Integer,Integer> resultProducts = new HashMap<>();
+        HashMap<String,Integer> resultProducts = new HashMap<>();
         try {
             while (resultSet.next()){
-                resultProducts.put(resultSet.getInt("productId"),resultSet.getInt("units"));
+                resultProducts.put(resultSet.getString("productId"),resultSet.getInt("units"));
             }
             cart.setProducts(resultProducts);
             return cart;
@@ -30,11 +30,11 @@ public class Cart {
         return null;
     }
 
-    public HashMap<Integer, Integer> getProducts() {
+    public HashMap<String, Integer> getProducts() {
         return products;
     }
 
-    public void setProducts(HashMap<Integer, Integer> products) {
+    public void setProducts(HashMap<String, Integer> products) {
         this.products = products;
     }
 

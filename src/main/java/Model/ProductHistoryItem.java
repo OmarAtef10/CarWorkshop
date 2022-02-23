@@ -3,24 +3,23 @@ package Model;
 import CustomizedUtilities.TimeUtility;
 
 import java.sql.ResultSet;
-import java.time.LocalDateTime;
 
 public class ProductHistoryItem {
-    private int ProductId;
+    private String productId;
     private String timeStamp;
     private int units;
     private String action;
 
 
-    public ProductHistoryItem(int productId, String timeStamp, int units, String action) {
-        ProductId = productId;
+    public ProductHistoryItem(String productId, String timeStamp, int units, String action) {
+        this.productId = productId;
         this.timeStamp = timeStamp;
         this.units = units;
         this.action = action;
     }
 
-    public ProductHistoryItem(int productId, int units, String action) {
-        ProductId = productId;
+    public ProductHistoryItem(String productId, int units, String action) {
+        this.productId = productId;
         this.timeStamp = TimeUtility.getCurrentDate();
         this.units = units;
         this.action = action;
@@ -30,7 +29,7 @@ public class ProductHistoryItem {
     public static ProductHistoryItem fromResultSet(ResultSet resultSet) {
         try {
             ProductHistoryItem productHistoryItem = new ProductHistoryItem(
-                    resultSet.getInt("productId"),
+                    resultSet.getString("productId"),
                     resultSet.getString("timeStamp"),
                     resultSet.getInt("units"),
                     resultSet.getString("action")
@@ -42,12 +41,12 @@ public class ProductHistoryItem {
         return null;
     }
 
-    public int getProductId() {
-        return ProductId;
+    public String getProductId() {
+        return productId;
     }
 
-    public void setProductId(int productId) {
-        ProductId = productId;
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 
     public String getTimeStamp() {

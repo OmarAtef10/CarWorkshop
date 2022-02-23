@@ -6,11 +6,12 @@ import java.util.ArrayList;
 //TODO
 public interface IDataBaseService {
     public boolean addProduct(Product product);
-    public Product getProduct(String productName , String manufacturer);
+    public ArrayList<Product> getProduct(String productName , String vendor);
+    public Product getProduct(String productName);
     public boolean updateProduct(Product product);
-    public boolean deleteProduct(String productName, String manufacturer);
-    public Product getOrNull(int productId);
-    public ArrayList<ProductHistoryItem> getHistory(int productId);
+    public boolean deleteProduct(String productName, String vendor);
+    public Product getOrNull(String productId);
+    public ArrayList<ProductHistoryItem> getHistory(String productId);
 
     public boolean addProductHistoryCreate(ProductHistoryItem productHistoryItem);
     public boolean addProductHistoryEdit(ProductHistoryItem productHistoryItem);

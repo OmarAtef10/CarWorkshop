@@ -9,4 +9,7 @@ public class TimeUtility {
         return dateTime.getYear()+"/"+dateTime.getMonthValue()+"/"+dateTime.getDayOfMonth()
                 +" :: "+dateTime.getHour()+":"+dateTime.getMinute();
     }
+    public static String getReformedDate(String date){
+        return date.substring(0,date.indexOf("::"));
+    }
 }

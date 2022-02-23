@@ -1,6 +1,7 @@
 package Model;
 
 import Controller.ProductDao;
+import CustomizedUtilities.UUID_Utility;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -11,7 +12,7 @@ public abstract class Product {
     private int units;
     private double pricePerUnit;
     private double marketPrice;
-    private int productId;  //TODO n5aleh UUID
+    private String productId;  //TODO n5aleh UUID
     protected Hashtable<String,Integer> locations; // R# S# - units
     private ArrayList<ProductHistoryItem> productHistory;
 
@@ -22,7 +23,7 @@ public abstract class Product {
         this.units = units;
         this.pricePerUnit = pricePerUnit;
         this.marketPrice = marketPrice;
-        this.productId = -1;
+        this.productId = UUID_Utility.generateId();
         this.locations = new Hashtable<>();
     }
 
@@ -66,11 +67,11 @@ public abstract class Product {
         this.marketPrice = marketPrice;
     }
 
-    public int getProductId() {
+    public String getProductId() {
         return productId;
     }
 
-    public void setProductId(int productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
 

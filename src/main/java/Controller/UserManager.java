@@ -56,8 +56,9 @@ public class UserManager {
         return currentUser;
     }
 
-    public User register(String username,String password){
+    public User register(String username,String password,Role role){
         User newRegistered = new User(username,password);
+        newRegistered.setRole(role);
         if(! this.userDao.addUser(newRegistered)){
             return null;
         }
@@ -77,6 +78,7 @@ public class UserManager {
     public boolean deleteUser(String username){
         return userDao.deleteUser(username);
     }
+
 
 
 

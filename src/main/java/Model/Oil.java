@@ -35,7 +35,7 @@ public class Oil extends Product {
             );
 
             oil.setProductName(oil.getVendor()+" "+oil.getMileage()+" "+oil.getViscosity());
-            oil.setProductId( resultSet.getInt("productId") );
+            oil.setProductId( resultSet.getString("productId") );
         }catch (Exception e){
             e.printStackTrace();
         }
