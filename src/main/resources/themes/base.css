@@ -186,9 +186,9 @@ Text {
 /* We must use the actual Button class instead of the "button" styleclass because ColorPicker also uses
 that styleclass but isn't an actual button
 */
-Button {
+/* Button {
     -fx-skin: "impl.jfxtras.styles.jmetro.FluentButtonSkin";
-}
+} */
 
 .button:default
 {
@@ -210,9 +210,9 @@ Button {
 
 /**************************** Toggle Button ***********************************/
 
-.toggle-button {
+/* .toggle-button {
     -fx-skin: "impl.jfxtras.styles.jmetro.FluentToggleButtonSkin";
-}
+} */
 
 .toggle-button:selected {
     -fx-background-color: accent_color;
@@ -948,7 +948,7 @@ Button {
    TextField which will cause an IllegalArgumentException when creating the impl.jfxtras.styles.jmetro.TextFieldSkin object and passing it,
    for instance, the WebColorField */
 TextField {
-    -fx-skin: "impl.jfxtras.styles.jmetro.TextFieldSkin";
+    /* -fx-skin: "impl.jfxtras.styles.jmetro.TextFieldSkin"; */
 
     -right-button-visible: true;
 }
@@ -978,7 +978,7 @@ TextField {
  ******************************************************************************/
 
 .password-field {
-    -fx-skin: "impl.jfxtras.styles.jmetro.PasswordFieldSkin";
+    /* -fx-skin: "impl.jfxtras.styles.jmetro.PasswordFieldSkin"; */
 
     -right-button-visible: true;
 }
@@ -1048,7 +1048,7 @@ TextField {
 }
 
 .progress-bar {
-    -fx-skin: "impl.jfxtras.styles.jmetro.ProgressBarSkin";
+    /* -fx-skin: "impl.jfxtras.styles.jmetro.ProgressBarSkin"; */
 }
 
 .progress-bar > .bar {
@@ -1086,7 +1086,7 @@ TextField {
  ******************************************************************************/
 
 .slider {
-    -fx-skin: "impl.jfxtras.styles.jmetro.SliderSkin";
+    /* -fx-skin: "impl.jfxtras.styles.jmetro.SliderSkin"; */
 }
 
 .slider {

@@ -25,6 +25,10 @@ public class UserManager {
         initPermissions();
     }
 
+    public static boolean userLoggedIn(){
+        return getInstance().currentUser != null;
+    }
+
     public static synchronized UserManager getInstance() {
         if (userManager == null) {
             userManager = new UserManager();

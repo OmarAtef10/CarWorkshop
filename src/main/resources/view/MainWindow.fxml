@@ -46,7 +46,7 @@
 
 <TabPane styleClass="background" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.MainWindowController">
    <tabs>
-      <Tab text="Inventory">
+      <Tab text="%inventory">
          <content>
             <AnchorPane>
                <children>
@@ -54,29 +54,29 @@
                      <children>
                         <VBox alignment="TOP_CENTER" prefHeight="600.0" prefWidth="273.0">
                            <children>
-                              <TitledPane alignment="CENTER" collapsible="false" contentDisplay="CENTER" styleClass="background" text="Product Info." VBox.vgrow="ALWAYS">
+                              <TitledPane alignment="CENTER" collapsible="false" contentDisplay="CENTER" styleClass="background" text="%product_info" VBox.vgrow="ALWAYS">
                                  <content>
-                                    <ListView prefHeight="416.0" prefWidth="274.0" />
+                                    <ListView fx:id="productInfoTable" prefHeight="416.0" prefWidth="274.0" />
                                  </content>
                               </TitledPane>
                               <VBox alignment="CENTER" styleClass="background" VBox.vgrow="ALWAYS">
                                  <children>
-                                    <Button fx:id="createProdcutBtn" mnemonicParsing="false" onAction="#createBtnPressed" prefHeight="28.0" prefWidth="225.0" text="Create Product">
+                                    <Button fx:id="createProdcutBtn" mnemonicParsing="false" onAction="#createBtnPressed" prefHeight="28.0" prefWidth="225.0" text="%create_product">
                                        <VBox.margin>
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                        </VBox.margin>
                                     </Button>
-                                    <Button mnemonicParsing="false" prefHeight="28.0" prefWidth="225.0" text="Add Stock">
+                                    <Button fx:id="addStockBtn" mnemonicParsing="false" onAction="#addStockBtnPressed" prefHeight="28.0" prefWidth="225.0" text="%add_stock">
                                        <VBox.margin>
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                        </VBox.margin>
                                     </Button>
-                                    <Button mnemonicParsing="false" prefHeight="28.0" prefWidth="225.0" text="New Purchase">
+                                    <Button fx:id="newPurchaseBtn" mnemonicParsing="false" onAction="#newPurchaseBtnPressed" prefHeight="28.0" prefWidth="225.0" text="%new_purchase">
                                        <VBox.margin>
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                        </VBox.margin>
                                     </Button>
-                                    <Button defaultButton="true" mnemonicParsing="false" prefHeight="28.0" prefWidth="225.0" text="Search">
+                                    <Button fx:id="searchBtn" defaultButton="true" mnemonicParsing="false" onAction="#searchBtnPressed" prefHeight="28.0" prefWidth="225.0" text="%search">
                                        <VBox.margin>
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                        </VBox.margin>
@@ -87,11 +87,11 @@
                         </VBox>
                         <SplitPane dividerPositions="0.5" prefHeight="400.0" prefWidth="476.0" HBox.hgrow="ALWAYS">
                           <items>
-                              <TableView prefHeight="398.0" prefWidth="236.0" />
+                              <TableView fx:id="productsTable" prefHeight="398.0" prefWidth="236.0" />
                               <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="398.0" prefWidth="236.0">
                                 <items>
-                                    <TableView prefHeight="200.0" prefWidth="236.0" />
-                                    <TableView prefHeight="200.0" prefWidth="236.0" />
+                                    <TableView fx:id="historyTable" prefHeight="200.0" prefWidth="236.0" />
+                                    <TableView fx:id="shelvesTable" prefHeight="200.0" prefWidth="236.0" />
                                 </items>
                               </SplitPane>
                           </items>
@@ -102,7 +102,7 @@
             </AnchorPane>
          </content>
       </Tab>
-      <Tab text="Users">
+      <Tab text="%users">
          <content>
             <AnchorPane>
                <children>
@@ -110,29 +110,29 @@
                      <children>
                         <VBox alignment="TOP_CENTER" prefHeight="600.0" prefWidth="273.0">
                            <children>
-                              <TitledPane alignment="CENTER" collapsible="false" contentDisplay="CENTER" styleClass="background" text="User Info" VBox.vgrow="ALWAYS">
+                              <TitledPane alignment="CENTER" collapsible="false" contentDisplay="CENTER" styleClass="background" text="%user_info" VBox.vgrow="ALWAYS">
                                  <content>
-                                    <ListView prefHeight="416.0" prefWidth="274.0" />
+                                    <ListView fx:id="userInfo" prefHeight="416.0" prefWidth="274.0" />
                                  </content>
                               </TitledPane>
                               <VBox alignment="CENTER" styleClass="background" VBox.vgrow="ALWAYS">
                                  <children>
-                                    <Button mnemonicParsing="false" prefHeight="28.0" prefWidth="225.0" text="Register User">
+                                    <Button fx:id="registerBtn" mnemonicParsing="false" onAction="#registerBtnPressed" prefHeight="28.0" prefWidth="225.0" text="%register_user">
                                        <VBox.margin>
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                        </VBox.margin>
                                     </Button>
-                                    <Button mnemonicParsing="false" prefHeight="28.0" prefWidth="225.0" text="Update User">
+                                    <Button fx:id="updateUserBtn" mnemonicParsing="false" onAction="#updateUserBtnPressed" prefHeight="28.0" prefWidth="225.0" text="%update_user">
                                        <VBox.margin>
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                        </VBox.margin>
                                     </Button>
-                                    <Button mnemonicParsing="false" prefHeight="28.0" prefWidth="225.0" text="Remove User">
+                                    <Button fx:id="removeUserBtn" mnemonicParsing="false" onAction="#removeUserBtnPressed" prefHeight="28.0" prefWidth="225.0" text="%remove_user">
                                        <VBox.margin>
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                        </VBox.margin>
                                     </Button>
-                                    <Button defaultButton="true" mnemonicParsing="false" prefHeight="28.0" prefWidth="225.0" text="Search">
+                                    <Button fx:id="searchUserBtn" defaultButton="true" mnemonicParsing="false" onAction="#searchUserBtnPressed" prefHeight="28.0" prefWidth="225.0" text="%search">
                                        <VBox.margin>
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                        </VBox.margin>
@@ -143,11 +143,11 @@
                         </VBox>
                         <SplitPane dividerPositions="0.5" prefHeight="400.0" prefWidth="476.0" HBox.hgrow="ALWAYS">
                            <items>
-                              <TableView prefHeight="398.0" prefWidth="236.0" />
+                              <TableView fx:id="usersTable" prefHeight="398.0" prefWidth="236.0" />
                               <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="398.0" prefWidth="236.0">
                                  <items>
-                                    <TableView prefHeight="200.0" prefWidth="236.0" />
-                                    <TableView prefHeight="200.0" prefWidth="236.0" />
+                                    <TableView fx:id="reportTable" prefHeight="200.0" prefWidth="236.0" />
+                                    <TableView fx:id="invoicesTable" prefHeight="200.0" prefWidth="236.0" />
                                  </items>
                               </SplitPane>
                            </items>

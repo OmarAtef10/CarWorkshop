@@ -6,6 +6,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import Context.Context;
+import View.LoginWindow;
 import View.MainWindow;
 import View.ProductWindow;
 import javafx.fxml.FXMLLoader;
@@ -22,6 +23,7 @@ public class WindowLoader {
         loaders = new HashMap<String, FXMLLoader>(){{
             put(MainWindow.FXML_NAME, createLoader(MainWindow.FXML_NAME, currLocale));
             put(ProductWindow.FXML_NAME, createLoader(ProductWindow.FXML_NAME, currLocale));
+            put(LoginWindow.FXML_NAME, createLoader(LoginWindow.FXML_NAME, currLocale));
         }};
     }
 
