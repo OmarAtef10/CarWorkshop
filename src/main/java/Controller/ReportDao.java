@@ -10,7 +10,7 @@ public class ReportDao {
         return DBContext.getDBContext().getDbService().addReport(report);
     };
 
-    public boolean deleteReport(int reportId){
+    public boolean deleteReport(String reportId){
         return DBContext.getDBContext().getDbService().deleteReport(reportId);
     }
 

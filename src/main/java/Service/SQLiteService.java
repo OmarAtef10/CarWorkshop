@@ -99,14 +99,14 @@ public class SQLiteService implements IDataBaseService {
         String reportsTable = "CREATE TABLE Reports(" +
                 "date VARCHAR(12)," +
                 "username VARCAHR(45)," +
-                "reportId INTEGER," +
+                "reportId VARCHAR(45)," +
                 "PRIMARY KEY(username,date)," +
                 "FOREIGN KEY(username) REFERENCES Users(username));";
 
 
         String reportInvoicesTable = "CREATE TABLE ReportInvoices(" +
-                "reportId INTEGER," +
-                "invoiceId INTEGER," +
+                "reportId VARCHAR(45)," +
+                "invoiceId VARCHAR(45)," +
                 "PRIMARY KEY(reportId, invoiceId)," +
                 "FOREIGN KEY(invoiceId) REFERENCES Invoices(invoiceId));";
         try {
@@ -145,7 +145,7 @@ public class SQLiteService implements IDataBaseService {
                 preparedStatement.setString(4, null);
                 preparedStatement.setString(6, null);
             }
-            preparedStatement.setString(1,product.getProductId());
+            preparedStatement.setString(1, product.getProductId());
             preparedStatement.setString(2, product.getProductName());
 
             preparedStatement.setDouble(5, product.getPricePerUnit());
@@ -155,7 +155,7 @@ public class SQLiteService implements IDataBaseService {
             preparedStatement.setDouble(9, product.getMarketPrice());
             preparedStatement.executeUpdate();
 
-            ProductHistoryItem productHistoryItem = new ProductHistoryItem(product.getProductId(),product.getUnits(),null);
+            ProductHistoryItem productHistoryItem = new ProductHistoryItem(product.getProductId(), product.getUnits(), null);
             addProductHistoryCreate(productHistoryItem);
 
             return true;
@@ -178,7 +178,7 @@ public class SQLiteService implements IDataBaseService {
             preparedStatement.setString(2, vendor);
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 if (resultSet.getString("viscosity") != null) {
                     res.add(Oil.fromResultSet(resultSet));
                 } else {
@@ -200,9 +200,9 @@ public class SQLiteService implements IDataBaseService {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(getProduct);
             preparedStatement.setString(1, productName);
             ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()){
+            if (resultSet.next()) {
                 if (resultSet.getString("viscosity") != null) {
-                     return (Oil.fromResultSet(resultSet));
+                    return (Oil.fromResultSet(resultSet));
                 } else {
                     return (ServicePart.fromResultSet(resultSet));
                 }
@@ -243,7 +243,7 @@ public class SQLiteService implements IDataBaseService {
         String getHistory = "SELECT * FROM ProductHistory WHERE productId =?;";
         try {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(getHistory);
-            preparedStatement.setString(1,productId);
+            preparedStatement.setString(1, productId);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 productHistory.add(ProductHistoryItem.fromResultSet(resultSet));
@@ -272,7 +272,7 @@ public class SQLiteService implements IDataBaseService {
                 preparedStatement.setString(6, product.getVendor());
                 preparedStatement.executeUpdate();
 
-                ProductHistoryItem productHistoryItem = new ProductHistoryItem(product.getProductId(),product.getUnits(),null);
+                ProductHistoryItem productHistoryItem = new ProductHistoryItem(product.getProductId(), product.getUnits(), null);
                 addProductHistoryEdit(productHistoryItem);
                 return true;
             } catch (Exception e) {
@@ -292,7 +292,7 @@ public class SQLiteService implements IDataBaseService {
                 preparedStatement.setString(5, product.getVendor());
                 preparedStatement.executeUpdate();
 
-                ProductHistoryItem productHistoryItem = new ProductHistoryItem(product.getProductId(),product.getUnits(),null);
+                ProductHistoryItem productHistoryItem = new ProductHistoryItem(product.getProductId(), product.getUnits(), null);
                 addProductHistoryEdit(productHistoryItem);
                 return true;
             } catch (Exception e) {
@@ -321,53 +321,53 @@ public class SQLiteService implements IDataBaseService {
     @Override
     public boolean addProductShelf(Product product) {
         String addProductShelf = "INSERT INTO ShelfProduct(productId, shelfNumber, units, expiryDate) VALUES(?,?,?,?);";
-        Hashtable<String,Integer> locations = product.getLocations();
-        try{
+        Hashtable<String, Integer> locations = product.getLocations();
+        try {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(addProductShelf);
-            for(String loc : locations.keySet()){
-                preparedStatement.setString(1,product.getProductId());
-                preparedStatement.setString(2,loc);
-                preparedStatement.setInt(3,locations.get(loc));
-                if(product instanceof Oil){
+            for (String loc : locations.keySet()) {
+                preparedStatement.setString(1, product.getProductId());
+                preparedStatement.setString(2, loc);
+                preparedStatement.setInt(3, locations.get(loc));
+                if (product instanceof Oil) {
                     Oil prod = (Oil) product;
-                    preparedStatement.setString(4,prod.getExpiryDate());
-                }else{
-                    preparedStatement.setString(4,null);
+                    preparedStatement.setString(4, prod.getExpiryDate());
+                } else {
+                    preparedStatement.setString(4, null);
                 }
                 preparedStatement.executeUpdate();
             }
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
     }
 
     @Override
-    public Hashtable<String,Integer> getProductShelf(String productName, String vendor) {
+    public Hashtable<String, Integer> getProductShelf(String productName, String vendor) {
         Product product = getProduct(productName);
-        String expDate ="";
+        String expDate = "";
 
         String getProductShelf = "SELECT * FROM ShelfProduct WHERE productId = ?;";
 
-        Hashtable<String,Integer> locations = new Hashtable<>();
-        int totalUnits =0 ;
+        Hashtable<String, Integer> locations = new Hashtable<>();
+        int totalUnits = 0;
 
-        try{
+        try {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(getProductShelf);
-            preparedStatement.setString(1,product.getProductId());
+            preparedStatement.setString(1, product.getProductId());
             ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 totalUnits += resultSet.getInt("units");
                 locations.put(resultSet.getString("shelfNumber"), resultSet.getInt("units"));
                 expDate = resultSet.getString("expiryDate");
             }
             product.setLocations(locations);
-            if(product instanceof Oil){
-                ((Oil) product) .setExpiryDate( expDate);
+            if (product instanceof Oil) {
+                ((Oil) product).setExpiryDate(expDate);
             }
             return locations;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -457,7 +457,8 @@ public class SQLiteService implements IDataBaseService {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(addReport);
             preparedStatement.setString(1, report.getDate().toString());
             preparedStatement.setString(2, report.getUserName());
-            preparedStatement.setInt(3, report.getReportId());
+            preparedStatement.setString(3, report.getReportId());
+            preparedStatement.executeUpdate();
             return report;
         } catch (Exception e) {
             e.printStackTrace();
@@ -466,11 +467,11 @@ public class SQLiteService implements IDataBaseService {
     }
 
     @Override
-    public boolean deleteReport(int reportId) {
+    public boolean deleteReport(String reportId) {
         String deleteReport = "DELETE FROM Reports WHERE reportId = ?";
         try {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(deleteReport);
-            preparedStatement.setInt(1, reportId);
+            preparedStatement.setString(1, reportId);
             preparedStatement.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -512,18 +513,21 @@ public class SQLiteService implements IDataBaseService {
     }
 
 
-
     @Override
     public ArrayList<Report> getReportsByDate(String date) {
-        ArrayList<Report> reports = new ArrayList<Report>();
+        String reformedDate = TimeUtility.getReformedDate(date);
+        ArrayList<Report> reports = new ArrayList<>();
         try {
-            String sqlString = "SELECT * FROM Reports where date = " + date + ";";
-            ResultSet rs = statement.executeQuery(sqlString);
-            while (rs.next())
+            String sqlString = "SELECT * FROM Reports where date =?;";
+            PreparedStatement preparedStatement = dbConnection.prepareStatement(sqlString);
+            preparedStatement.setString(1, reformedDate);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
                 reports.add(Report.fromResultSet(rs));
+            }
+            return reports;
         } catch (Exception e) {
             e.printStackTrace();
-            return reports;
         }
         return reports;
     }
@@ -591,7 +595,7 @@ public class SQLiteService implements IDataBaseService {
         String getInvoice = "SELECT * FROM Invoices WHERE invoiceId = ?";
         try {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(getInvoice);
-            preparedStatement.setString(1,id);
+            preparedStatement.setString(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 return Invoice.fromResultSet(resultSet);
@@ -605,22 +609,22 @@ public class SQLiteService implements IDataBaseService {
     @Override
     public boolean addInvoiceProduct(Invoice invoice) {
         String addInvoiceProduct = "INSERT INTO InvoiceProduct(invoiceId, productId,units) VALUES(?,?,?);";
-        HashMap<String,Integer> products = invoice.getCart().getProducts();
+        HashMap<String, Integer> products = invoice.getCart().getProducts();
         try {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(addInvoiceProduct);
-            if(products.size() > 0){
-                for(String key : products.keySet()){
-                    preparedStatement.setString(1,invoice.getInvoiceID());
-                    preparedStatement.setString(2,key);
-                    preparedStatement.setInt(3,products.get(key));
+            if (products.size() > 0) {
+                for (String key : products.keySet()) {
+                    preparedStatement.setString(1, invoice.getInvoiceID());
+                    preparedStatement.setString(2, key);
+                    preparedStatement.setInt(3, products.get(key));
                     preparedStatement.executeUpdate();
 
-                    ProductHistoryItem productHistoryItem = new ProductHistoryItem(key,products.get(key),null);
+                    ProductHistoryItem productHistoryItem = new ProductHistoryItem(key, products.get(key), null);
                     addProductHistorySell(productHistoryItem);
                 }
                 return true;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
@@ -630,13 +634,13 @@ public class SQLiteService implements IDataBaseService {
     public Cart getCart(Invoice invoice) {
         String getCart = "SELECT productId,units FROM InvoiceProduct WHERE invoiceId = ?;";
         Cart cart = new Cart();
-        HashMap<Integer,Integer> products = new HashMap<>();
+        HashMap<Integer, Integer> products = new HashMap<>();
         try {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(getCart);
-            preparedStatement.setString(1,invoice.getInvoiceID());
+            preparedStatement.setString(1, invoice.getInvoiceID());
             ResultSet resultSet = preparedStatement.executeQuery();
             return Cart.fromResultSet(resultSet);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -645,20 +649,18 @@ public class SQLiteService implements IDataBaseService {
     @Override
     public ArrayList<Invoice> getDailyUserInvoices(String username, String date) {
         String reformedDate = TimeUtility.getReformedDate(date);
-        System.out.println(reformedDate);
         ArrayList<Invoice> invoices = new ArrayList<>();
         String getDailyUserInvoices = "SELECT * FROM Invoices WHERE username = ?" +
-                "AND date LIKE '" + reformedDate +"%';";
+                "AND date LIKE '" + reformedDate + "%';";
         try {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(getDailyUserInvoices);
-            preparedStatement.setString(1,username);
+            preparedStatement.setString(1, username);
             ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()){
-                invoices.add( Invoice.fromResultSet(resultSet) );
+            while (resultSet.next()) {
+                invoices.add(Invoice.fromResultSet(resultSet));
             }
-            System.out.println(invoices);
             return invoices;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -666,17 +668,16 @@ public class SQLiteService implements IDataBaseService {
 
     @Override
     public ArrayList<Invoice> getDailyInvoices(String date) {
-        String reformedDate = date.substring(0,date.indexOf("::"));
+        String reformedDate = date.substring(0, date.indexOf("::"));
         ArrayList<Invoice> invoices = new ArrayList<>();
-        String getDailyInvoices = "SELECT * FROM Invoices WHERE date LIKE '" + reformedDate +"%';";
+        String getDailyInvoices = "SELECT * FROM Invoices WHERE date LIKE '" + reformedDate + "%';";
         try {
             ResultSet resultSet = statement.executeQuery(getDailyInvoices);
-            while (resultSet.next()){
-                invoices.add( Invoice.fromResultSet(resultSet) );
+            while (resultSet.next()) {
+                invoices.add(Invoice.fromResultSet(resultSet));
             }
-            System.out.println(invoices);
             return invoices;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -735,13 +736,13 @@ public class SQLiteService implements IDataBaseService {
         String addProductActionHistory = "INSERT INTO ProductHistory (productId,timeStamp,units,action) VALUES (?,?,?,?) ";
         try {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(addProductActionHistory);
-            preparedStatement.setString(1,productHistoryItem.getProductId());
-            preparedStatement.setString(2,productHistoryItem.getTimeStamp());
-            preparedStatement.setInt(3,productHistoryItem.getUnits());
-            preparedStatement.setString(4,productHistoryItem.getAction());
+            preparedStatement.setString(1, productHistoryItem.getProductId());
+            preparedStatement.setString(2, productHistoryItem.getTimeStamp());
+            preparedStatement.setInt(3, productHistoryItem.getUnits());
+            preparedStatement.setString(4, productHistoryItem.getAction());
             preparedStatement.executeUpdate();
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
@@ -753,13 +754,13 @@ public class SQLiteService implements IDataBaseService {
         String addProductActionHistory = "INSERT INTO ProductHistory (productId,timeStamp,units,action) VALUES (?,?,?,?) ";
         try {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(addProductActionHistory);
-            preparedStatement.setString(1,productHistoryItem.getProductId());
-            preparedStatement.setString(2,productHistoryItem.getTimeStamp());
-            preparedStatement.setInt(3,productHistoryItem.getUnits());
-            preparedStatement.setString(4,productHistoryItem.getAction());
+            preparedStatement.setString(1, productHistoryItem.getProductId());
+            preparedStatement.setString(2, productHistoryItem.getTimeStamp());
+            preparedStatement.setInt(3, productHistoryItem.getUnits());
+            preparedStatement.setString(4, productHistoryItem.getAction());
             preparedStatement.executeUpdate();
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
@@ -771,21 +772,16 @@ public class SQLiteService implements IDataBaseService {
         String addProductActionHistory = "INSERT INTO ProductHistory (productId,timeStamp,units,action) VALUES (?,?,?,?) ";
         try {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(addProductActionHistory);
-            preparedStatement.setString(1,productHistoryItem.getProductId());
-            preparedStatement.setString(2,productHistoryItem.getTimeStamp());
-            preparedStatement.setInt(3,productHistoryItem.getUnits());
-            preparedStatement.setString(4,productHistoryItem.getAction());
+            preparedStatement.setString(1, productHistoryItem.getProductId());
+            preparedStatement.setString(2, productHistoryItem.getTimeStamp());
+            preparedStatement.setInt(3, productHistoryItem.getUnits());
+            preparedStatement.setString(4, productHistoryItem.getAction());
             preparedStatement.executeUpdate();
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
     }
 }
 
-class Main {
-    public static void main(String[] args) {
-        SQLiteService sqLiteService = new SQLiteService();
-    }
-}

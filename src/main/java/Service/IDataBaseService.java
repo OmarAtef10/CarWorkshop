@@ -29,11 +29,11 @@ public interface IDataBaseService {
     public boolean deleteUser(String username);
 
     public Report addReport(Report report);
-    public boolean deleteReport(int reportId);
-    public Report updateReport(Report report);
+    public boolean deleteReport(String reportId);
+    public Report updateReport(Report report); //TODO
     public ArrayList<Report> getReportsByUsername(String userName);
-    public ArrayList<Report> getReportsByDate(String date);
-    public Report getReportByUsernameDate(String userName, String date);
+    public ArrayList<Report> getReportsByDate(String date);//TODO
+    public Report getReportByUsernameDate(String userName, String date);//TODO
 
 
     public Invoice addInvoice(Invoice invoice);

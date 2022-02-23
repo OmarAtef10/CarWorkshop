@@ -68,6 +68,9 @@ public class UserManager {
     public void logout(){
         Report userReport = new Report(currentUser.getUserName(),TimeUtility.getCurrentDate());
 
+        ReportDao reportDao = new ReportDao();
+        reportDao.addReport(userReport);
+
         currentUser = null;
     }
 
