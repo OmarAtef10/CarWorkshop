@@ -1,9 +1,9 @@
 package Model;
 
 import Controller.InvoiceDao;
+import CustomizedUtilities.TimeUtility;
 
 import java.sql.ResultSet;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class Invoice {
@@ -21,7 +21,7 @@ public class Invoice {
         this.cart = cart;
         this.phone = phone;
         this.totalPaid = totalPaid;
-        this.date = getCurrentDate();
+        this.date = TimeUtility.getCurrentDate();
         this.invoiceID = generateId();
     }
 
@@ -89,13 +89,6 @@ public class Invoice {
 
     public String getDate() {
         return date;
-    }
-
-    public String getCurrentDate(){
-        LocalDateTime dateTime = LocalDateTime.now();
-        //YY/MM/DD
-        return dateTime.getYear()+"/"+dateTime.getMonthValue()+"/"+dateTime.getDayOfMonth()
-                +" :: "+dateTime.getHour()+":"+dateTime.getMinute();
     }
 
     public String generateId(){

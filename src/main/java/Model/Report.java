@@ -90,13 +90,6 @@ public class Report {
         return userName;
     }
 
-    public String getCurrentDate(){
-        LocalDateTime dateTime = LocalDateTime.now();
-        //YY/MM/DD
-        return dateTime.getYear()+"/"+dateTime.getMonthValue()+"/"+dateTime.getDayOfMonth()
-                +" :: "+dateTime.getHour()+":"+dateTime.getMinute();
-    }
-
     public double calculateTotalSales(){
         for(int i=0; i<invoices.size(); i++){
             this.totalSales += invoices.get(i).getTotalPaid();

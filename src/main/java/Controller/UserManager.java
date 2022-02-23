@@ -1,5 +1,6 @@
 package Controller;
 
+import CustomizedUtilities.TimeUtility;
 import Model.Action;
 import Model.Report;
 import Model.Role;
@@ -41,7 +42,7 @@ public class UserManager {
     }
 
     public User login(String username, String password) throws Exception {
-        String currentSessionStart = getCurrentDate();
+        String currentSessionStart = TimeUtility.getCurrentDate();
 
         UserDao userDao = new UserDao();
         User user = userDao.getUser(username);
@@ -64,7 +65,7 @@ public class UserManager {
     }
 
     public void logout(){
-        Report userReport = new Report(currentUser.getUserName(),getCurrentDate());
+        Report userReport = new Report(currentUser.getUserName(),TimeUtility.getCurrentDate());
 
         currentUser = null;
     }
@@ -78,11 +79,6 @@ public class UserManager {
     }
 
 
-    public String getCurrentDate(){
-        LocalDateTime dateTime = LocalDateTime.now();
-        //YY/MM/DD
-        return dateTime.getYear()+"/"+dateTime.getMonthValue()+"/"+dateTime.getDayOfMonth()
-                +" :: "+dateTime.getHour()+":"+dateTime.getMinute();
-    }
+
 
 }

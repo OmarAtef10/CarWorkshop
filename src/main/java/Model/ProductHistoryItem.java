@@ -1,5 +1,7 @@
 package Model;
 
+import CustomizedUtilities.TimeUtility;
+
 import java.sql.ResultSet;
 import java.time.LocalDateTime;
 
@@ -19,7 +21,7 @@ public class ProductHistoryItem {
 
     public ProductHistoryItem(int productId, int units, String action) {
         ProductId = productId;
-        this.timeStamp = getCurrentDate();
+        this.timeStamp = TimeUtility.getCurrentDate();
         this.units = units;
         this.action = action;
     }
@@ -70,12 +72,5 @@ public class ProductHistoryItem {
 
     public void setAction(String action) {
         this.action = action;
-    }
-
-    public String getCurrentDate(){
-        LocalDateTime dateTime = LocalDateTime.now();
-        //YY/MM/DD
-        return dateTime.getYear()+"/"+dateTime.getMonthValue()+"/"+dateTime.getDayOfMonth()
-                +" :: "+dateTime.getHour()+":"+dateTime.getMinute();
     }
 }
