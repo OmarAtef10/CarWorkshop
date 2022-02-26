@@ -3,6 +3,7 @@ package Model;
 import java.sql.ResultSet;
 
 public class ServicePart extends Product {
+    //wtf  is ZIIIIIIS?
     private String partName;
 
     public ServicePart() {
@@ -36,10 +37,14 @@ public class ServicePart extends Product {
         try {
             servicePart.setProductId( resultSet.getString("productId") );
             servicePart.partName = resultSet.getString("name");
+            servicePart.setProductName(servicePart.partName);
             servicePart.setPricePerUnit(resultSet.getDouble("price"));
             servicePart.setUnits(resultSet.getInt("units"));
             servicePart.setVendor(resultSet.getString("vendor"));
             servicePart.setMarketPrice(resultSet.getDouble("marketPrice"));
+            ProductDao dao = new ProductDao();
+            servicePart.setLocations(dao.getProductShelf(servicePart.getProductId()));
+            servicePart.setProductHistory(dao.getHistory(servicePart.getProductId()));
         } catch (Exception e) {
             e.printStackTrace();
         }

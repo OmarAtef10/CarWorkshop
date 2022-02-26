@@ -245,12 +245,12 @@ public class SQLiteService implements IDataBaseService {
             while (resultSet.next()) {
                 productHistory.add(ProductHistoryItem.fromResultSet(resultSet));
             }
-            return productHistory;
+
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return null;
+        return productHistory;
     }
 
     @Override
@@ -733,7 +733,7 @@ public class SQLiteService implements IDataBaseService {
         try {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(addProductActionHistory);
             preparedStatement.setString(1, productHistoryItem.getProductId());
-            preparedStatement.setString(2, productHistoryItem.getTimeStamp());
+            preparedStatement.setString(2, productHistoryItem.getTimestamp());
             preparedStatement.setInt(3, productHistoryItem.getUnits());
             preparedStatement.setString(4, productHistoryItem.getAction());
             preparedStatement.executeUpdate();
@@ -751,7 +751,7 @@ public class SQLiteService implements IDataBaseService {
         try {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(addProductActionHistory);
             preparedStatement.setString(1, productHistoryItem.getProductId());
-            preparedStatement.setString(2, productHistoryItem.getTimeStamp());
+            preparedStatement.setString(2, productHistoryItem.getTimestamp());
             preparedStatement.setInt(3, productHistoryItem.getUnits());
             preparedStatement.setString(4, productHistoryItem.getAction());
             preparedStatement.executeUpdate();
@@ -769,7 +769,7 @@ public class SQLiteService implements IDataBaseService {
         try {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(addProductActionHistory);
             preparedStatement.setString(1, productHistoryItem.getProductId());
-            preparedStatement.setString(2, productHistoryItem.getTimeStamp());
+            preparedStatement.setString(2, productHistoryItem.getTimestamp());
             preparedStatement.setInt(3, productHistoryItem.getUnits());
             preparedStatement.setString(4, productHistoryItem.getAction());
             preparedStatement.executeUpdate();
@@ -778,6 +778,53 @@ public class SQLiteService implements IDataBaseService {
             e.printStackTrace();
         }
         return false;
+    }
+
+    @Override
+    public Hashtable<String, Integer> getProductShelf(String productId) {
+        String getProductShelf = "SELECT * FROM ShelfProduct WHERE productId = ?;";
+        String expDate = "";
+
+        Hashtable<String, Integer> locations = new Hashtable<>();
+        int totalUnits = 0;
+
+        try {
+            PreparedStatement preparedStatement = dbConnection.prepareStatement(getProductShelf);
+            preparedStatement.setString(1, productId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                totalUnits += resultSet.getInt("units");
+                locations.put(resultSet.getString("shelfNumber"), resultSet.getInt("units"));
+                expDate = resultSet.getString("expiryDate");
+            }
+            return locations;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    @Override
+    public ArrayList<Product> getAllProducts() {
+        String sql = "SELECT * FROM Product";
+        ArrayList<Product> products = new ArrayList<>();
+        try{
+            ResultSet rs = statement.executeQuery(sql);
+            while(rs.next()){
+                //TODO: put from result set in products instead
+                while (rs.next()) {
+                    if (rs.getString("viscosity") != null) {
+                        products.add(Oil.fromResultSet(rs));
+                    } else {
+                        products.add(ServicePart.fromResultSet(rs));
+                    }
+                }
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return products;
     }
 }
 

@@ -6,21 +6,21 @@ import java.sql.ResultSet;
 
 public class ProductHistoryItem {
     private String productId;
-    private String timeStamp;
+    private String timestamp;
     private int units;
     private String action;
 
 
     public ProductHistoryItem(String productId, String timeStamp, int units, String action) {
         this.productId = productId;
-        this.timeStamp = timeStamp;
+        this.timestamp = timeStamp;
         this.units = units;
         this.action = action;
     }
 
     public ProductHistoryItem(String productId, int units, String action) {
         this.productId = productId;
-        this.timeStamp = TimeUtility.getCurrentDate();
+        this.timestamp = TimeUtility.getCurrentDate();
         this.units = units;
         this.action = action;
     }
@@ -49,12 +49,12 @@ public class ProductHistoryItem {
         this.productId = productId;
     }
 
-    public String getTimeStamp() {
-        return timeStamp;
+    public String getTimestamp() {
+        return timestamp;
     }
 
-    public void setTimeStamp(String timeStamp) {
-        this.timeStamp = timeStamp;
+    public void setTimestamp(String timeStamp) {
+        this.timestamp = timeStamp;
     }
 
     public int getUnits() {

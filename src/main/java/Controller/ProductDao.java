@@ -56,7 +56,16 @@ public class ProductDao {
     public boolean addProductShelf(Product product){
         return DBContext.getDBContext().getDbService().addProductShelf(product);
     }
+
     public Hashtable<String, Integer> getProductShelf(String productName , String vendor){
         return DBContext.getDBContext().getDbService().getProductShelf(productName,vendor);
     }
-}
+
+    public Hashtable<String, Integer> getProductShelf(String productId){
+        return DBContext.getDBContext().getDbService().getProductShelf(productId);
+    }
+
+    public ArrayList<Product> getAll(){
+        return DBContext.getDBContext().getDbService().getAllProducts();
+    }
+}   

@@ -37,6 +37,9 @@ public class Oil extends Product {
 
             oil.setProductName(oil.getVendor()+" "+oil.getMileage()+" "+oil.getViscosity());
             oil.setProductId( resultSet.getString("productId") );
+            ProductDao dao = new ProductDao();
+            oil.setProductHistory(dao.getHistory(oil.getProductId()));
+            oil.setLocations(dao.getProductShelf(oil.getProductId()));
 
         }catch (Exception e){
             e.printStackTrace();
