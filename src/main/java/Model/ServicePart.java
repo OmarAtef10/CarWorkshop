@@ -2,6 +2,8 @@ package Model;
 
 import java.sql.ResultSet;
 
+import Controller.ProductDao;
+
 public class ServicePart extends Product {
     //wtf  is ZIIIIIIS?
     private String partName;

@@ -19,6 +19,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.text.Text;
 
 public class MainWindowController {
 
@@ -147,6 +148,9 @@ public class MainWindowController {
 
 		initializeTables();
 		initData();
+
+		historyTable.setPlaceholder(new Text("Select a product"));
+		shelvesTable.setPlaceholder(new Text("Select a product"));
 	}
 
 	void initializeTables() {

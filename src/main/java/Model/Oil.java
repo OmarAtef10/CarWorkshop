@@ -2,6 +2,8 @@ package Model;
 
 import java.sql.ResultSet;
 
+import Controller.ProductDao;
+
 
 public class Oil extends Product {
     private int mileage;

@@ -55,6 +55,7 @@ public class MainWindow {
             root = loader.load();
             root.getStylesheets().addAll(Context.getContext().getCurrentTheme());
             stage.setScene(new Scene(root));
+            stage.setMaximized(true);
             stage.show();
         } catch (IOException e) {
             // TODO Auto-generated catch block
