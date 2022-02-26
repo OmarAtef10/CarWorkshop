@@ -7,11 +7,9 @@ import Model.Role;
 import Model.User;
 
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Hashtable;
-import java.util.Objects;
+
 
 public class UserManager {
     private Hashtable<Action, ArrayList<Role>> permissions;
@@ -86,8 +84,17 @@ public class UserManager {
         return userDao.deleteUser(username);
     }
 
+    public Report getMainDailyReport(String date){
+        ReportDao reportDao = new ReportDao();
+        Report report = reportDao.getDailyMainReport(date);
+        return report;
+    }
 
-
+    public Report getMainDailyReport(){
+        ReportDao reportDao = new ReportDao();
+        Report report = reportDao.getDailyMainReport(TimeUtility.getCurrentDate());
+        return report;
+    }
 
 
 }

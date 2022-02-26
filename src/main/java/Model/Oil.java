@@ -1,9 +1,7 @@
 package Model;
 
-import Controller.ProductDao;
-
 import java.sql.ResultSet;
-import java.util.Hashtable;
+
 
 public class Oil extends Product {
     private int mileage;

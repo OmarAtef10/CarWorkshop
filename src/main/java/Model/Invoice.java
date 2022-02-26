@@ -5,7 +5,6 @@ import CustomizedUtilities.TimeUtility;
 import CustomizedUtilities.UUID_Utility;
 
 import java.sql.ResultSet;
-import java.util.UUID;
 
 public class Invoice {
     private String invoiceID;

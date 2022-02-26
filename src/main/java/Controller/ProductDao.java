@@ -1,7 +1,6 @@
 package Controller;
 
 import Context.DBContext;
-import Model.Oil;
 import Model.Product;
 import Model.ProductHistoryItem;
 
@@ -60,6 +59,4 @@ public class ProductDao {
     public Hashtable<String, Integer> getProductShelf(String productName , String vendor){
         return DBContext.getDBContext().getDbService().getProductShelf(productName,vendor);
     }
-
-
 }

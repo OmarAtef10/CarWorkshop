@@ -4,7 +4,6 @@ import Controller.InvoiceDao;
 import CustomizedUtilities.UUID_Utility;
 
 import java.sql.ResultSet;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
@@ -65,6 +64,20 @@ public class Report {
                     resultSet.getString("date")
             );
             report.setInvoices(invoiceDao.getDailyUserInvoices(report.userName, report.date));
+            report.soldProducts = new Hashtable<>();
+            for (int i = 0; i < report.invoices.size(); i++) {
+                report.totalSales += report.invoices.get(i).getTotalPaid();
+                Cart cart = invoiceDao.getCart(report.invoices.get(i));
+                for (String id : cart.getProducts().keySet()) {
+                    if (report.soldProducts.containsKey(id)) {
+                        int add = cart.getProducts().get(id);
+                        add += report.soldProducts.get(id);
+                        report.soldProducts.put(id, add);
+                    } else {
+                        report.soldProducts.put(id, cart.getProducts().get(id));
+                    }
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -109,6 +122,14 @@ public class Report {
 
     public String getUserName() {
         return userName;
+    }
+
+    public Hashtable<String, Integer> getSoldProducts() {
+        return soldProducts;
+    }
+
+    public void setSoldProducts(Hashtable<String, Integer> soldProducts) {
+        this.soldProducts = soldProducts;
     }
 
     public double calculateTotalSales() {

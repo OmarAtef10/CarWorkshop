@@ -1,14 +1,11 @@
 package Service;
 
-import Controller.InvoiceDao;
-import Controller.ProductDao;
 import CustomizedUtilities.TimeUtility;
 import Model.*;
 
 import java.io.File;
 import java.sql.*;
 import java.util.*;
-import java.util.Date;
 
 public class SQLiteService implements IDataBaseService {
     private static Connection dbConnection;
@@ -518,9 +515,8 @@ public class SQLiteService implements IDataBaseService {
         String reformedDate = TimeUtility.getReformedDate(date);
         ArrayList<Report> reports = new ArrayList<>();
         try {
-            String sqlString = "SELECT * FROM Reports where date =?;";
+            String sqlString = "SELECT * FROM Reports WHERE date LIKE '" + reformedDate + "%';";
             PreparedStatement preparedStatement = dbConnection.prepareStatement(sqlString);
-            preparedStatement.setString(1, reformedDate);
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
                 reports.add(Report.fromResultSet(rs));

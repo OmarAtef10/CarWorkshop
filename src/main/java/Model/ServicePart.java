@@ -1,10 +1,7 @@
 package Model;
 
-import Controller.ProductDao;
-
 import java.sql.ResultSet;
-import java.util.Hashtable;
-//TODO init locations from shelfproduct table when getting from resultset
+
 public class ServicePart extends Product {
     private String partName;
 

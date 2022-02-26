@@ -3,14 +3,12 @@ import Controller.*;
 import Model.*;
 import Service.SQLiteService;
 
-import java.util.ArrayList;
-import java.util.Hashtable;
-
 //YY MM DD
 public class Main {
     public static void main(String[] args) throws Exception {
         DBContext.getDBContext().setDbService(new SQLiteService());
 
+        UserManager userManager = UserManager.getInstance();
         ProductDao productDao = new ProductDao();
         ReportDao reportDao = new ReportDao();
         InvoiceDao invoiceDao = new InvoiceDao();
@@ -40,9 +38,10 @@ public class Main {
 //        UserManager userManager=UserManager.getInstance();
 //        User u = userManager.login("omar","1234");
 //        userManager.logout();
-      ArrayList<Report> ar =   reportDao.getReportsByDate("2022/2/23 :: 16:8:6:934000000");
-
-
+      //ArrayList<Report> ar =   reportDao.getReportsByDate("2022/2/23 :: 16:8:6:934000000");
+        userManager.login("kaka","123");
+        Report report = reportDao.getDailyMainReport("2022/2/23 :: 16:8:6:934000000");
+        System.out.println("RRR");
     }
 }
 
