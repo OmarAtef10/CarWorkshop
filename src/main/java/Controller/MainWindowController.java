@@ -8,6 +8,7 @@ import java.util.ResourceBundle;
 
 import Model.Product;
 import Model.ProductHistoryItem;
+import View.ProductWindow;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -79,7 +80,8 @@ public class MainWindowController {
 
 	@FXML
 	void addStockBtnPressed(ActionEvent event) {
-
+		ProductWindow productWindow = new ProductWindow();
+		productWindow.view();
 	}
 
 	@FXML

@@ -123,7 +123,7 @@ public class SQLiteService implements IDataBaseService {
 
     @Override
     public boolean addProduct(Product product) {
-        if (getProduct(product.getProductName(), product.getVendor()) != null) {
+        if (getProduct(product.getProductName()) != null) {
             return false;
         }
 

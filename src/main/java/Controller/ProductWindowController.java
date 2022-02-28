@@ -2,6 +2,9 @@ package Controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import Model.Oil;
+import Model.ServicePart;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -9,6 +12,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 
 public class ProductWindowController {
 
@@ -56,12 +60,49 @@ public class ProductWindowController {
 
     @FXML
     void cancelBtnPressed(ActionEvent event) {
-
+        ((Stage) cancelBtn.getScene().getWindow()).close();
     }
 
     @FXML
     void saveBtnPressed(ActionEvent event) {
+        ProductDao productDao = new ProductDao();
+        if (typeCombobox.getValue().equals("Oil")) {
 
+            if (vendorField.getText().equals("") || unitsField.getText().equals("") || unitPriceField.getText().equals("")
+                    || marketPriceField.getText().equals("") || viscField.getText().equals("") || milageField.getText().equals("")
+                    || expiryField.getValue() != null) {
+
+
+                Oil oil = new Oil(vendorField.getText(),
+                        Integer.parseInt(unitsField.getText()),
+                        Double.parseDouble(unitPriceField.getText()),
+                        Double.parseDouble(marketPriceField.getText()),
+                        viscField.getText(),
+                        Integer.parseInt(milageField.getText()),
+                        expiryField.getValue().toString()
+                );
+                productDao.addProduct(oil);
+
+                cancelBtnPressed(new ActionEvent());
+            }
+
+        } else if (typeCombobox.getValue().equals("Service Part")) {
+
+            System.out.println(vendorField.getText()+ "  "+unitPriceField.getText()+" "+" "+unitsField.getText()+" "+marketPriceField.getText()+" "+nameField.getText());
+            if (vendorField.getText().equals("") || unitsField.getText().equals("") || unitPriceField.getText().equals("")
+                    || marketPriceField.getText().equals("") || nameField.getText().equals("")) {
+
+                ServicePart servicePart = new ServicePart(nameField.getText(),
+                        vendorField.getText(),
+                        Integer.parseInt(unitsField.getText()),
+                        Double.parseDouble(unitPriceField.getText()),
+                        Double.parseDouble(marketPriceField.getText())
+                );
+                productDao.addProduct(servicePart);
+
+                cancelBtnPressed(new ActionEvent());
+            }
+        }
     }
 
     @FXML
@@ -82,15 +123,16 @@ public class ProductWindowController {
 
         typeCombobox.setOnAction((arg0) -> {
             String selected = typeCombobox.getSelectionModel().getSelectedItem();
-            if(selected.equals("Oil")){
+            if (selected.equals("Oil")) {
                 expiryField.setDisable(false);
                 milageField.setDisable(false);
                 viscField.setDisable(false);
-            }
-            else{
+                nameField.setDisable(true);
+            } else {
                 expiryField.setDisable(true);
                 milageField.setDisable(true);
                 viscField.setDisable(true);
+                nameField.setDisable(false);
             }
         });
     }

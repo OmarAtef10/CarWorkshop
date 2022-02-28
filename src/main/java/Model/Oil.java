@@ -8,12 +8,11 @@ import Controller.ProductDao;
 public class Oil extends Product {
     private int mileage;
     private String viscosity;
-    private int containerPrice;
     private String expiryDate;
 
 
-    public Oil(String vendor, int units, double pricePerContainer, double marketPrice, String viscosity, int mileage, String expiryDate) {
-        super(vendor, units, pricePerContainer, marketPrice);
+    public Oil(String vendor, int units, double pricePerUnit, double marketPrice, String viscosity, int mileage, String expiryDate) {
+        super(vendor, units, pricePerUnit, marketPrice);
         String productName = vendor + " " + mileage + " " + viscosity;
         this.setProductName(productName);
         this.mileage = mileage;
@@ -65,14 +64,6 @@ public class Oil extends Product {
         this.viscosity = viscosity;
     }
 
-    public int getContainerPrice() {
-        return containerPrice;
-    }
-
-    public void setContainerPrice(int containerPrice) {
-        this.containerPrice = containerPrice;
-    }
-
     public String getExpiryDate() {
         return expiryDate;
     }
@@ -87,7 +78,6 @@ public class Oil extends Product {
                 "productId="+ getProductId() +
                 ", mileage=" + mileage +
                 ", viscosity='" + viscosity + '\'' +
-                ", containerPrice=" + containerPrice +
                 ", expiryDate='" + expiryDate + '\'' +
                 '}';
     }
