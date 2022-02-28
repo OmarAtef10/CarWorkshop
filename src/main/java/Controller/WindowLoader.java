@@ -6,6 +6,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import Context.Context;
+import View.AddStockShelveWindow;
 import View.LoginWindow;
 import View.MainWindow;
 import View.ProductWindow;
@@ -24,14 +25,17 @@ public class WindowLoader {
             put(MainWindow.FXML_NAME, createLoader(MainWindow.FXML_NAME, currLocale));
             put(ProductWindow.FXML_NAME, createLoader(ProductWindow.FXML_NAME, currLocale));
             put(LoginWindow.FXML_NAME, createLoader(LoginWindow.FXML_NAME, currLocale));
+            put(AddStockShelveWindow.FXML_NAME, createLoader(AddStockShelveWindow.FXML_NAME, currLocale));
         }};
     }
 
     public static FXMLLoader getLoader(String fxml){
         FXMLLoader loader = loaders.get(fxml);
-        if(loader != null)
+        if(loader != null){
+            loader.setRoot(null);
+            loader.setController(null);   
             return loader;
-
+        }
         System.out.println("WARNING: Loader of " + fxml + " was not found");
         loader = createLoader(fxml, currLocale);
         loaders.put(fxml, loader);
