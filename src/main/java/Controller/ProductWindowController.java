@@ -7,12 +7,10 @@ import Model.Oil;
 import Model.ServicePart;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import Context.Context;
 
 public class ProductWindowController {
 
@@ -66,12 +64,14 @@ public class ProductWindowController {
     @FXML
     void saveBtnPressed(ActionEvent event) {
         ProductDao productDao = new ProductDao();
+        boolean success = false;
         if (typeCombobox.getValue().equals("Oil")) {
 
-            if (vendorField.getText().equals("") || unitsField.getText().equals("") || unitPriceField.getText().equals("")
-                    || marketPriceField.getText().equals("") || viscField.getText().equals("") || milageField.getText().equals("")
+            if (!vendorField.getText().equals("") || unitsField.getText().equals("")
+                    || !unitPriceField.getText().equals("")
+                    || !marketPriceField.getText().equals("") || viscField.getText().equals("")
+                    || !milageField.getText().equals("")
                     || expiryField.getValue() != null) {
-
 
                 Oil oil = new Oil(vendorField.getText(),
                         Integer.parseInt(unitsField.getText()),
@@ -79,29 +79,34 @@ public class ProductWindowController {
                         Double.parseDouble(marketPriceField.getText()),
                         viscField.getText(),
                         Integer.parseInt(milageField.getText()),
-                        expiryField.getValue().toString()
-                );
+                        expiryField.getValue().toString());
                 productDao.addProduct(oil);
-
+                success = true;
                 cancelBtnPressed(new ActionEvent());
             }
 
         } else if (typeCombobox.getValue().equals("Service Part")) {
 
-            System.out.println(vendorField.getText()+ "  "+unitPriceField.getText()+" "+" "+unitsField.getText()+" "+marketPriceField.getText()+" "+nameField.getText());
-            if (vendorField.getText().equals("") || unitsField.getText().equals("") || unitPriceField.getText().equals("")
-                    || marketPriceField.getText().equals("") || nameField.getText().equals("")) {
+            System.out.println(vendorField.getText() + "  " + unitPriceField.getText() + " " + " "
+                    + unitsField.getText() + " " + marketPriceField.getText() + " " + nameField.getText());
+            if (!vendorField.getText().equals("") || !unitsField.getText().equals("")
+                    || !unitPriceField.getText().equals("")
+                    || !marketPriceField.getText().equals("") || !nameField.getText().equals("")) {
 
                 ServicePart servicePart = new ServicePart(nameField.getText(),
                         vendorField.getText(),
                         Integer.parseInt(unitsField.getText()),
                         Double.parseDouble(unitPriceField.getText()),
-                        Double.parseDouble(marketPriceField.getText())
-                );
+                        Double.parseDouble(marketPriceField.getText()));
                 productDao.addProduct(servicePart);
-
+                success = true;
                 cancelBtnPressed(new ActionEvent());
             }
+        }
+        if(!success){
+            Alert alert = new Alert(Alert.AlertType.ERROR, "WRONG DATA", ButtonType.OK);
+            alert.getDialogPane().getScene().getStylesheets().addAll(Context.getContext().getCurrentTheme());
+            alert.show();
         }
     }
 
