@@ -446,6 +446,24 @@ public class SQLiteService implements IDataBaseService {
         return false;
     }
 
+
+    @Override
+    public ArrayList<User> getAllUsers() {
+        ArrayList<User> allUsers = new ArrayList<>();
+        String getAllUsers = "SELECT * FROM Users";
+        try {
+            PreparedStatement preparedStatement = dbConnection.prepareStatement(getAllUsers);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                User user = User.fromResultSet(resultSet);
+                allUsers.add(user);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return  allUsers;
+    }
+
     ////////////////////////////////////////////////////////////////////////////
     @Override
     public Report addReport(Report report) {

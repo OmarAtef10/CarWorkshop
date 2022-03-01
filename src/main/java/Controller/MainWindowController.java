@@ -8,6 +8,8 @@ import java.util.ResourceBundle;
 
 import Model.Product;
 import Model.ProductHistoryItem;
+import Model.Role;
+import Model.User;
 import View.AddStockShelveWindow;
 import View.ProductWindow;
 import View.UserWindow;
@@ -78,7 +80,7 @@ public class MainWindowController {
 	private ListView<?> userInfo;
 
 	@FXML
-	private TableView<?> usersTable;
+	private TableView<User> usersTable;
 
 	@FXML
 	void addStockBtnPressed(ActionEvent event) {
@@ -217,6 +219,38 @@ public class MainWindowController {
 
 		shelvesTable.getColumns().addAll(shelfCol, shelfUnitCol);
 		shelvesTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+
+		//UsersMenu
+
+		TableColumn<User,String> nameColumn = new TableColumn<User,String>("UserName");
+		nameColumn.setCellValueFactory(new PropertyValueFactory<>("UserName"));
+
+		TableColumn<User,String> passwordColumn = new TableColumn<User,String>("Password");
+		passwordColumn.setCellValueFactory(new PropertyValueFactory<>("Password"));
+
+
+		TableColumn<User,String> roleColumn = new TableColumn<User,String>("Role");
+		roleColumn.setCellValueFactory(new PropertyValueFactory<>("Role"));
+
+		usersTable.getColumns().addAll(nameColumn,passwordColumn,roleColumn);
+		usersTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+		usersTable.setRowFactory((arg0) -> {
+			TableRow<User> selectedRow = new TableRow<>();
+			selectedRow.setOnMouseClicked((event) -> {
+				User user = selectedRow.getItem();
+				if (event.getClickCount() == 1 && !selectedRow.isEmpty()) {
+					updateRelatedUserInfo(user);
+				}
+			});
+			return selectedRow;
+		});
+
+		//Reports Table
+
+
+		//Invoices Table
+
 	}
 
 	private void updateRelatedProductInfo(Product product) {
@@ -228,10 +262,23 @@ public class MainWindowController {
 		shelvesTable.getItems().addAll(product.getLocations().entrySet());
     }
 
+	private void updateRelatedUserInfo(User user) { //TODO TODO TODO
+		//reports table
+		reportTable.getItems().clear();
+		//reportTable.getItems().addAll(user.getSessionReport());
+		//invoices table
+		invoicesTable.getItems().clear();
+		//invoicesTable.getItems().addAll(user.getLocations().entrySet());
+	}
+
 	void initData() {
 		ProductDao dao = new ProductDao();
 		// TODO: remove hardcode
 		productsTable.getItems().addAll(dao.getAll());
+
+		UserDao userDao = new UserDao();
+
+		usersTable.getItems().addAll(userDao.getAll());
 	}
 
 }

@@ -29,6 +29,8 @@ public interface IDataBaseService {
     public User getUser(String username);
     public User updateUser(User user);
     public boolean deleteUser(String username);
+    public ArrayList<User>getAllUsers();
+
 
     public Report addReport(Report report);
     public boolean deleteReport(String reportId);
