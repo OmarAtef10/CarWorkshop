@@ -3,14 +3,20 @@ package Controller;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import Context.Context;
 import Model.Oil;
 import Model.ServicePart;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import Context.Context;
 
 public class ProductWindowController {
 
@@ -104,7 +110,7 @@ public class ProductWindowController {
             }
         }
         if(!success){
-            Alert alert = new Alert(Alert.AlertType.ERROR, "WRONG DATA", ButtonType.OK);
+            Alert alert = new Alert(AlertType.ERROR, "WRONG DATA", ButtonType.OK);
             alert.getDialogPane().getScene().getStylesheets().addAll(Context.getContext().getCurrentTheme());
             alert.show();
         }
@@ -113,18 +119,25 @@ public class ProductWindowController {
     @FXML
     void initialize() {
         assert cancelBtn != null : "fx:id=\"cancelBtn\" was not injected: check your FXML file 'ProductWindow.fxml'.";
-        assert expiryField != null : "fx:id=\"expiryField\" was not injected: check your FXML file 'ProductWindow.fxml'.";
+        assert expiryField != null
+                : "fx:id=\"expiryField\" was not injected: check your FXML file 'ProductWindow.fxml'.";
         assert gridPane != null : "fx:id=\"gridPane\" was not injected: check your FXML file 'ProductWindow.fxml'.";
-        assert marketPriceField != null : "fx:id=\"marketPriceField\" was not injected: check your FXML file 'ProductWindow.fxml'.";
-        assert milageField != null : "fx:id=\"milageField\" was not injected: check your FXML file 'ProductWindow.fxml'.";
+        assert marketPriceField != null
+                : "fx:id=\"marketPriceField\" was not injected: check your FXML file 'ProductWindow.fxml'.";
+        assert milageField != null
+                : "fx:id=\"milageField\" was not injected: check your FXML file 'ProductWindow.fxml'.";
         assert nameField != null : "fx:id=\"nameField\" was not injected: check your FXML file 'ProductWindow.fxml'.";
         assert saveBtn != null : "fx:id=\"saveBtn\" was not injected: check your FXML file 'ProductWindow.fxml'.";
-        assert typeCombobox != null : "fx:id=\"typeCombobox\" was not injected: check your FXML file 'ProductWindow.fxml'.";
-        assert unitPriceField != null : "fx:id=\"unitPriceField\" was not injected: check your FXML file 'ProductWindow.fxml'.";
+        assert typeCombobox != null
+                : "fx:id=\"typeCombobox\" was not injected: check your FXML file 'ProductWindow.fxml'.";
+        assert unitPriceField != null
+                : "fx:id=\"unitPriceField\" was not injected: check your FXML file 'ProductWindow.fxml'.";
         assert unitsField != null : "fx:id=\"unitsField\" was not injected: check your FXML file 'ProductWindow.fxml'.";
-        assert vendorField != null : "fx:id=\"vendorField\" was not injected: check your FXML file 'ProductWindow.fxml'.";
+        assert vendorField != null
+                : "fx:id=\"vendorField\" was not injected: check your FXML file 'ProductWindow.fxml'.";
         assert viscField != null : "fx:id=\"viscField\" was not injected: check your FXML file 'ProductWindow.fxml'.";
         typeCombobox.getItems().addAll("Oil", "Service Part");
+
 
         typeCombobox.setOnAction((arg0) -> {
             String selected = typeCombobox.getSelectionModel().getSelectedItem();
@@ -140,6 +153,8 @@ public class ProductWindowController {
                 nameField.setDisable(false);
             }
         });
+
+        typeCombobox.setValue("Oil");
     }
 
 }
