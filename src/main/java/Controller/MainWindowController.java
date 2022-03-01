@@ -2,17 +2,17 @@ package Controller;
 
 import java.net.URL;
 import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 import Model.Product;
 import Model.ProductHistoryItem;
 import Model.Role;
 import Model.User;
-import View.AddStockShelveWindow;
 import View.ProductWindow;
 import View.UserWindow;
+import View.AddStockWindow;
+import View.ProductWindow;
+import View.ShelveWindow;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,9 +21,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.text.Text;
 
 public class MainWindowController {
@@ -67,6 +65,15 @@ public class MainWindowController {
 	@FXML
 	private Button searchBtn;
 
+    @FXML
+    private Button editProductBtn;
+	
+	@FXML
+    private Button shelfBtn;
+
+    @FXML
+    private Button stockProductBtn;
+
 	@FXML
 	private Button searchUserBtn;
 
@@ -83,16 +90,30 @@ public class MainWindowController {
 	private TableView<User> usersTable;
 
 	@FXML
-	void addStockBtnPressed(ActionEvent event) {
-		AddStockShelveWindow window = new AddStockShelveWindow();
-		window.view(); 
-	}
-
-	@FXML
 	void createBtnPressed(ActionEvent event) {
 		ProductWindow productWindow = new ProductWindow();
 		productWindow.view();
 	}
+	
+    @FXML
+    void editProductBtnPressed(ActionEvent event) {
+		Product product = productsTable.getSelectionModel().getSelectedItem();
+		ProductWindow window = new ProductWindow();
+		window.view();
+		window.setProduct(product);
+    }
+
+	@FXML
+    void shelfBtnPressed(ActionEvent event) {
+		ShelveWindow window = new ShelveWindow();
+		window.show();
+    }
+	
+    @FXML
+    void stockProductBtnPressed(ActionEvent event) {
+		AddStockWindow window = new AddStockWindow();
+		window.show();
+    }
 
 	@FXML
 	void newPurchaseBtnPressed(ActionEvent event) {
@@ -160,6 +181,9 @@ public class MainWindowController {
 
 		historyTable.setPlaceholder(new Text("Select a product"));
 		shelvesTable.setPlaceholder(new Text("Select a product"));
+		editProductBtn.setDisable(true);
+		stockProductBtn.setDisable(true);
+		shelfBtn.setDisable(true);
 	}
 
 	void initializeTables() {
@@ -260,6 +284,10 @@ public class MainWindowController {
         //locations table
         shelvesTable.getItems().clear();
 		shelvesTable.getItems().addAll(product.getLocations().entrySet());
+		//buttons
+		editProductBtn.setDisable(false);
+		stockProductBtn.setDisable(false);
+		shelfBtn.setDisable(false);
     }
 
 	private void updateRelatedUserInfo(User user) { //TODO TODO TODO

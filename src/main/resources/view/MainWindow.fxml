@@ -66,11 +66,25 @@
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                        </VBox.margin>
                                     </Button>
-                                    <Button fx:id="addStockBtn" mnemonicParsing="false" onAction="#addStockBtnPressed" prefHeight="28.0" prefWidth="225.0" text="%add_stock">
-                                       <VBox.margin>
-                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                       </VBox.margin>
-                                    </Button>
+                                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                                       <children>
+                                          <Button fx:id="editProductBtn" mnemonicParsing="false" onAction="#editProductBtnPressed" prefHeight="28.0" prefWidth="68.0" text="%edit">
+                                             <HBox.margin>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                             </HBox.margin>
+                                          </Button>
+                                          <Button fx:id="stockProductBtn" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#stockProductBtnPressed" prefHeight="28.0" prefWidth="68.0" text="%stock">
+                                             <HBox.margin>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                             </HBox.margin>
+                                          </Button>
+                                          <Button fx:id="shelfBtn" layoutX="67.0" layoutY="10.0" mnemonicParsing="false" onAction="#shelfBtnPressed" prefHeight="28.0" prefWidth="68.0" text="%shelve">
+                                             <HBox.margin>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                             </HBox.margin>
+                                          </Button>
+                                       </children>
+                                    </HBox>
                                     <Button fx:id="newPurchaseBtn" mnemonicParsing="false" onAction="#newPurchaseBtnPressed" prefHeight="28.0" prefWidth="225.0" text="%new_purchase">
                                        <VBox.margin>
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

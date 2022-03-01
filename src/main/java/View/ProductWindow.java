@@ -5,6 +5,7 @@ import java.io.IOException;
 import Context.Context;
 import Controller.ProductWindowController;
 import Controller.WindowLoader;
+import Model.Product;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -17,12 +18,10 @@ public class ProductWindow {
 
     public ProductWindow(){
         loader = WindowLoader.getLoader(FXML_NAME);
-        try {
-            controller = loader.getController();
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+    }
+
+    public void setProduct(Product product){
+        controller.setProduct(product);
     }
 
     public Stage view(){
@@ -30,6 +29,7 @@ public class ProductWindow {
         Stage stage = new Stage();
         try {
             root = loader.load();
+            controller = loader.getController();
             root.getStylesheets().addAll(Context.getContext().getCurrentTheme());
             stage.setScene(new Scene(root));
             stage.show();

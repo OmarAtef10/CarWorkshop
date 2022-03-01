@@ -1,10 +1,12 @@
 package Controller;
 
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 import Context.Context;
 import Model.Oil;
+import Model.Product;
 import Model.ServicePart;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,6 +19,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import javafx.util.converter.LocalDateStringConverter;
 
 public class ProductWindowController {
 
@@ -65,6 +68,21 @@ public class ProductWindowController {
     @FXML
     void cancelBtnPressed(ActionEvent event) {
         ((Stage) cancelBtn.getScene().getWindow()).close();
+    }
+
+    public void setProduct(Product product){
+        nameField.setText(product.getProductName());
+        unitsField.setText(String.valueOf(product.getUnits()));
+        unitPriceField.setText(String.valueOf(product.getPricePerUnit()));
+        vendorField.setText(String.valueOf(product.getVendor()));
+        marketPriceField.setText(String.valueOf(product.getMarketPrice()));
+        
+
+        if(product instanceof Oil){
+            milageField.setText(String.valueOf(((Oil)product).getMileage()));
+            viscField.setText(((Oil)product).getViscosity());
+            expiryField.setValue(LocalDate.parse(((Oil)product).getExpiryDate()));
+        }
     }
 
     @FXML
@@ -155,6 +173,7 @@ public class ProductWindowController {
         });
 
         typeCombobox.setValue("Oil");
+        nameField.setDisable(true);
     }
 
 }
