@@ -10,6 +10,7 @@ import Model.Product;
 import Model.ProductHistoryItem;
 import View.AddStockShelveWindow;
 import View.ProductWindow;
+import View.UserWindow;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -99,6 +100,8 @@ public class MainWindowController {
 	@FXML
 	void registerBtnPressed(ActionEvent event) {
 
+		UserWindow userWindow = new UserWindow();
+		userWindow.view();
 	}
 
 	@FXML
