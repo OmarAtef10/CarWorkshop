@@ -11,7 +11,8 @@
 <?import javafx.scene.layout.VBox?>
 
 
-<VBox prefHeight="200.0" prefWidth="600.0" styleClass="background" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<VBox prefHeight="200.0" prefWidth="600.0" styleClass="background" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="Controller.SearchWindowController">
    <children>
       <GridPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="139.0" prefWidth="610.0" VBox.vgrow="ALWAYS">
         <columnConstraints>

@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 
 import Context.Context;
+import Controller.ProductDao;
 import Controller.WindowLoader;
+import Model.Product;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +20,8 @@ public class AddStockWindow extends VBox{
 
     public static final String FXML_NAME = AddStockWindow.class.getSimpleName() + ".fxml";
     Stage stage;
+
+    private Product product;
 
     public AddStockWindow(){
         try {
@@ -59,7 +63,19 @@ public class AddStockWindow extends VBox{
 
     @FXML
     void saveBtnPressed(ActionEvent event) {
-
+        ProductDao productDao = new ProductDao();
+        int newStockCount = product.getUnits();
+        newStockCount += Integer.parseInt(unitsField.getText());
+        product.setUnits( newStockCount );
+        productDao.updateProduct(product);
+        cancelBtnPressed(new ActionEvent());
     }
 
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
 }

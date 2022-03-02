@@ -5,6 +5,7 @@ import java.io.IOException;
 import Context.Context;
 import Controller.UserWindowController;
 import Controller.WindowLoader;
+import Model.User;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -30,6 +31,7 @@ public class UserWindow {
         Stage stage = new Stage();
         try {
             root = loader.load();
+            controller = loader.getController();
             root.getStylesheets().addAll(Context.getContext().getCurrentTheme());
             stage.setScene(new Scene(root));
             stage.show();
@@ -39,5 +41,13 @@ public class UserWindow {
         }
 
         return stage;
+    }
+
+    public void setUser(User user){
+        this.controller.setUser(user);
+    }
+
+    public User getUser(){
+        return controller.getUser();
     }
 }

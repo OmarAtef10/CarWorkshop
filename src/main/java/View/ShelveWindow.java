@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 
 import Context.Context;
+import Controller.ProductDao;
 import Controller.WindowLoader;
+import Model.Product;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -34,6 +36,8 @@ public class ShelveWindow extends VBox{
 
     @FXML
     private TextField unitsField;
+
+    private Product product;
 
     public ShelveWindow(){
         try {
@@ -66,6 +70,17 @@ public class ShelveWindow extends VBox{
 
     @FXML
     void saveBtnPressed(ActionEvent event) {
+        ProductDao productDao = new ProductDao();
+        this.product.addLocation(shelfNumField.getText(),Integer.parseInt(unitsField.getText()));
+        productDao.addProductShelf(this.product);
+        cancelBtnPressed(new ActionEvent());
+    }
 
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 }

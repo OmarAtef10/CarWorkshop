@@ -12,7 +12,7 @@ import java.util.Hashtable;
 
 
 public class UserManager {
-    private Hashtable<Action, ArrayList<Role>> permissions;
+    private final Hashtable<Role, ArrayList<Action>> permissions;
     private User currentUser = null;
     private static UserManager userManager;
     private UserDao userDao = null;
@@ -23,7 +23,7 @@ public class UserManager {
         initPermissions();
     }
 
-    public static boolean userLoggedIn(){
+    public static boolean userLoggedIn() {
         return getInstance().currentUser != null;
     }
 
@@ -35,12 +35,22 @@ public class UserManager {
     }
 
     public void initPermissions() {
-        for (Action action : Action.values()) {
-            permissions.put(action, new ArrayList<Role>());
-            permissions.get(action).add(Role.ADMIN);
-        }
-        permissions.get(Action.VIEW_SHELF).add(Role.EMPLOYEE);
-        permissions.get(Action.EDIT_SHELF).add(Role.EMPLOYEE);
+        permissions.put(Role.ADMIN, new ArrayList<Action>() {{
+            add(Action.VIEW_INVENTORY);
+            add(Action.VIEW_SHELF);
+            add(Action.EDIT_INVENTORY);
+            add(Action.EDIT_SHELF);
+            add(Action.VIEW_DAILY_REPORT);
+            add(Action.ADD_USERS);
+            add(Action.EDIT_USERS);
+            add(Action.CHECK_OUT);
+        }});
+
+        permissions.put(Role.EMPLOYEE, new ArrayList<Action>() {{
+            add(Action.VIEW_INVENTORY);
+            add(Action.VIEW_SHELF);
+            add(Action.CHECK_OUT);
+        }});
     }
 
     public User login(String username, String password) throws Exception {
@@ -48,27 +58,27 @@ public class UserManager {
 
         UserDao userDao = new UserDao();
         User user = userDao.getUser(username);
-        if(user == null){
+        if (user == null) {
             throw new Exception("User doesn't exist!");
-        }else if( user.getPassword().equals(password) ){
+        } else if (user.getPassword().equals(password)) {
             this.currentUser = user;
-        }else{
+        } else {
             throw new Exception("Wrong password!");
         }
         return currentUser;
     }
 
-    public User register(String username,String password,Role role){
-        User newRegistered = new User(username,password);
+    public User register(String username, String password, Role role) {
+        User newRegistered = new User(username, password);
         newRegistered.setRole(role);
-        if(! this.userDao.addUser(newRegistered)){
+        if (!this.userDao.addUser(newRegistered)) {
             return null;
         }
         return newRegistered;
     }
 
-    public void logout(){
-        Report userReport = new Report(currentUser.getUserName(),TimeUtility.getCurrentDate());
+    public void logout() {
+        Report userReport = new Report(currentUser.getUserName(), TimeUtility.getCurrentDate());
 
         ReportDao reportDao = new ReportDao();
         reportDao.addReport(userReport);
@@ -76,25 +86,36 @@ public class UserManager {
         currentUser = null;
     }
 
-    public User updateUser(User user){
+    public User updateUser(User user) {
         return this.userDao.updateUser(user);
     }
 
-    public boolean deleteUser(String username){
+    public boolean deleteUser(String username) {
         return userDao.deleteUser(username);
     }
 
-    public Report getMainDailyReport(String date){
+    public Report getMainDailyReport(String date) {
         ReportDao reportDao = new ReportDao();
         Report report = reportDao.getDailyMainReport(date);
         return report;
     }
 
-    public Report getMainDailyReport(){
+    public Report getMainDailyReport() {
         ReportDao reportDao = new ReportDao();
         Report report = reportDao.getDailyMainReport(TimeUtility.getCurrentDate());
         return report;
     }
 
+    public User getCurrentUser() {
+        return currentUser;
+    }
 
+    public Hashtable<Role, ArrayList<Action>> getPermissions() {
+        return permissions;
+    }
+
+    public boolean hasPermission(Action action) {;
+        return UserManager.getInstance().getPermissions().get(this.currentUser.getRole()).contains(action);
+    }
 }
+

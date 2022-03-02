@@ -116,7 +116,7 @@
             </AnchorPane>
          </content>
       </Tab>
-      <Tab text="%users">
+      <Tab text="%users" fx:id="usersTab">
          <content>
             <AnchorPane>
                <children>

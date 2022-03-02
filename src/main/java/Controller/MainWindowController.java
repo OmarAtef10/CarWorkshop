@@ -4,10 +4,8 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
-import Model.Product;
-import Model.ProductHistoryItem;
-import Model.Role;
-import Model.User;
+import Context.Context;
+import Model.*;
 import View.ProductWindow;
 import View.UserWindow;
 import View.AddStockWindow;
@@ -15,15 +13,13 @@ import View.ProductWindow;
 import View.ShelveWindow;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
-
+import javafx.stage.WindowEvent;
+//TODO User data / shelf data/ stock updates need to be shown on UI tables after each update!
 public class MainWindowController {
 
 	@FXML
@@ -90,9 +86,17 @@ public class MainWindowController {
 	private TableView<User> usersTable;
 
 	@FXML
+	private Tab usersTab;
+
+	@FXML
 	void createBtnPressed(ActionEvent event) {
 		ProductWindow productWindow = new ProductWindow();
-		productWindow.view();
+		productWindow.view().setOnHidden(new EventHandler<WindowEvent>() {
+			@Override
+			public void handle(WindowEvent windowEvent) {
+				productsTable.getItems().add(productWindow.getProduct());
+			}
+		});
 	}
 	
     @FXML
@@ -107,12 +111,14 @@ public class MainWindowController {
     void shelfBtnPressed(ActionEvent event) {
 		ShelveWindow window = new ShelveWindow();
 		window.show();
+		window.setProduct( productsTable.getSelectionModel().getSelectedItem() );
     }
 	
     @FXML
     void stockProductBtnPressed(ActionEvent event) {
 		AddStockWindow window = new AddStockWindow();
 		window.show();
+		window.setProduct( productsTable.getSelectionModel().getSelectedItem() );
     }
 
 	@FXML
@@ -122,14 +128,31 @@ public class MainWindowController {
 
 	@FXML
 	void registerBtnPressed(ActionEvent event) {
+		if(UserManager.getInstance().hasPermission(Action.ADD_USERS)){
+			UserWindow userWindow = new UserWindow();
+			userWindow.view().setOnHidden(new EventHandler<WindowEvent>() {
+				@Override
+				public void handle(WindowEvent windowEvent) {
+					usersTable.getItems().add( userWindow.getUser());
+				}
+			});
 
-		UserWindow userWindow = new UserWindow();
-		userWindow.view();
+		}else{
+			registerBtn.setDisable(true);
+		}
 	}
 
 	@FXML
 	void removeUserBtnPressed(ActionEvent event) {
-
+		User user = usersTable.getSelectionModel().getSelectedItem();
+		if(!UserManager.getInstance().getCurrentUser().getUserName().equals(user.getUserName())){
+			UserManager.getInstance().deleteUser(user.getUserName());
+			usersTable.getItems().remove(user);
+		}else{
+			Alert alert = new Alert(Alert.AlertType.ERROR, "You can't delete current logged in user!", ButtonType.OK);
+			alert.getDialogPane().getStylesheets().addAll(Context.getContext().getCurrentTheme());
+			alert.show();
+		}
 	}
 
 	@FXML
@@ -144,6 +167,10 @@ public class MainWindowController {
 
 	@FXML
 	void updateUserBtnPressed(ActionEvent event) {
+		User user = usersTable.getSelectionModel().getSelectedItem();
+		UserWindow userWindow = new UserWindow();
+		userWindow.view();
+		userWindow.setUser(user);
 
 	}
 
@@ -275,6 +302,16 @@ public class MainWindowController {
 
 		//Invoices Table
 
+
+
+		// Check buttons
+		if(UserManager.getInstance().getCurrentUser().getRole() != Role.ADMIN){
+			usersTab.setDisable(true);
+		}
+
+		updateUserBtn.setDisable(true);
+		removeUserBtn.setDisable(true);
+
 	}
 
 	private void updateRelatedProductInfo(Product product) {
@@ -297,7 +334,13 @@ public class MainWindowController {
 		//invoices table
 		invoicesTable.getItems().clear();
 		//invoicesTable.getItems().addAll(user.getLocations().entrySet());
+
+		//
+		removeUserBtn.setDisable(false);
+		updateUserBtn.setDisable(false);
+
 	}
+
 
 	void initData() {
 		ProductDao dao = new ProductDao();

@@ -36,7 +36,19 @@ public class UserWindowController {
 
     @FXML
     private ComboBox<String> typeCombobox;
+    private User user = null;
 
+    public void setUser(User user){
+        this.user = user;
+        userNameField.setDisable(true);
+        typeCombobox.setValue(user.getRole().toString());
+        userNameField.setText(user.getUserName());
+        passwordField.setText(user.getPassword());
+    }
+
+    public User getUser(){
+        return this.user;
+    }
 
     @FXML
     void cancelBtnPressed(ActionEvent event) {
@@ -46,29 +58,41 @@ public class UserWindowController {
     @FXML
     void saveBtnPressed(ActionEvent event) {
         UserDao userDao = new UserDao();
-        boolean success = false;
-        if (typeCombobox.getValue().equals("Admin")) {
-            if (!userNameField.getText().equals("") || !passwordField.getText().equals("")) {
-                User user = UserManager.getInstance().register(userNameField.getText(),
-                        passwordField.getText(), Role.ADMIN);
-                userDao.addUser(user);
-                success = true;
-                cancelBtnPressed(new ActionEvent());
+
+        if(this.user == null){
+            boolean success = false;
+            if (typeCombobox.getValue().equals("Admin")) {
+                if (!userNameField.getText().equals("") || !passwordField.getText().equals("")) {
+                    User user = UserManager.getInstance().register(userNameField.getText(),
+                            passwordField.getText(), Role.ADMIN);
+                    userDao.addUser(user);
+                    success = true;
+                    this.user = user;
+                    cancelBtnPressed(new ActionEvent());
+                }
+            } else if (typeCombobox.getValue().equals("Employee")) {
+                if (!userNameField.getText().equals("") || !passwordField.getText().equals("")) {
+                    User user = UserManager.getInstance().register(userNameField.getText(),
+                            passwordField.getText(), Role.EMPLOYEE);
+                    userDao.addUser(user);
+                    success = true;
+                    this.user = user;
+                    cancelBtnPressed(new ActionEvent());
+                }
+                if (!success) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR, "WRONG DATA", ButtonType.OK);
+                    alert.getDialogPane().getScene().getStylesheets().addAll(Context.getContext().getCurrentTheme());
+                    alert.show();
+                }
             }
-        } else if (typeCombobox.getValue().equals("User")) {
-            if (!userNameField.getText().equals("") || !passwordField.getText().equals("")) {
-                User user = UserManager.getInstance().register(userNameField.getText(),
-                        passwordField.getText(), Role.EMPLOYEE);
-                userDao.addUser(user);
-                success = true;
-                cancelBtnPressed(new ActionEvent());
-            }
-            if (!success) {
-                Alert alert = new Alert(Alert.AlertType.ERROR, "WRONG DATA", ButtonType.OK);
-                alert.getDialogPane().getScene().getStylesheets().addAll(Context.getContext().getCurrentTheme());
-                alert.show();
-            }
+        }else{
+            this.user.setRole( Role.valueOf(typeCombobox.getValue().toUpperCase()));
+            this.user.setPassword(passwordField.getText());
+            userDao.updateUser(this.user);
+
+            cancelBtnPressed(new ActionEvent());
         }
+
     }
 
     @FXML
@@ -78,7 +102,7 @@ public class UserWindowController {
         assert gridPane != null : "fx:id=\"gridPane\" was not injected: check your FXML file 'UserWindow.fxml'.";
         assert passwordField != null : "fx:id=\"passwordField\" was not injected: check your FXML file 'UserWindow.fxml'.";
         assert typeCombobox != null : "fx:id=\"typeCombobox\" was not injected: check your FXML file 'UserWindow.fxml'.";
-        typeCombobox.getItems().addAll("Admin", "User");
+        typeCombobox.getItems().addAll("Admin", "Employee");
     }
 
 }

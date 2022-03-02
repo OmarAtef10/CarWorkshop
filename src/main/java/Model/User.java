@@ -48,6 +48,14 @@ public class User {
         this.role = role;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setSessionReport(Report sessionReport) {
+        this.sessionReport = sessionReport;
+    }
+
     public Report getSessionReport() {
         return sessionReport;
     }

@@ -319,9 +319,13 @@ public class SQLiteService implements IDataBaseService {
     public boolean addProductShelf(Product product) {
         String addProductShelf = "INSERT INTO ShelfProduct(productId, shelfNumber, units, expiryDate) VALUES(?,?,?,?);";
         Hashtable<String, Integer> locations = product.getLocations();
+        Hashtable<String, Integer> db_inst = getProductShelf(product.getProductId());
         try {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(addProductShelf);
             for (String loc : locations.keySet()) {
+                if(db_inst.containsKey(loc)){
+                    continue;
+                }
                 preparedStatement.setString(1, product.getProductId());
                 preparedStatement.setString(2, loc);
                 preparedStatement.setInt(3, locations.get(loc));

@@ -65,12 +65,15 @@ public class ProductWindowController {
     @FXML
     private TextField viscField;
 
+    private Product product;
+
     @FXML
     void cancelBtnPressed(ActionEvent event) {
         ((Stage) cancelBtn.getScene().getWindow()).close();
     }
 
     public void setProduct(Product product){
+        this.product = product;
         nameField.setText(product.getProductName());
         unitsField.setText(String.valueOf(product.getUnits()));
         unitPriceField.setText(String.valueOf(product.getPricePerUnit()));
@@ -83,6 +86,10 @@ public class ProductWindowController {
             viscField.setText(((Oil)product).getViscosity());
             expiryField.setValue(LocalDate.parse(((Oil)product).getExpiryDate()));
         }
+    }
+
+    public Product getProduct(){
+        return this.product;
     }
 
     @FXML
@@ -106,6 +113,7 @@ public class ProductWindowController {
                         expiryField.getValue().toString());
                 productDao.addProduct(oil);
                 success = true;
+                this.product = oil;
                 cancelBtnPressed(new ActionEvent());
             }
 
@@ -124,6 +132,7 @@ public class ProductWindowController {
                         Double.parseDouble(marketPriceField.getText()));
                 productDao.addProduct(servicePart);
                 success = true;
+                this.product = servicePart;
                 cancelBtnPressed(new ActionEvent());
             }
         }

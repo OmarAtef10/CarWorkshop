@@ -7,5 +7,6 @@ public enum Action {
     EDIT_SHELF,
     VIEW_DAILY_REPORT,
     ADD_USERS,
-    EDIT_USERS;
+    EDIT_USERS,
+    CHECK_OUT;
 }

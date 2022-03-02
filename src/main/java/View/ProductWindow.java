@@ -40,4 +40,8 @@ public class ProductWindow {
 
         return stage;
     }
+
+    public Product getProduct(){
+        return controller.getProduct();
+    }
 }
