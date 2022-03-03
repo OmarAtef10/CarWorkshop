@@ -101,7 +101,6 @@ public class ProductWindowController {
     @FXML
     void saveBtnPressed(ActionEvent event) {
         ProductDao productDao = new ProductDao();
-        String old_item_id = product.getProductId();
 
         boolean success = false;
         if (typeCombobox.getValue().equals("Oil")) {
@@ -112,47 +111,32 @@ public class ProductWindowController {
                     || expiryField.getValue() != null) {
 
 
-                Oil oil = new Oil(vendorField.getText(),
-                        Integer.parseInt(unitsField.getText()),
-                        Double.parseDouble(unitPriceField.getText()),
-                        Double.parseDouble(marketPriceField.getText()),
-                        viscField.getText(),
-                        Integer.parseInt(milageField.getText()),
-                        expiryField.getValue().toString());
-
-                Hashtable<String ,  Integer> old_locations = product.getLocations();
-                oil.setLocations(old_locations);
-                productDao.deleteProduct(product.getProductName(), product.getVendor());
-
-                productDao.addProduct(oil);
-                productDao.addProductShelf(oil);
+                this.product.setVendor(vendorField.getText());
+                this.product.setUnits(Integer.parseInt(unitsField.getText()));
+                this.product.setPricePerUnit(Double.parseDouble(unitPriceField.getText()));
+                this.product.setMarketPrice(Double.parseDouble(marketPriceField.getText()));
+                ((Oil)this.product).setViscosity(viscField.getText());
+                ((Oil)this.product).setMileage(Integer.parseInt(milageField.getText()));
+                ((Oil)this.product).setExpiryDate(expiryField.getValue().toString());
+                productDao.updateProduct(product);
                 success = true;
-                this.product = oil;
                 cancelBtnPressed(new ActionEvent());
             }
 
         } else if (typeCombobox.getValue().equals("Service Part")) {
-
-            System.out.println(vendorField.getText() + "  " + unitPriceField.getText() + " " + " "
-                    + unitsField.getText() + " " + marketPriceField.getText() + " " + nameField.getText());
             if (!vendorField.getText().equals("") || !unitsField.getText().equals("")
-                    || !unitPriceField.getText().equals("")
-                    || !marketPriceField.getText().equals("") || !nameField.getText().equals("")) {
+                    || !unitPriceField.getText().equals("") || !marketPriceField.getText().equals("")
+                    || !nameField.getText().equals("")) {
 
-                ServicePart servicePart = new ServicePart(nameField.getText(),
-                        vendorField.getText(),
-                        Integer.parseInt(unitsField.getText()),
-                        Double.parseDouble(unitPriceField.getText()),
-                        Double.parseDouble(marketPriceField.getText()));
 
-                Hashtable<String,Integer> old_location = product.getLocations();
-                servicePart.setLocations(old_location);
-                productDao.deleteProduct(product.getProductName(), product.getVendor());
 
-                productDao.addProduct(servicePart);
-                productDao.addProductShelf(servicePart);
+                this.product.setProductName(nameField.getText());
+                this.product.setVendor(vendorField.getText());
+                this.product.setUnits(Integer.parseInt(unitsField.getText()));
+                this.product.setPricePerUnit(Double.parseDouble(unitPriceField.getText()));
+                this.product.setMarketPrice(Double.parseDouble(marketPriceField.getText()));
+                productDao.updateProduct(product);
                 success = true;
-                this.product = servicePart;
                 cancelBtnPressed(new ActionEvent());
             }
         }
@@ -197,7 +181,7 @@ public class ProductWindowController {
                 expiryField.setDisable(true);
                 milageField.setDisable(true);
                 viscField.setDisable(true);
-                nameField.setDisable(false);
+                nameField.setDisable(true);
             }
         });
         typeCombobox.setValue("Oil");
