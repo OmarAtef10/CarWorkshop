@@ -2,6 +2,7 @@ package Controller;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.Hashtable;
 import java.util.ResourceBundle;
 
 import Context.Context;
@@ -74,6 +75,11 @@ public class ProductWindowController {
 
     public void setProduct(Product product){
         this.product = product;
+        if(product instanceof Oil){
+            typeCombobox.setValue("Oil");
+        }else{
+            typeCombobox.setValue("Service Part");
+        }
         nameField.setText(product.getProductName());
         unitsField.setText(String.valueOf(product.getUnits()));
         unitPriceField.setText(String.valueOf(product.getPricePerUnit()));
@@ -95,14 +101,16 @@ public class ProductWindowController {
     @FXML
     void saveBtnPressed(ActionEvent event) {
         ProductDao productDao = new ProductDao();
+        String old_item_id = product.getProductId();
+
         boolean success = false;
         if (typeCombobox.getValue().equals("Oil")) {
-
             if (!vendorField.getText().equals("") || unitsField.getText().equals("")
                     || !unitPriceField.getText().equals("")
                     || !marketPriceField.getText().equals("") || viscField.getText().equals("")
                     || !milageField.getText().equals("")
                     || expiryField.getValue() != null) {
+
 
                 Oil oil = new Oil(vendorField.getText(),
                         Integer.parseInt(unitsField.getText()),
@@ -111,7 +119,13 @@ public class ProductWindowController {
                         viscField.getText(),
                         Integer.parseInt(milageField.getText()),
                         expiryField.getValue().toString());
+
+                Hashtable<String ,  Integer> old_locations = product.getLocations();
+                oil.setLocations(old_locations);
+                productDao.deleteProduct(product.getProductName(), product.getVendor());
+
                 productDao.addProduct(oil);
+                productDao.addProductShelf(oil);
                 success = true;
                 this.product = oil;
                 cancelBtnPressed(new ActionEvent());
@@ -130,7 +144,13 @@ public class ProductWindowController {
                         Integer.parseInt(unitsField.getText()),
                         Double.parseDouble(unitPriceField.getText()),
                         Double.parseDouble(marketPriceField.getText()));
+
+                Hashtable<String,Integer> old_location = product.getLocations();
+                servicePart.setLocations(old_location);
+                productDao.deleteProduct(product.getProductName(), product.getVendor());
+
                 productDao.addProduct(servicePart);
+                productDao.addProductShelf(servicePart);
                 success = true;
                 this.product = servicePart;
                 cancelBtnPressed(new ActionEvent());
@@ -180,9 +200,9 @@ public class ProductWindowController {
                 nameField.setDisable(false);
             }
         });
-
         typeCombobox.setValue("Oil");
         nameField.setDisable(true);
+
     }
 
 }
