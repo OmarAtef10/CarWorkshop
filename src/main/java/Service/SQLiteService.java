@@ -666,10 +666,11 @@ public class SQLiteService implements IDataBaseService {
 
     @Override
     public ArrayList<Invoice> getDailyUserInvoices(String username, String date) {
+        //FIXME: This doesn't work and getReformedDate return the date with an extra space
         String reformedDate = TimeUtility.getReformedDate(date);
         ArrayList<Invoice> invoices = new ArrayList<>();
         String getDailyUserInvoices = "SELECT * FROM Invoices WHERE username = ?" +
-                "AND date LIKE '" + reformedDate + "%';";
+                "AND date LIKE " + reformedDate + "%;";
         try {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(getDailyUserInvoices);
             preparedStatement.setString(1, username);

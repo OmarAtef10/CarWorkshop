@@ -7,7 +7,7 @@ import CustomizedUtilities.UUID_Utility;
 import java.sql.ResultSet;
 
 public class Invoice {
-    private String invoiceID;
+    private String invoiceId;
     private String userName;
     private Cart cart;
     private String phone;
@@ -22,7 +22,7 @@ public class Invoice {
         this.phone = phone;
         this.totalPaid = totalPaid;
         this.date = TimeUtility.getCurrentDate();
-        this.invoiceID = UUID_Utility.generateId();
+        this.invoiceId = UUID_Utility.generateId();
     }
 
     public static Invoice fromResultSet(ResultSet resultSet) {
@@ -43,7 +43,7 @@ public class Invoice {
     }
 
     public void setInvoiceID(String invoiceID) {
-        this.invoiceID = invoiceID;
+        this.invoiceId = invoiceID;
     }
 
     public void setUserName(String userName) {
@@ -68,7 +68,7 @@ public class Invoice {
     }
 
     public String getInvoiceID() {
-        return invoiceID;
+        return invoiceId;
     }
 
     public String getUserName() {

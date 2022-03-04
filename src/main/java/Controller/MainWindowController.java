@@ -39,7 +39,7 @@ public class MainWindowController {
     private TableView<ProductHistoryItem> historyTable;
 
     @FXML
-    private TableView<?> invoicesTable;
+    private TableView<Invoice> invoicesTable;
 
     @FXML
     private Button newPurchaseBtn;
@@ -323,8 +323,28 @@ public class MainWindowController {
 
         reportTable.getColumns().addAll(reportIdColumn, reportDateColumn);
         reportTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        reportTable.setRowFactory((arg0) -> {
+            TableRow<Report> selectedRow = new TableRow<>();
+            selectedRow.setOnMouseClicked((event) -> {
+                Report report = selectedRow.getItem();
+                if(event.getClickCount() == 1 && !selectedRow.isEmpty()){
+                    invoicesTable.getItems().clear();
+                    invoicesTable.getItems().addAll(report.getInvoices());
+                }
+            });
+            return selectedRow;
+        });
 
         //Invoices Table
+
+        TableColumn<Invoice, String> invoiceIdCol = new TableColumn<Invoice, String>("Invoice ID");
+        reportIdColumn.setCellFactory(new PropertyValueFactory("invoiceId"));
+
+        TableColumn<Invoice, Double> totalCol = new TableColumn<Invoice, Double>("Total");
+        totalCol.setCellFactory(new PropertyValueFactory("totalPaid"));
+
+        invoicesTable.getColumns().addAll(invoiceIdCol, totalCol);
+        invoicesTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
 
         // Check buttons
