@@ -2,6 +2,7 @@ package View;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.Hashtable;
 
 import Context.Context;
 import Controller.ProductDao;
@@ -11,7 +12,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -38,6 +41,8 @@ public class ShelveWindow extends VBox{
     private TextField unitsField;
 
     private Product product;
+    private ProductDao productDao = new ProductDao();
+
 
     public ShelveWindow(){
         try {
@@ -70,10 +75,32 @@ public class ShelveWindow extends VBox{
 
     @FXML
     void saveBtnPressed(ActionEvent event) {
-        ProductDao productDao = new ProductDao();
-        this.product.addLocation(shelfNumField.getText(),Integer.parseInt(unitsField.getText()));
-        productDao.addProductShelf(this.product);
+        if(checkUnitsAvailibilty()){
+            this.product.addLocation(shelfNumField.getText(),Integer.parseInt(unitsField.getText()));
+            productDao.addProductShelf(this.product);
+        }else{
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Insufficient units", ButtonType.OK);
+            alert.getDialogPane().getScene().getStylesheets().addAll(Context.getContext().getCurrentTheme());
+            alert.show();
+        }
         cancelBtnPressed(new ActionEvent());
+    }
+
+    public boolean checkUnitsAvailibilty(){
+        Hashtable<String,Integer> shelfed_products = productDao.getProductShelf(this.product.getProductId());
+        int shelfed_products_count = 0;
+        for(String p : shelfed_products.keySet()){
+            shelfed_products_count += shelfed_products.get(p);
+        }
+
+        int unshelfed_prods = product.getUnits()- shelfed_products_count;
+        if(!unitsField.getText().equals("")){
+            int new_shelfed = Integer.parseInt(unitsField.getText());
+            if(unshelfed_prods>=new_shelfed){
+                return true;
+            }
+        }
+        return false;
     }
 
     public Product getProduct() {

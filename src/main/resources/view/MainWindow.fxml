@@ -84,7 +84,15 @@
                                              </HBox.margin>
                                           </Button>
                                        </children>
+                                       <VBox.margin>
+                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                       </VBox.margin>
                                     </HBox>
+                                    <Button fx:id="removeBtn" mnemonicParsing="false" onAction="#removeBtnPressed" prefWidth="225.0" text="%remove" VBox.vgrow="ALWAYS">
+                                       <VBox.margin>
+                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                       </VBox.margin>
+                                    </Button>
                                     <Button fx:id="newPurchaseBtn" mnemonicParsing="false" onAction="#newPurchaseBtnPressed" prefHeight="28.0" prefWidth="225.0" text="%new_purchase">
                                        <VBox.margin>
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -96,19 +104,22 @@
                                        </VBox.margin>
                                     </Button>
                                  </children>
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </VBox.margin>
                               </VBox>
                            </children>
                         </VBox>
                         <SplitPane dividerPositions="0.5" prefHeight="400.0" prefWidth="476.0" HBox.hgrow="ALWAYS">
-                          <items>
+                           <items>
                               <TableView fx:id="productsTable" prefHeight="398.0" prefWidth="236.0" />
                               <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="398.0" prefWidth="236.0">
-                                <items>
+                                 <items>
                                     <TableView fx:id="historyTable" prefHeight="200.0" prefWidth="236.0" />
                                     <TableView fx:id="shelvesTable" prefHeight="200.0" prefWidth="236.0" />
-                                </items>
+                                 </items>
                               </SplitPane>
-                          </items>
+                           </items>
                         </SplitPane>
                      </children>
                   </HBox>
@@ -116,7 +127,7 @@
             </AnchorPane>
          </content>
       </Tab>
-      <Tab text="%users" fx:id="usersTab">
+      <Tab fx:id="usersTab" text="%users">
          <content>
             <AnchorPane>
                <children>

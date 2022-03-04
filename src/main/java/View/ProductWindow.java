@@ -24,6 +24,10 @@ public class ProductWindow {
         controller.setProduct(product);
     }
 
+    public void setEditMode(boolean mode){
+        controller.setEditMode(mode);
+    }
+
     public Stage view(){
         Parent root;
         Stage stage = new Stage();

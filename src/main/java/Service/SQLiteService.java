@@ -91,7 +91,8 @@ public class SQLiteService implements IDataBaseService {
                 "shelfNumber VARCHAR(45) PRIMARY KEY," +
                 "units INTEGER," +
                 "expiryDate VARCHAR(12) NULL," +
-                "FOREIGN KEY(productId) REFERENCES Product(productId));";
+                "FOREIGN KEY(productId) REFERENCES Product(productId) " +
+                "ON DELETE CASCADE);";
 
         String reportsTable = "CREATE TABLE Reports(" +
                 "date VARCHAR(12)," +
@@ -256,8 +257,8 @@ public class SQLiteService implements IDataBaseService {
     @Override
     public boolean updateProduct(Product product) {
         if (product instanceof Oil) {
-            String updateProduct = "UPDATE Product SET price = ?, marketPrice = ? ,units = ?, expiryDate = ?" +
-                    "WHERE name  = ? AND vendor = ?;";
+            String updateProduct = "UPDATE Product SET price = ?, marketPrice = ? ,units = ?, expiryDate = ?, vendor=?" +
+                    "WHERE productId = ?;";
 
             try {
                 PreparedStatement preparedStatement = dbConnection.prepareStatement(updateProduct);
@@ -265,8 +266,8 @@ public class SQLiteService implements IDataBaseService {
                 preparedStatement.setDouble(2, product.getMarketPrice());
                 preparedStatement.setInt(3, product.getUnits());
                 preparedStatement.setString(4, ((Oil) product).getExpiryDate());
-                preparedStatement.setString(5, product.getProductName());
-                preparedStatement.setString(6, product.getVendor());
+                preparedStatement.setString(5,product.getVendor());
+                preparedStatement.setString(6, product.getProductId());
                 preparedStatement.executeUpdate();
 
                 ProductHistoryItem productHistoryItem = new ProductHistoryItem(product.getProductId(), product.getUnits(), null);
@@ -278,15 +279,14 @@ public class SQLiteService implements IDataBaseService {
             return false;
         } else {
             String updateProduct = "UPDATE Product SET price = ?, marketPrice = ? ,units = ? " +
-                    "WHERE name  = ? AND vendor = ?;";
+                    "WHERE productId = ?;";
 
             try {
                 PreparedStatement preparedStatement = dbConnection.prepareStatement(updateProduct);
                 preparedStatement.setDouble(1, product.getPricePerUnit());
                 preparedStatement.setDouble(2, product.getMarketPrice());
                 preparedStatement.setInt(3, product.getUnits());
-                preparedStatement.setString(4, product.getProductName());
-                preparedStatement.setString(5, product.getVendor());
+                preparedStatement.setString(4, product.getProductId());
                 preparedStatement.executeUpdate();
 
                 ProductHistoryItem productHistoryItem = new ProductHistoryItem(product.getProductId(), product.getUnits(), null);
@@ -847,6 +847,10 @@ public class SQLiteService implements IDataBaseService {
             e.printStackTrace();
         }
         return products;
+    }
+
+    public static void main(String[] args) {
+        new SQLiteService();
     }
 }
 

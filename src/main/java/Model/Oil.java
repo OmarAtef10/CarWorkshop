@@ -11,7 +11,8 @@ public class Oil extends Product {
     private String expiryDate;
 
 
-    public Oil(String vendor, int units, double pricePerUnit, double marketPrice, String viscosity, int mileage, String expiryDate) {
+    public Oil(String vendor, int units, double pricePerUnit,
+               double marketPrice, String viscosity, int mileage, String expiryDate) {
         super(vendor, units, pricePerUnit, marketPrice);
         String productName = vendor + " " + mileage + " " + viscosity;
         this.setProductName(productName);

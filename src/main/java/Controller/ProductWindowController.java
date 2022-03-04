@@ -67,17 +67,19 @@ public class ProductWindowController {
     private TextField viscField;
 
     private Product product;
+    private boolean edit_mode = false;
+    private ProductDao productDao = new ProductDao();
 
     @FXML
     void cancelBtnPressed(ActionEvent event) {
         ((Stage) cancelBtn.getScene().getWindow()).close();
     }
 
-    public void setProduct(Product product){
+    public void setProduct(Product product) {
         this.product = product;
-        if(product instanceof Oil){
+        if (product instanceof Oil) {
             typeCombobox.setValue("Oil");
-        }else{
+        } else {
             typeCombobox.setValue("Service Part");
         }
         nameField.setText(product.getProductName());
@@ -85,24 +87,35 @@ public class ProductWindowController {
         unitPriceField.setText(String.valueOf(product.getPricePerUnit()));
         vendorField.setText(String.valueOf(product.getVendor()));
         marketPriceField.setText(String.valueOf(product.getMarketPrice()));
-        
 
-        if(product instanceof Oil){
-            milageField.setText(String.valueOf(((Oil)product).getMileage()));
-            viscField.setText(((Oil)product).getViscosity());
-            expiryField.setValue(LocalDate.parse(((Oil)product).getExpiryDate()));
+
+        if (product instanceof Oil) {
+            milageField.setText(String.valueOf(((Oil) product).getMileage()));
+            viscField.setText(((Oil) product).getViscosity());
+            expiryField.setValue(LocalDate.parse(((Oil) product).getExpiryDate()));
         }
     }
 
-    public Product getProduct(){
+    public Product getProduct() {
         return this.product;
+    }
+
+    public void setEditMode(boolean mode) {
+        this.edit_mode = mode;
     }
 
     @FXML
     void saveBtnPressed(ActionEvent event) {
-        ProductDao productDao = new ProductDao();
+
 
         boolean success = false;
+
+        if (!edit_mode) {
+            createProduct();
+            cancelBtnPressed(new ActionEvent());
+            return;
+        }
+
         if (typeCombobox.getValue().equals("Oil")) {
             if (!vendorField.getText().equals("") || unitsField.getText().equals("")
                     || !unitPriceField.getText().equals("")
@@ -115,9 +128,9 @@ public class ProductWindowController {
                 this.product.setUnits(Integer.parseInt(unitsField.getText()));
                 this.product.setPricePerUnit(Double.parseDouble(unitPriceField.getText()));
                 this.product.setMarketPrice(Double.parseDouble(marketPriceField.getText()));
-                ((Oil)this.product).setViscosity(viscField.getText());
-                ((Oil)this.product).setMileage(Integer.parseInt(milageField.getText()));
-                ((Oil)this.product).setExpiryDate(expiryField.getValue().toString());
+                ((Oil) this.product).setViscosity(viscField.getText());
+                ((Oil) this.product).setMileage(Integer.parseInt(milageField.getText()));
+                ((Oil) this.product).setExpiryDate(expiryField.getValue().toString());
                 productDao.updateProduct(product);
                 success = true;
                 cancelBtnPressed(new ActionEvent());
@@ -127,7 +140,6 @@ public class ProductWindowController {
             if (!vendorField.getText().equals("") || !unitsField.getText().equals("")
                     || !unitPriceField.getText().equals("") || !marketPriceField.getText().equals("")
                     || !nameField.getText().equals("")) {
-
 
 
                 this.product.setProductName(nameField.getText());
@@ -140,10 +152,46 @@ public class ProductWindowController {
                 cancelBtnPressed(new ActionEvent());
             }
         }
-        if(!success){
+        if (!success) {
             Alert alert = new Alert(AlertType.ERROR, "WRONG DATA", ButtonType.OK);
             alert.getDialogPane().getScene().getStylesheets().addAll(Context.getContext().getCurrentTheme());
             alert.show();
+        }
+    }
+
+    private void createProduct() {
+        if (typeCombobox.getValue().equals("Oil")) {
+            if (!vendorField.getText().equals("") || unitsField.getText().equals("")
+                    || !unitPriceField.getText().equals("")
+                    || !marketPriceField.getText().equals("") || viscField.getText().equals("")
+                    || !milageField.getText().equals("")
+                    || expiryField.getValue() != null) {
+
+                this.product = new Oil(
+                       vendorField.getText(),
+                        Integer.parseInt(unitsField.getText()),
+                        Double.parseDouble(unitPriceField.getText()),
+                        Double.parseDouble(marketPriceField.getText()),
+                        viscField.getText(),
+                        Integer.parseInt(milageField.getText()),
+                        expiryField.getValue().toString()
+                );
+                productDao.addProduct(product);
+            }
+        } else if (typeCombobox.getValue().equals("Service Part")) {
+            if (!vendorField.getText().equals("") || !unitsField.getText().equals("")
+                    || !unitPriceField.getText().equals("") || !marketPriceField.getText().equals("")
+                    || !nameField.getText().equals("")) {
+
+                this.product = new ServicePart(
+                        nameField.getText(),
+                        vendorField.getText(),
+                        Integer.parseInt(unitPriceField.getText()),
+                        Double.parseDouble(unitPriceField.getText()),
+                        Double.parseDouble(marketPriceField.getText())
+                );
+                productDao.addProduct(product);
+            }
         }
     }
 
@@ -181,7 +229,7 @@ public class ProductWindowController {
                 expiryField.setDisable(true);
                 milageField.setDisable(true);
                 viscField.setDisable(true);
-                nameField.setDisable(true);
+                nameField.setDisable(false);
             }
         });
         typeCombobox.setValue("Oil");
