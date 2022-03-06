@@ -328,20 +328,18 @@ public class MainWindowController {
             selectedRow.setOnMouseClicked((event) -> {
                 Report report = selectedRow.getItem();
                 if(event.getClickCount() == 1 && !selectedRow.isEmpty()){
-                    invoicesTable.getItems().clear();
-                    invoicesTable.getItems().addAll(report.getInvoices());
+                   ReportInvoicesGetter(report);
                 }
             });
             return selectedRow;
         });
 
         //Invoices Table
-
         TableColumn<Invoice, String> invoiceIdCol = new TableColumn<Invoice, String>("Invoice ID");
-        reportIdColumn.setCellFactory(new PropertyValueFactory("invoiceId"));
+        invoiceIdCol.setCellValueFactory(new PropertyValueFactory<>("invoiceId"));
 
         TableColumn<Invoice, Double> totalCol = new TableColumn<Invoice, Double>("Total");
-        totalCol.setCellFactory(new PropertyValueFactory("totalPaid"));
+        totalCol.setCellValueFactory(new PropertyValueFactory<>("totalPaid"));
 
         invoicesTable.getColumns().addAll(invoiceIdCol, totalCol);
         invoicesTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -386,6 +384,12 @@ public class MainWindowController {
         removeUserBtn.setDisable(false);
         updateUserBtn.setDisable(false);
 
+
+    }
+
+    private  void ReportInvoicesGetter(Report report){
+        invoicesTable.getItems().clear();
+        invoicesTable.getItems().addAll(report.getInvoices());
 
     }
 

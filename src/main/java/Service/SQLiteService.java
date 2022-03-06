@@ -266,7 +266,7 @@ public class SQLiteService implements IDataBaseService {
                 preparedStatement.setDouble(2, product.getMarketPrice());
                 preparedStatement.setInt(3, product.getUnits());
                 preparedStatement.setString(4, ((Oil) product).getExpiryDate());
-                preparedStatement.setString(5,product.getVendor());
+                preparedStatement.setString(5, product.getVendor());
                 preparedStatement.setString(6, product.getProductId());
                 preparedStatement.executeUpdate();
 
@@ -323,7 +323,7 @@ public class SQLiteService implements IDataBaseService {
         try {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(addProductShelf);
             for (String loc : locations.keySet()) {
-                if(db_inst.containsKey(loc)){
+                if (db_inst.containsKey(loc)) {
                     continue;
                 }
                 preparedStatement.setString(1, product.getProductId());
@@ -458,14 +458,14 @@ public class SQLiteService implements IDataBaseService {
         try {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(getAllUsers);
             ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 User user = User.fromResultSet(resultSet);
                 allUsers.add(user);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return  allUsers;
+        return allUsers;
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -552,7 +552,21 @@ public class SQLiteService implements IDataBaseService {
 
     @Override
     public Report getReportByUsernameDate(String userName, String date) {
-        return null;
+        Report report = null;
+        String reformedDate = TimeUtility.getReformedDate(date);
+        String getReport = "SELECT * FROM Reports WHERE username = ? AND date LIKE'" + reformedDate + "%';";
+        try {
+            PreparedStatement preparedStatement = dbConnection.prepareStatement(getReport);
+            preparedStatement.setString(1, userName);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                report = Report.fromResultSet(resultSet);
+                return report;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return report;
     }
 
     ///////////////////////////////////////////////////////////////////////////////////
@@ -666,11 +680,10 @@ public class SQLiteService implements IDataBaseService {
 
     @Override
     public ArrayList<Invoice> getDailyUserInvoices(String username, String date) {
-        //FIXME: This doesn't work and getReformedDate return the date with an extra space
+        //FIXME: This doesn't work and getReformedDate return the date with an extra space  -> DONE
         String reformedDate = TimeUtility.getReformedDate(date);
         ArrayList<Invoice> invoices = new ArrayList<>();
-        String getDailyUserInvoices = "SELECT * FROM Invoices WHERE username = ?" +
-                "AND date LIKE " + reformedDate + "%;";
+        String getDailyUserInvoices = "SELECT * FROM Invoices WHERE username = ? AND date LIKE '" + reformedDate + "%';";
         try {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(getDailyUserInvoices);
             preparedStatement.setString(1, username);
@@ -832,9 +845,9 @@ public class SQLiteService implements IDataBaseService {
     public ArrayList<Product> getAllProducts() {
         String sql = "SELECT * FROM Product";
         ArrayList<Product> products = new ArrayList<>();
-        try{
+        try {
             ResultSet rs = statement.executeQuery(sql);
-            while(rs.next()){
+            while (rs.next()) {
                 //TODO: put from result set in products instead
                 while (rs.next()) {
                     if (rs.getString("viscosity") != null) {
@@ -844,7 +857,7 @@ public class SQLiteService implements IDataBaseService {
                     }
                 }
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return products;

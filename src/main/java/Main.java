@@ -4,15 +4,16 @@ import Model.*;
 import Service.SQLiteService;
 import View.LoginWindow;
 
+import java.util.ArrayList;
+
 //YY MM DD
 public class Main {
     public static void main(String[] args) throws Exception {
+
         DBContext.getDBContext().setDbService(new SQLiteService());
         WindowLoader.initLoaders();
         LoginWindow window = new LoginWindow();
         window.view();
-
-
 
     }
 }
