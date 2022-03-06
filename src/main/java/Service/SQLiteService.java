@@ -377,6 +377,37 @@ public class SQLiteService implements IDataBaseService {
         return null;
     }
 
+    @Override
+    public boolean addUniqueProductShelf(String productId, String shelfNumber, int units, String expiryDate) {
+        String query = "INSERT INTO ShelfProduct(productId, shelfNumber, units, expiryDate) VALUES (?,?,?,?);";
+        try {
+            PreparedStatement preparedStatement =dbConnection.prepareStatement(query);
+            preparedStatement.setString(1,productId);
+            preparedStatement.setString(2,shelfNumber);
+            preparedStatement.setInt(3,units);
+            preparedStatement.setString(4,expiryDate);
+            preparedStatement.executeUpdate();
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean removeProductShelf(String shelfName) {
+        String query =  "DELETE FROM ShelfProduct WHERE shelfNumber = ?;";
+        try {
+            PreparedStatement preparedStatement = dbConnection.prepareStatement(query);
+            preparedStatement.setString(1,shelfName);
+            preparedStatement.executeUpdate();
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     /////////////////////////////////////////////////////////////////////////////
     @Override
     public boolean addUser(User user) {
@@ -577,11 +608,11 @@ public class SQLiteService implements IDataBaseService {
         String addInvoice = "INSERT INTO Invoices (phone, username,totalAmount,date,invoiceId) VALUES (?,?,?,?,?)";
         try {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(addInvoice);
-            preparedStatement.setString(1, invoice.getCustomerID());
+            preparedStatement.setString(1, invoice.getCustomerId());
             preparedStatement.setString(2, invoice.getUserName());
             preparedStatement.setDouble(3, invoice.getTotalPaid());
             preparedStatement.setString(4, invoice.getDate());
-            preparedStatement.setString(5, invoice.getInvoiceID());
+            preparedStatement.setString(5, invoice.getInvoiceId());
             preparedStatement.executeUpdate();
             addInvoiceProduct(invoice);
             return invoice;
@@ -612,10 +643,10 @@ public class SQLiteService implements IDataBaseService {
         try {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(updateInvoice);
             preparedStatement.setString(1, invoice.getUserName());
-            preparedStatement.setString(2, invoice.getCustomerID());
+            preparedStatement.setString(2, invoice.getCustomerId());
             preparedStatement.setString(3, invoice.getDate());
             preparedStatement.setDouble(4, invoice.getTotalPaid());
-            preparedStatement.setString(5, invoice.getInvoiceID());
+            preparedStatement.setString(5, invoice.getInvoiceId());
             preparedStatement.executeUpdate();
             return invoice;
         } catch (Exception e) {
@@ -648,7 +679,7 @@ public class SQLiteService implements IDataBaseService {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(addInvoiceProduct);
             if (products.size() > 0) {
                 for (String key : products.keySet()) {
-                    preparedStatement.setString(1, invoice.getInvoiceID());
+                    preparedStatement.setString(1, invoice.getInvoiceId());
                     preparedStatement.setString(2, key);
                     preparedStatement.setInt(3, products.get(key));
                     preparedStatement.executeUpdate();
@@ -671,7 +702,7 @@ public class SQLiteService implements IDataBaseService {
         HashMap<Integer, Integer> products = new HashMap<>();
         try {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(getCart);
-            preparedStatement.setString(1, invoice.getInvoiceID());
+            preparedStatement.setString(1, invoice.getInvoiceId());
             ResultSet resultSet = preparedStatement.executeQuery();
             return Cart.fromResultSet(resultSet);
         } catch (Exception e) {
@@ -867,14 +898,15 @@ public class SQLiteService implements IDataBaseService {
 
     public static void main(String[] args) {
         IDataBaseService service = new SQLiteService();
-        System.out.println(service.searchByQuery("", "", "Shell"));
+        System.out.println(service.searchByQuery("","", "", "Shell"));
     }
 
     @Override
-    public ArrayList<Product> searchByQuery(String milage, String type, String vendor) {
+    public ArrayList<Product> searchByQuery(String productName, String milage, String type, String vendor) {
         ArrayList<Product> products = new ArrayList<>();
         String sqlQuery = "SELECT * FROM Product WHERE ";
         sqlQuery += "range like " + (milage.equals("")? "\"%\" " : ("\"" + milage + "\" "));
+        sqlQuery += "AND name like " + (productName.equals("")? "\"%\" " : ("\"" + productName + "\" "));
         sqlQuery += "AND type like " + (type.equals("")? "\"%\" " : ("\"" + type + "\" "));
         sqlQuery += "AND vendor like " + (vendor.equals("")? "\"%\" ": ("\"" + vendor+  "\"" ) + ";");
         try{

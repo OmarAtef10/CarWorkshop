@@ -48,6 +48,9 @@ public class SearchWindow extends VBox{
     private TextField vendorField;
 
     @FXML
+    private TextField productNameField;
+
+    @FXML
     void cancelBtnPressed(ActionEvent event) {
         stage.close();
     }
@@ -59,11 +62,12 @@ public class SearchWindow extends VBox{
     @FXML
     void searchBtnPressed(ActionEvent event) {
         ProductDao dao = new ProductDao();
+        String productName = productNameField.getText();
         String milage = productMilageField.getText();
         String type = productTypeField.getValue();
         String vendor = vendorField.getText();
 
-        searchResults = dao.searchByQuery(milage, type, vendor);
+        searchResults = dao.searchByQuery(productName,milage, type, vendor);
         stage.close();
     }
 

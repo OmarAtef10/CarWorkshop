@@ -15,7 +15,7 @@ public interface IDataBaseService {
     public Product getOrNull(String productId);
     public ArrayList<ProductHistoryItem> getHistory(String productId);
     ArrayList<Product> getAllProducts();
-    ArrayList<Product> searchByQuery(String milage, String type, String vendor);
+    ArrayList<Product> searchByQuery(String productName,String milage, String type, String vendor);
 
     public boolean addProductHistoryCreate(ProductHistoryItem productHistoryItem);
     public boolean addProductHistoryEdit(ProductHistoryItem productHistoryItem);
@@ -23,8 +23,11 @@ public interface IDataBaseService {
 
 
     public boolean addProductShelf(Product product);
+    public boolean addUniqueProductShelf(String productId, String shelfNumber,int units,String expiryDate);
     public Hashtable<String,Integer> getProductShelf(String productName , String vendor);
     public Hashtable<String,Integer> getProductShelf(String productId);
+    public boolean removeProductShelf(String shelfName);
+
 
     public boolean addUser(User user);
     public User getUser(String username);

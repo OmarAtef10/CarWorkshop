@@ -29,8 +29,8 @@ public class Invoice {
         InvoiceDao invoiceDao = new InvoiceDao();
         try {
             Invoice invoice = new Invoice();
-            invoice.setInvoiceID(resultSet.getString("invoiceId"));
-            invoice.setCustomerID(resultSet.getString("phone"));
+            invoice.setInvoiceId(resultSet.getString("invoiceId"));
+            invoice.setCustomerId(resultSet.getString("phone"));
             invoice.setUserName(resultSet.getString("username"));
             invoice.setTotalPaid(resultSet.getDouble("totalAmount"));
             invoice.setDate(resultSet.getString("date"));
@@ -42,7 +42,7 @@ public class Invoice {
         return null;
     }
 
-    public void setInvoiceID(String invoiceID) {
+    public void setInvoiceId(String invoiceID) {
         this.invoiceId = invoiceID;
     }
 
@@ -54,7 +54,7 @@ public class Invoice {
         this.cart = cart;
     }
 
-    public void setCustomerID(String phone) {
+    public void setCustomerId(String phone) {
         this.phone = phone;
     }
 
@@ -67,7 +67,7 @@ public class Invoice {
         this.date = date;
     }
 
-    public String getInvoiceID() {
+    public String getInvoiceId() {
         return invoiceId;
     }
 
@@ -79,7 +79,7 @@ public class Invoice {
         return cart;
     }
 
-    public String getCustomerID() {
+    public String getCustomerId() {
         return phone;
     }
 

@@ -3,6 +3,7 @@ package Controller;
 import Context.DBContext;
 import Model.Product;
 import Model.ProductHistoryItem;
+import org.sqlite.core.DB;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -65,11 +66,19 @@ public class ProductDao {
         return DBContext.getDBContext().getDbService().getProductShelf(productId);
     }
 
+    public boolean addUniqueProductShelf(String productId, String shelfNumber,int units,String expiryDate){
+        return DBContext.getDBContext().getDbService().addUniqueProductShelf(productId,shelfNumber,units,expiryDate);
+    }
+
+    public boolean removeProductShelf(String shelfName){
+        return DBContext.getDBContext().getDbService().removeProductShelf(shelfName);
+    }
+
     public ArrayList<Product> getAll(){
         return DBContext.getDBContext().getDbService().getAllProducts();
     }
 
-    public ArrayList<Product> searchByQuery(String milage, String type, String vendor){
-        return DBContext.getDBContext().getDbService().searchByQuery(milage, type, vendor);
+    public ArrayList<Product> searchByQuery(String productName, String milage, String type, String vendor){
+        return DBContext.getDBContext().getDbService().searchByQuery(productName,milage, type, vendor);
     }
 }   

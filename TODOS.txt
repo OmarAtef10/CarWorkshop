@@ -1,4 +1,4 @@
-Update UI After actions on any product
-Put remove product button
-When click on user show list of reports
 When selling a product edit shelf units ( Units check before sell and update after sell)
+Update user invoices under report
+Add product date to left
+Purchase screen

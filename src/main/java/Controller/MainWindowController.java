@@ -235,6 +235,7 @@ public class MainWindowController {
     @FXML
     void revertBtnPressed(ActionEvent event) {
         productsTable.getItems().clear();
+        usersTable.getItems().clear();
         initData();
     }
 
