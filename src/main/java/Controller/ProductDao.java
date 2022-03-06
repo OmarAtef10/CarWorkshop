@@ -68,4 +68,8 @@ public class ProductDao {
     public ArrayList<Product> getAll(){
         return DBContext.getDBContext().getDbService().getAllProducts();
     }
+
+    public ArrayList<Product> searchByQuery(String milage, String type, String vendor){
+        return DBContext.getDBContext().getDbService().searchByQuery(milage, type, vendor);
+    }
 }   

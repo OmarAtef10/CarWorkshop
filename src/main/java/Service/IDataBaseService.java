@@ -15,6 +15,7 @@ public interface IDataBaseService {
     public Product getOrNull(String productId);
     public ArrayList<ProductHistoryItem> getHistory(String productId);
     ArrayList<Product> getAllProducts();
+    ArrayList<Product> searchByQuery(String milage, String type, String vendor);
 
     public boolean addProductHistoryCreate(ProductHistoryItem productHistoryItem);
     public boolean addProductHistoryEdit(ProductHistoryItem productHistoryItem);

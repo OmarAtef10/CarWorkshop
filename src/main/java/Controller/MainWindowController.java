@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 import Context.Context;
 import Model.*;
 import View.ProductWindow;
+import View.SearchWindow;
 import View.UserWindow;
 import View.AddStockWindow;
 import View.ProductWindow;
@@ -170,7 +171,11 @@ public class MainWindowController {
 
     @FXML
     void searchBtnPressed(ActionEvent event) {
-
+        SearchWindow window = new SearchWindow();
+        window.show().setOnHidden((arg0) -> {
+            productsTable.getItems().clear();
+            productsTable.getItems().addAll(window.getSearchResults());
+        });;
     }
 
     @FXML
@@ -225,6 +230,12 @@ public class MainWindowController {
         stockProductBtn.setDisable(true);
         shelfBtn.setDisable(true);
         removeBtn.setDisable(true);
+    }
+
+    @FXML
+    void revertBtnPressed(ActionEvent event) {
+        productsTable.getItems().clear();
+        initData();
     }
 
     void initializeTables() {

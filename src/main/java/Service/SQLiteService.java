@@ -58,6 +58,7 @@ public class SQLiteService implements IDataBaseService {
                 "expiryDate VARCHAR(12)," +
                 "units INTEGER," +
                 "vendor VARCHAR(45)," +
+                "type TEXT," +
                 "marketPrice REAL);";
 
         String productHistoryTable = "CREATE TABLE ProductHistory(" +
@@ -128,8 +129,8 @@ public class SQLiteService implements IDataBaseService {
             return false;
         }
 
-        String addProduct = "INSERT INTO Product (productId,name,range,viscosity,price,expiryDate,units,vendor,marketPrice)" +
-                "VALUES(?,?,?,?,?,?,?,?,?);";
+        String addProduct = "INSERT INTO Product (productId,name,range,viscosity,price,expiryDate,units,vendor,marketPrice, type)" +
+                "VALUES(?,?,?,?,?,?,?,?,?, ?);";
         try {
 
             PreparedStatement preparedStatement = dbConnection.prepareStatement(addProduct);
@@ -137,8 +138,9 @@ public class SQLiteService implements IDataBaseService {
                 preparedStatement.setDouble(3, ((Oil) product).getMileage());
                 preparedStatement.setString(4, ((Oil) product).getViscosity());
                 preparedStatement.setString(6, ((Oil) product).getExpiryDate());
+                preparedStatement.setString(10, "Oil");
             } else {
-
+                preparedStatement.setString(10, "Service Part");
                 preparedStatement.setDouble(3, 0);
                 preparedStatement.setString(4, null);
                 preparedStatement.setString(6, null);
@@ -177,7 +179,7 @@ public class SQLiteService implements IDataBaseService {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                if (resultSet.getString("viscosity") != null) {
+                if (resultSet.getString("type").equals("Oil")) {
                     res.add(Oil.fromResultSet(resultSet));
                 } else {
                     res.add(ServicePart.fromResultSet(resultSet));
@@ -199,7 +201,7 @@ public class SQLiteService implements IDataBaseService {
             preparedStatement.setString(1, productName);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                if (resultSet.getString("viscosity") != null) {
+                if (resultSet.getString("type").equals("Oil")) {
                     return (Oil.fromResultSet(resultSet));
                 } else {
                     return (ServicePart.fromResultSet(resultSet));
@@ -220,7 +222,7 @@ public class SQLiteService implements IDataBaseService {
             preparedStatement.setString(1, productId);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                if (resultSet.getString("viscosity") != null) {
+                if (resultSet.getString("type").equals("Oil")) {
                     return Oil.fromResultSet(resultSet);
                 } else {
                     return ServicePart.fromResultSet(resultSet);
@@ -850,7 +852,7 @@ public class SQLiteService implements IDataBaseService {
             while (rs.next()) {
                 //TODO: put from result set in products instead
                 while (rs.next()) {
-                    if (rs.getString("viscosity") != null) {
+                    if (rs.getString("type").equals("Oil")) {
                         products.add(Oil.fromResultSet(rs));
                     } else {
                         products.add(ServicePart.fromResultSet(rs));
@@ -864,7 +866,30 @@ public class SQLiteService implements IDataBaseService {
     }
 
     public static void main(String[] args) {
-        new SQLiteService();
+        IDataBaseService service = new SQLiteService();
+        System.out.println(service.searchByQuery("", "", "Shell"));
+    }
+
+    @Override
+    public ArrayList<Product> searchByQuery(String milage, String type, String vendor) {
+        ArrayList<Product> products = new ArrayList<>();
+        String sqlQuery = "SELECT * FROM Product WHERE ";
+        sqlQuery += "range like " + (milage.equals("")? "\"%\" " : ("\"" + milage + "\" "));
+        sqlQuery += "AND type like " + (type.equals("")? "\"%\" " : ("\"" + type + "\" "));
+        sqlQuery += "AND vendor like " + (vendor.equals("")? "\"%\" ": ("\"" + vendor+  "\"" ) + ";");
+        try{
+            ResultSet rs = statement.executeQuery(sqlQuery);
+            while(rs.next()){
+                if (rs.getString("type").equals("Oil")) {
+                    products.add(Oil.fromResultSet(rs));
+                } else {
+                    products.add(ServicePart.fromResultSet(rs));
+                }
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return products;
     }
 }
 
