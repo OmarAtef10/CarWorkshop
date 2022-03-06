@@ -1,9 +1,11 @@
 package Controller;
 
+import Context.DBContext;
 import Model.Cart;
 import Model.Invoice;
 import Model.Oil;
 import Model.Product;
+import Service.SQLiteService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,7 +42,9 @@ public class ProductInvoiceManagerUtil {
         while (req_units!=0) {
             for (String shelve : shelves.keySet()) {
                 if (shelves.get(shelve) == req_units) {
-                    product.setUnits(product.getUnits() - req_units);
+                    int product_total_units = product.getUnits();
+
+                    product.setUnits(product_total_units - req_units);
 
                     productDao.removeProductShelf(shelve);
                     product.getLocations().remove(shelve);
@@ -49,7 +53,8 @@ public class ProductInvoiceManagerUtil {
                     shelves.replace(shelve,0);
                     req_units=0;
                 } else if (shelves.get(shelve) > req_units) {
-                    product.setUnits(product.getUnits() - req_units);
+                    int product_total_units = product.getUnits();
+                    product.setUnits(product_total_units - req_units);
                     product.getLocations().replace(shelve, product.getUnits());
 
                     productDao.updateProduct(product);
@@ -68,16 +73,15 @@ public class ProductInvoiceManagerUtil {
     }
 
     public static void main(String[] args) {
-        new ProductDao().getOrNull("b7bdddc7");
-        //
-//        ProductDao d = new ProductDao();
-//        Product product = d.getOrNull("b7bdddc7");
-//        Invoice invoice = new Invoice();
-//        invoice.setCart(new Cart());
-//        invoice.getCart().addProduct(product,8);
-//
-//        ProductInvoiceManagerUtil productInvoiceManagerUtil = new ProductInvoiceManagerUtil(invoice);
-//        productInvoiceManagerUtil.updateShelves();
+        DBContext.getDBContext().setDbService(new SQLiteService());
+        ProductDao d = new ProductDao();
+        Product product = d.getOrNull("b7bdddc7");
+        Invoice invoice = new Invoice();
+        invoice.setCart(new Cart());
+        invoice.getCart().addProduct(product,8);
+
+        ProductInvoiceManagerUtil productInvoiceManagerUtil = new ProductInvoiceManagerUtil(invoice);
+        productInvoiceManagerUtil.updateShelves();
 
     }
 }

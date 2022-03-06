@@ -52,8 +52,6 @@ public class Cart {
         products.put(product.getProductId(), units);
         setTotal(getTotal() + (product.getPricePerUnit() * units));
 
-        product.setUnits(product.getUnits()-units);
-        productDao.updateProduct(product);
     }
 
     public void removeProduct(Product product){
@@ -61,9 +59,6 @@ public class Cart {
 
         int units = products.remove(product.getProductId());
         setTotal(getTotal() - (units * product.getPricePerUnit()));
-
-        product.setUnits(product.getUnits()+ units);
-        productDao.updateProduct(product);
     }
 
     @Override
