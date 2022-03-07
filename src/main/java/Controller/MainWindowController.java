@@ -6,12 +6,8 @@ import java.util.ResourceBundle;
 
 import Context.Context;
 import Model.*;
+import View.*;
 import View.ProductWindow;
-import View.SearchWindow;
-import View.UserWindow;
-import View.AddStockWindow;
-import View.ProductWindow;
-import View.ShelveWindow;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -139,7 +135,8 @@ public class MainWindowController {
 
     @FXML
     void newPurchaseBtnPressed(ActionEvent event) {
-
+        NewPurchase purchaseWindow = new NewPurchase();
+        purchaseWindow.view();
         revertBtnPressed(new ActionEvent());
     }
 
@@ -178,7 +175,8 @@ public class MainWindowController {
         window.show().setOnHidden((arg0) -> {
             productsTable.getItems().clear();
             productsTable.getItems().addAll(window.getSearchResults());
-        });;
+        });
+        ;
     }
 
     @FXML
@@ -327,7 +325,6 @@ public class MainWindowController {
         });
 
 
-
         //Reports Table
 
         TableColumn<Report, String> reportIdColumn = new TableColumn<Report, String>("Report ID");
@@ -342,8 +339,8 @@ public class MainWindowController {
             TableRow<Report> selectedRow = new TableRow<>();
             selectedRow.setOnMouseClicked((event) -> {
                 Report report = selectedRow.getItem();
-                if(event.getClickCount() == 1 && !selectedRow.isEmpty()){
-                   ReportInvoicesGetter(report);
+                if (event.getClickCount() == 1 && !selectedRow.isEmpty()) {
+                    ReportInvoicesGetter(report);
                 }
             });
             return selectedRow;
@@ -369,6 +366,7 @@ public class MainWindowController {
         removeUserBtn.setDisable(true);
 
     }
+
     //TODO
     private void updateRelatedProductInfo(Product product) {
         //history table
@@ -402,7 +400,7 @@ public class MainWindowController {
 
     }
 
-    private  void ReportInvoicesGetter(Report report){
+    private void ReportInvoicesGetter(Report report) {
         invoicesTable.getItems().clear();
         invoicesTable.getItems().addAll(report.getInvoices());
 
