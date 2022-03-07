@@ -1,4 +1,4 @@
-When selling a product edit shelf units ( Units check before sell and update after sell)
+
 Update user invoices under report
-Add product date to left
+Add product data to left
 Purchase screen

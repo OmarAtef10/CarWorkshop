@@ -23,6 +23,7 @@ public interface IDataBaseService {
 
 
     public boolean addProductShelf(Product product);
+    public boolean updateShelf(String shelfName,int units);
     public boolean addUniqueProductShelf(String productId, String shelfNumber,int units,String expiryDate);
     public Hashtable<String,Integer> getProductShelf(String productName , String vendor);
     public Hashtable<String,Integer> getProductShelf(String productId);

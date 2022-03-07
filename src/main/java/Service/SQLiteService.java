@@ -347,6 +347,21 @@ public class SQLiteService implements IDataBaseService {
     }
 
     @Override
+    public boolean updateShelf(String shelfName,int units) {
+        String query = "UPDATE ShelfProduct SET units = ? WHERE shelfNumber =?;";
+        try {
+            PreparedStatement preparedStatement = dbConnection.prepareStatement(query);
+            preparedStatement.setInt(1,units);
+            preparedStatement.setString(2,shelfName);
+            preparedStatement.executeUpdate();
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
     public Hashtable<String, Integer> getProductShelf(String productName, String vendor) {
         Product product = getProduct(productName);
         String expDate = "";
@@ -381,14 +396,14 @@ public class SQLiteService implements IDataBaseService {
     public boolean addUniqueProductShelf(String productId, String shelfNumber, int units, String expiryDate) {
         String query = "INSERT INTO ShelfProduct(productId, shelfNumber, units, expiryDate) VALUES (?,?,?,?);";
         try {
-            PreparedStatement preparedStatement =dbConnection.prepareStatement(query);
-            preparedStatement.setString(1,productId);
-            preparedStatement.setString(2,shelfNumber);
-            preparedStatement.setInt(3,units);
-            preparedStatement.setString(4,expiryDate);
+            PreparedStatement preparedStatement = dbConnection.prepareStatement(query);
+            preparedStatement.setString(1, productId);
+            preparedStatement.setString(2, shelfNumber);
+            preparedStatement.setInt(3, units);
+            preparedStatement.setString(4, expiryDate);
             preparedStatement.executeUpdate();
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
@@ -396,13 +411,13 @@ public class SQLiteService implements IDataBaseService {
 
     @Override
     public boolean removeProductShelf(String shelfName) {
-        String query =  "DELETE FROM ShelfProduct WHERE shelfNumber = ?;";
+        String query = "DELETE FROM ShelfProduct WHERE shelfNumber = ?;";
         try {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(query);
-            preparedStatement.setString(1,shelfName);
+            preparedStatement.setString(1, shelfName);
             preparedStatement.executeUpdate();
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
@@ -880,16 +895,16 @@ public class SQLiteService implements IDataBaseService {
         ArrayList<Product> products = new ArrayList<>();
         try {
             ResultSet rs = statement.executeQuery(sql);
+
+            //TODO: put from result set in products instead
             while (rs.next()) {
-                //TODO: put from result set in products instead
-                while (rs.next()) {
-                    if (rs.getString("type").equals("Oil")) {
-                        products.add(Oil.fromResultSet(rs));
-                    } else {
-                        products.add(ServicePart.fromResultSet(rs));
-                    }
+                if (rs.getString("type").equals("Oil")) {
+                    products.add(Oil.fromResultSet(rs));
+                } else {
+                    products.add(ServicePart.fromResultSet(rs));
                 }
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -898,27 +913,27 @@ public class SQLiteService implements IDataBaseService {
 
     public static void main(String[] args) {
         IDataBaseService service = new SQLiteService();
-        System.out.println(service.searchByQuery("","", "", "Shell"));
+        System.out.println(service.searchByQuery("", "", "", "Shell"));
     }
 
     @Override
     public ArrayList<Product> searchByQuery(String productName, String milage, String type, String vendor) {
         ArrayList<Product> products = new ArrayList<>();
         String sqlQuery = "SELECT * FROM Product WHERE ";
-        sqlQuery += "range like " + (milage.equals("")? "\"%\" " : ("\"" + milage + "\" "));
-        sqlQuery += "AND name like " + (productName.equals("")? "\"%\" " : ("\"" + productName + "\" "));
-        sqlQuery += "AND type like " + (type.equals("")? "\"%\" " : ("\"" + type + "\" "));
-        sqlQuery += "AND vendor like " + (vendor.equals("")? "\"%\" ": ("\"" + vendor+  "\"" ) + ";");
-        try{
+        sqlQuery += "range like " + (milage.equals("") ? "\"%\" " : ("\"" + milage + "\" "));
+        sqlQuery += "AND name like " + (productName.equals("") ? "\"%\" " : ("\"" + productName + "\" "));
+        sqlQuery += "AND type like " + (type.equals("") ? "\"%\" " : ("\"" + type + "\" "));
+        sqlQuery += "AND vendor like " + (vendor.equals("") ? "\"%\" " : ("\"" + vendor + "\"") + ";");
+        try {
             ResultSet rs = statement.executeQuery(sqlQuery);
-            while(rs.next()){
+            while (rs.next()) {
                 if (rs.getString("type").equals("Oil")) {
                     products.add(Oil.fromResultSet(rs));
                 } else {
                     products.add(ServicePart.fromResultSet(rs));
                 }
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return products;

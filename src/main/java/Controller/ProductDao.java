@@ -74,6 +74,10 @@ public class ProductDao {
         return DBContext.getDBContext().getDbService().removeProductShelf(shelfName);
     }
 
+    public boolean updateShelf(String shelfName,int units){
+        return DBContext.getDBContext().getDbService().updateShelf(shelfName,units);
+    }
+
     public ArrayList<Product> getAll(){
         return DBContext.getDBContext().getDbService().getAllProducts();
     }

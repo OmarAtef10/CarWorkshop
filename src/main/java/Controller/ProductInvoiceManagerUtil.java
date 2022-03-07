@@ -13,12 +13,14 @@ import java.util.Hashtable;
 
 public class ProductInvoiceManagerUtil {
     private HashMap<String, Integer> products; //invoice products ids / units per product
+    private Hashtable<String,Integer> shelf_units_sold;
     private Invoice invoice;
     private final ProductDao productDao = new ProductDao();
 
     public ProductInvoiceManagerUtil(Invoice invoice) {
         this.invoice = invoice;
         products = invoice.getCart().getProducts();
+        this.shelf_units_sold = new Hashtable<>();
     }
 
     private void updateShelves(){
@@ -39,37 +41,46 @@ public class ProductInvoiceManagerUtil {
 
     private void updateProduct(Product product,int req_units){
         Hashtable<String,Integer> shelves = new Hashtable<>(productDao.getProductShelf(product.getProductId()));
-        while (req_units!=0) {
-            for (String shelve : shelves.keySet()) {
-                if (shelves.get(shelve) == req_units) {
-                    int product_total_units = product.getUnits();
 
-                    product.setUnits(product_total_units - req_units);
+        int totalRemoved = 0;
+        for(String shelf : shelves.keySet()){
+            int current_units = shelves.get(shelf);
+            if(current_units == req_units){
+                totalRemoved += current_units;
+                current_units = 0;
+                this.shelf_units_sold.put(shelf,current_units);
+            }else if(current_units > req_units){
+                totalRemoved += req_units;
+                current_units = current_units - req_units;
+                this.shelf_units_sold.put(shelf,req_units);
 
-                    productDao.removeProductShelf(shelve);
-                    product.getLocations().remove(shelve);
+            }else if(current_units < req_units){
+                totalRemoved += current_units;
+                current_units = 0;
+                this.shelf_units_sold.put(shelf,current_units);
+            }
+            shelves.replace(shelf,current_units);
 
-                    productDao.updateProduct(product);
-                    shelves.replace(shelve,0);
-                    req_units=0;
-                } else if (shelves.get(shelve) > req_units) {
-                    int product_total_units = product.getUnits();
-                    product.setUnits(product_total_units - req_units);
-                    product.getLocations().replace(shelve, product.getUnits());
-
-                    productDao.updateProduct(product);
-                    productDao.removeProductShelf(shelve);
-                    productDao.addUniqueProductShelf(product.getProductId(),
-                            shelve, product.getUnits(), ((Oil) product).getExpiryDate());
-
-                    req_units=0;
-                } else if (shelves.get(shelve) < req_units) {
-                    req_units -= shelves.get(shelve);
-                    productDao.removeProductShelf(shelve);
-                    shelves.replace(shelve,0);
-                }
+            req_units -= totalRemoved;
+            if( req_units <= 0){
+                break;
             }
         }
+        product.setUnits( product.getUnits() - totalRemoved );
+        productDao.updateProduct(product);
+        for(String shelf : shelves.keySet()){
+            if(shelves.get(shelf) == 0){
+                productDao.removeProductShelf(shelf);
+            }else{
+                productDao.updateShelf(shelf,shelves.get(shelf));
+            }
+
+        }
+
+    }
+
+    public Hashtable<String, Integer> getShelf_units_sold() {
+        return shelf_units_sold;
     }
 
     public static void main(String[] args) {
