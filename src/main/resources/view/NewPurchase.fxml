@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="969.0" styleClass="background" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.NewPurchaseController">
+<fx:root minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="969.0" styleClass="background" type="AnchorPane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -157,4 +157,4 @@
          </padding>
       </VBox>
    </children>
-</AnchorPane>
+</fx:root>

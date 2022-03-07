@@ -136,8 +136,8 @@ public class MainWindowController {
     @FXML
     void newPurchaseBtnPressed(ActionEvent event) {
         NewPurchase purchaseWindow = new NewPurchase();
-        purchaseWindow.view();
-        revertBtnPressed(new ActionEvent());
+        purchaseWindow.show();
+        // revertBtnPressed(event);
     }
 
     @FXML

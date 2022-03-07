@@ -1,44 +1,96 @@
 package View;
 
 import Context.Context;
-import Controller.NewPurchaseController;
 import Controller.WindowLoader;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 
-import java.io.IOException;
-
-public class NewPurchase {
+public class NewPurchase extends AnchorPane{
+    //IDEA: Add chechboxes in products row for the user to select before pressing new purchase
     public static String FXML_NAME = NewPurchase.class.getSimpleName() + ".fxml";
     private final FXMLLoader loader;
-    private NewPurchaseController controller;
+    private Stage stage;
 
     public NewPurchase() {
         loader = WindowLoader.getLoader(FXML_NAME);
         try {
-            controller = loader.getController();
+            loader.setRoot(this);
+            loader.setController(this);
+            loader.load();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public Stage view() {
-        Parent root;
-        Stage stage = new Stage();
-        try {
-            root = loader.load();
-            controller = loader.getController();
-            root.getStylesheets().addAll(Context.getContext().getCurrentTheme());
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
+    public Stage show(){
+        stage = new Stage();
+        stage.setScene(new Scene(this));
+        stage.getScene().getStylesheets().addAll(Context.getContext().getCurrentTheme());
+        stage.show();
         return stage;
+    }
+
+    
+    @FXML
+    private TextField amountField;
+
+    @FXML
+    private TextField carModelField;
+
+    @FXML
+    private TableView<?> customerCart;
+
+    @FXML
+    private TableView<?> inventoryTable;
+
+    @FXML
+    private Button manualAdjustTotalBtn;
+
+    @FXML
+    private Button moveToCartBtn;
+
+    @FXML
+    private TextField nameField;
+
+    @FXML
+    private TextField phoneField;
+
+    @FXML
+    private TextField productNameSearchField;
+
+    @FXML
+    private Button removeFromCartBtn;
+
+    @FXML
+    private Button shelfEntryBtn;
+
+    @FXML
+    private TextField totalField;
+
+    @FXML
+    void manualAdjustTotalBtnPressed(ActionEvent event) {
+
+    }
+
+    @FXML
+    void moveToCartBtnPressed(ActionEvent event) {
+
+    }
+
+    @FXML
+    void removeFromCartBtnPressed(ActionEvent event) {
+
+    }
+
+    @FXML
+    void shelfEntryBtnPressed(ActionEvent event) {
 
     }
 
