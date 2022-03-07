@@ -126,6 +126,7 @@ public class MainWindowController {
         ShelveWindow window = new ShelveWindow();
         window.show();
         window.setProduct(productsTable.getSelectionModel().getSelectedItem());
+        revertBtnPressed(new ActionEvent());
     }
 
     @FXML
@@ -133,11 +134,13 @@ public class MainWindowController {
         AddStockWindow window = new AddStockWindow();
         window.show();
         window.setProduct(productsTable.getSelectionModel().getSelectedItem());
+        revertBtnPressed(new ActionEvent());
     }
 
     @FXML
     void newPurchaseBtnPressed(ActionEvent event) {
 
+        revertBtnPressed(new ActionEvent());
     }
 
     @FXML

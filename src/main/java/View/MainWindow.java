@@ -8,10 +8,12 @@ import Controller.MainWindowController;
 import Controller.UserManager;
 import Controller.WindowLoader;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 // public class MainWindow extends Application{
 //     public static final String FXML_NAME = MainWindow.class.getSimpleName() + ".fxml";
@@ -61,7 +63,12 @@ public class MainWindow {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent windowEvent) {
+                UserManager.getInstance().logout();
+            }
+        });
         return stage;
     }
 
