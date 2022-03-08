@@ -27,6 +27,7 @@ public abstract class Product {
         this.locations = new Hashtable<>();
     }
 
+
     public String getProductName() {
         return productName;
     }
