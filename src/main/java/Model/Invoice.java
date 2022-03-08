@@ -14,7 +14,9 @@ public class Invoice {
     private double totalPaid;
     private String date;
 
-    public Invoice() {}
+    public Invoice() {
+        this.invoiceId = UUID_Utility.generateId();
+    }
 
     public Invoice(String userName, Cart cart, String phone, double totalPaid) {
         this.userName = userName;

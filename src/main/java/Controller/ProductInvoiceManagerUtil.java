@@ -23,7 +23,7 @@ public class ProductInvoiceManagerUtil {
         this.shelf_units_sold = new Hashtable<>();
     }
 
-    private void updateShelves(){
+    public void updateShelves(){
         for(String productId : products.keySet()){
             Product product = productDao.getOrNull(productId);
             try {

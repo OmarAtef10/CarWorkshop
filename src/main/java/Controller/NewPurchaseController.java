@@ -1,13 +1,21 @@
 package Controller;
 
+import Context.Context;
 import Model.Cart;
 import Model.Customer;
 import Model.Invoice;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 
-import java.awt.*;
 import java.net.URL;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class NewPurchaseController {
@@ -32,6 +40,9 @@ public class NewPurchaseController {
     private Button removeFromCartBtn;
 
     @FXML
+    private Button cancelBtn;
+
+    @FXML
     private TextField nameField;
 
     @FXML
@@ -49,9 +60,10 @@ public class NewPurchaseController {
     @FXML
     private TextField productNameSearchField;
 
-
+    private final InvoiceDao invoiceDao = new InvoiceDao();
+    private final ProductDao productDao = new ProductDao();
+    private final CustomerDao customerDao = new CustomerDao();
     private Cart cart;
-
     private Invoice invoice;
     private Customer customer;
 
@@ -68,31 +80,73 @@ public class NewPurchaseController {
         return cart;
     }
 
-    public void moveToCartBtnPressed(){
+    public void moveToCartBtnPressed(ActionEvent e) {
 
     }
 
-    public void removeFromCartBtnPressed(){
+    public void removeFromCartBtnPressed(ActionEvent e) {
 
     }
 
-    public void manualAdjustTotalBtnPressed(){
+    public void manualAdjustTotalBtnPressed(ActionEvent e) {
 
     }
 
-    public void shelfEntryBtnPressed(){
+    public void shelfEntryBtnPressed(ActionEvent e) {
 
     }
 
-    public void confirmBtnPressed(){
+    public void confirmBtnPressed(ActionEvent e) {
+
         this.invoice = new Invoice();
         this.invoice.setUserName(UserManager.getInstance().getCurrentUser().getUserName());
-        this.invoice.setCart(this.cart);
+
+        String customerName = nameField.getText();
+        String customerPhoneNumber = phoneField.getText();
+        String carModel = carModelField.getText();
+        if (!customerName.equals("") || !customerPhoneNumber.equals("") || !carModel.equals("")) {
+            this.customer.setName(customerName);
+            this.customer.setMobileNumber(customerPhoneNumber);
+            this.customer.setCarModel(carModel);
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Wrong Information", ButtonType.OK);
+            alert.getDialogPane().getScene().getStylesheets().addAll(Context.getContext().getCurrentTheme());
+            alert.show();
+            return;
+        }
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation Dialog");
+        alert.setHeaderText("Look, a Confirmation Dialog");
+        alert.setContentText("Are you ok with this?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK){
+            this.cart = customer.getCart();
+            this.invoice.setCart(this.customer.getCart());
+
+            if( customerDao.getCustomer(customerPhoneNumber) == null ){
+                customerDao.addCustomer(this.customer);
+            }else{
+                customerDao.updateCustomer(this.customer);
+            }
+            invoiceDao.addInvoice(this.invoice);
+
+            //Products units/shelfs
+            ProductInvoiceManagerUtil productInvoiceManagerUtil = new ProductInvoiceManagerUtil(this.invoice);
+            productInvoiceManagerUtil.updateShelves();
+
+            cancelBtnPressed(new ActionEvent());
+        } else {
+            return;
+        }
+
     }
 
-    public void cancelBtnPressed(){
-
+    public void cancelBtnPressed(ActionEvent a) {
+        ((Stage) cancelBtn.getScene().getWindow()).close();
     }
+
     @FXML
     void initialize() {
         assert manualAdjustTotalBtn != null : "fx:id=\"manualAdjustTotalBtn\" was not injected: check your FXML file 'NewPurchase.fxml'.";

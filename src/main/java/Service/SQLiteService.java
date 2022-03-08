@@ -810,6 +810,22 @@ public class SQLiteService implements IDataBaseService {
         return false;
     }
 
+    @Override
+    public boolean updateCustomer(Customer customer) {
+        String query = "UPDATE Customers SET carModel = ?, name=? WHERE phone = ?;";
+        try {
+            PreparedStatement preparedStatement = dbConnection.prepareStatement(query);
+            preparedStatement.setString(1, customer.getCarModel());
+            preparedStatement.setString(2,customer.getName());
+            preparedStatement.setString(3,customer.getMobileNumber());
+            preparedStatement.executeUpdate();
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     @Override  //TODO
     public boolean addProductHistoryCreate(ProductHistoryItem productHistoryItem) {
         productHistoryItem.setAction("Create");
@@ -911,10 +927,6 @@ public class SQLiteService implements IDataBaseService {
         return products;
     }
 
-    public static void main(String[] args) {
-        IDataBaseService service = new SQLiteService();
-        System.out.println(service.searchByQuery("", "", "", "Shell"));
-    }
 
     @Override
     public ArrayList<Product> searchByQuery(String productName, String milage, String type, String vendor) {

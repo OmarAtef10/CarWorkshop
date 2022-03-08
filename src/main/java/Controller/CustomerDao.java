@@ -16,4 +16,9 @@ public class CustomerDao {
     public boolean deleteCustomer(String phone){
         return DBContext.getDBContext().getDbService().deleteCustomer(phone);
     }
+
+
+    public boolean updateCustomer(Customer customer){
+        return DBContext.getDBContext().getDbService().updateCustomer(customer);
+    }
 }

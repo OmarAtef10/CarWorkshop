@@ -57,4 +57,5 @@ public interface IDataBaseService {
     public boolean addCustomer(Customer customer);
     public Customer getCustomer(String phone);
     public boolean deleteCustomer(String phone);
+    public boolean updateCustomer(Customer customer);
 }
