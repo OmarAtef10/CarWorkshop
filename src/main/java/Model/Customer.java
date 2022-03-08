@@ -9,7 +9,9 @@ public class Customer {
     private String carModel;
     private Cart cart;
 
-    public Customer(){}
+    public Customer(){
+        this.cart = new Cart();
+    }
 
     public Customer( String name, String mobileNumber, String carModel){
         this.name = name;
@@ -38,6 +40,22 @@ public class Customer {
 
     }
 
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setMobileNumber(String mobileNumber) {
+        this.mobileNumber = mobileNumber;
+    }
+
+    public void setCarModel(String carModel) {
+        this.carModel = carModel;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
+    }
 
     public String getName() {
         return name;

@@ -64,12 +64,12 @@
                   </GridPane>
                   <VBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="211.0" HBox.hgrow="SOMETIMES">
                      <children>
-                        <Button mnemonicParsing="false" prefHeight="28.0" prefWidth="553.0" style="-fx-background-color: #0066CC;" styleClass="btnDef" text="%confirm_purchase" VBox.vgrow="ALWAYS">
+                        <Button mnemonicParsing="false" prefHeight="28.0" prefWidth="553.0" style="-fx-background-color: #0066CC;" styleClass="btnDef" text="%confirm_purchase" onAction="#confirmBtnPressed" VBox.vgrow="ALWAYS">
                            <VBox.margin>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </VBox.margin>
                         </Button>
-                        <Button cancelButton="true" minHeight="-Infinity" mnemonicParsing="false" prefHeight="28.0" prefWidth="553.0" text="%cancel" VBox.vgrow="ALWAYS">
+                        <Button cancelButton="true" minHeight="-Infinity" mnemonicParsing="false" prefHeight="28.0" prefWidth="553.0" text="%cancel" onAction="#cancelBtnPressed" VBox.vgrow="ALWAYS">
                            <VBox.margin>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </VBox.margin>

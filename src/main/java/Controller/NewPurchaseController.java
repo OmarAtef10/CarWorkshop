@@ -1,6 +1,7 @@
 package Controller;
 
 import Model.Cart;
+import Model.Customer;
 import Model.Invoice;
 import javafx.fxml.FXML;
 import javafx.scene.layout.GridPane;
@@ -52,6 +53,7 @@ public class NewPurchaseController {
     private Cart cart;
 
     private Invoice invoice;
+    private Customer customer;
 
 
     public Invoice getInvoice() {
@@ -66,8 +68,31 @@ public class NewPurchaseController {
         return cart;
     }
 
+    public void moveToCartBtnPressed(){
 
+    }
 
+    public void removeFromCartBtnPressed(){
+
+    }
+
+    public void manualAdjustTotalBtnPressed(){
+
+    }
+
+    public void shelfEntryBtnPressed(){
+
+    }
+
+    public void confirmBtnPressed(){
+        this.invoice = new Invoice();
+        this.invoice.setUserName(UserManager.getInstance().getCurrentUser().getUserName());
+        this.invoice.setCart(this.cart);
+    }
+
+    public void cancelBtnPressed(){
+
+    }
     @FXML
     void initialize() {
         assert manualAdjustTotalBtn != null : "fx:id=\"manualAdjustTotalBtn\" was not injected: check your FXML file 'NewPurchase.fxml'.";
@@ -81,8 +106,8 @@ public class NewPurchaseController {
         assert productNameSearchField != null : "fx:id=\"productNameSearchField\" was not injected: check your FXML file 'NewPurchase.fxml'.";
         assert gridPane != null : "fx:id=\"gridPane\" was not injected: check your FXML file 'ProductWindow.fxml'.";
 
-        invoice  = new Invoice();
-        cart=new Cart();
+        this.customer = new Customer();
+        this.cart = this.customer.getCart();
 
     }
 
