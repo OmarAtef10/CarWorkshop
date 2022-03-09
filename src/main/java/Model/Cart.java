@@ -47,19 +47,24 @@ public class Cart {
     }
 
     public void addProduct(Product product, int units){
-        ProductDao productDao = new ProductDao();
-
-        products.put(product.getProductId(), units);
-        setTotal(getTotal() + (product.getPricePerUnit() * units));
+        if(this.products.get(product.getProductId()) != null){
+            int old_units =products.get(product.getProductId());
+            int new_units = units + old_units;
+            products.replace(product.getProductId(),new_units);
+            setTotal( getTotal() - (product.getPricePerUnit() * old_units));
+            setTotal(getTotal() + (product.getPricePerUnit() * new_units));
+        }else{
+            products.put(product.getProductId(), units);
+            setTotal(getTotal() + (product.getPricePerUnit() * units));
+        }
 
     }
-
+//TODO
     public void removeProduct(Product product){
-        ProductDao productDao = new ProductDao();
-
         int units = products.remove(product.getProductId());
         setTotal(getTotal() - (units * product.getPricePerUnit()));
     }
+
 
     @Override
     public String toString() {

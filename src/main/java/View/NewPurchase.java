@@ -29,17 +29,14 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
-import java.io.File;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 
 
 public class NewPurchase extends AnchorPane{
 
     public class CartItem {
+        private Product product;
         private String name;
         private int units;
         private double price;
@@ -65,6 +62,13 @@ public class NewPurchase extends AnchorPane{
         }
         public void setPrice(double price) {
             this.price = price;
+        }
+        public Product getProduct() {
+            return product;
+        }
+
+        public void setProduct(Product product) {
+            this.product = product;
         }
     }
     //IDEA: Add chechboxes in products row for the user to select before pressing new purchase
@@ -143,7 +147,7 @@ public class NewPurchase extends AnchorPane{
     private Cart cart;
     private Invoice invoice;
     private Customer customer;
-
+    private Hashtable<String, CartItem> customerCartItem = new Hashtable<>();
 
     public Invoice getInvoice() {
         return invoice;
@@ -162,21 +166,47 @@ public class NewPurchase extends AnchorPane{
         if(!am.equals("")){
             int amount = Integer.parseInt(am);
             Product product = inventoryTable.getSelectionModel().getSelectedItem();
-            product.setUnits(product.getUnits() - amount);
-            inventoryTable.refresh();
-            if(product.getUnits() <= 0)
-                inventoryTable.getItems().remove(product);
-            amountField.clear();
+            if(product.getUnits() >= amount) {
+                //Check if item already in cart
+                CartItem cartItem = this.customerCartItem.get(product.getProductId());
+                if(cartItem != null){
+                    cartItem.setUnits( cartItem.getUnits() + amount);
+                }
+                product.setUnits(product.getUnits() - amount);
+                inventoryTable.refresh();
+                if (product.getUnits() <= 0) {
+                    inventoryTable.getItems().remove(product);
+                }
+                amountField.clear();
 
-            CartItem item = new CartItem(product.getProductName(), amount, product.getPricePerUnit());
-            customerCart.getItems().add(item);
-            cart.addProduct(product, amount);
+                if(cartItem == null) {
+                    CartItem item = new CartItem(product.getProductName(), amount, product.getPricePerUnit());
+                    item.setProduct(product);
+                    customerCart.getItems().add(item);
+                }
+
+                cart.addProduct(product, amount);
+            }else{
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Insufficient units.", ButtonType.OK);
+                alert.getDialogPane().getScene().getStylesheets().addAll(Context.getContext().getCurrentTheme());
+                alert.show();
+            }
         }
 
     }
-
+//TODO
     public void removeFromCartBtnPressed(ActionEvent e) {
+        CartItem cartItem = customerCart.getSelectionModel().getSelectedItem();
+        Product product = cartItem.getProduct();
+        if(product.getUnits() == 0) {
+            inventoryTable.getItems().add(product);
+        }
+        product.setUnits( product.getUnits() + cartItem.getUnits());
 
+        int index = customerCart.getSelectionModel().getSelectedIndex();
+        customerCart.getItems().remove(index);
+        inventoryTable.refresh();
+        customerCart.refresh();
     }
 
     public void manualAdjustTotalBtnPressed(ActionEvent e) {
@@ -210,7 +240,7 @@ public class NewPurchase extends AnchorPane{
         alert.getDialogPane().getScene().getStylesheets().addAll(Context.getContext().getCurrentTheme());
         alert.setTitle("Confirmation Dialog");
         //TODO show invoice details
-        // alert.setGraphic(new ImageView(new Image("D:\\MyProjects\\CarWorkshop\\src\\main\\resources\\cena.gif")));
+        alert.setGraphic(new ImageView(new Image("D:\\Java\\CarWorkshop\\src\\main\\resources")));
         alert.setHeaderText("Look, a Confirmation Dialog");
         alert.setContentText("Are you ok with this?");
 

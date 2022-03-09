@@ -780,7 +780,7 @@ public class SQLiteService implements IDataBaseService {
         }
         return false;
     }
-
+//TODO
     @Override
     public Customer getCustomer(String phone) {
         String getCustomer = "SELECT name,phone,carModel FROM Customers WHERE phone = ?;";
@@ -789,7 +789,10 @@ public class SQLiteService implements IDataBaseService {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(getCustomer);
             preparedStatement.setString(1, phone);
             ResultSet resultSet = preparedStatement.executeQuery();
-            return Customer.fromResultSet(resultSet);
+            if(resultSet.next()){
+                return Customer.fromResultSet(resultSet);
+            }
+            return null;
         } catch (Exception e) {
             e.printStackTrace();
         }
