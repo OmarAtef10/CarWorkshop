@@ -198,15 +198,33 @@ public class NewPurchase extends AnchorPane{
     public void removeFromCartBtnPressed(ActionEvent e) {
         CartItem cartItem = customerCart.getSelectionModel().getSelectedItem();
         Product product = cartItem.getProduct();
-        if(product.getUnits() == 0) {
-            inventoryTable.getItems().add(product);
-        }
-        product.setUnits( product.getUnits() + cartItem.getUnits());
+        String amtField = amountField.getText();
+        if(amtField.equals("")) {
+            if (product.getUnits() == 0) {
+                inventoryTable.getItems().add(product);
+            }
+            product.setUnits(product.getUnits() + cartItem.getUnits());
 
-        int index = customerCart.getSelectionModel().getSelectedIndex();
-        customerCart.getItems().remove(index);
+            int index = customerCart.getSelectionModel().getSelectedIndex();
+            customerCart.getItems().remove(index);
+        }else{
+            int removed_amt = Integer.parseInt(amtField);
+            int remaining_amt = cartItem.getUnits() - removed_amt;
+            cartItem.setUnits(remaining_amt);
+            if (product.getUnits() == 0) {
+                inventoryTable.getItems().add(product);
+            }
+            product.setUnits(product.getUnits() + removed_amt);
+
+            int index = customerCart.getSelectionModel().getSelectedIndex();
+           if(cartItem.getUnits() == 0){
+               customerCart.getItems().remove(index);
+           }
+        }
+
         inventoryTable.refresh();
         customerCart.refresh();
+
     }
 
     public void manualAdjustTotalBtnPressed(ActionEvent e) {
