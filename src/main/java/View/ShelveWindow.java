@@ -75,6 +75,12 @@ public class ShelveWindow extends VBox{
 
     @FXML
     void saveBtnPressed(ActionEvent event) {
+        if(this.product == null){
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Please select a product.", ButtonType.OK);
+            alert.getDialogPane().getScene().getStylesheets().addAll(Context.getContext().getCurrentTheme());
+            alert.show();
+            return;
+        }
         if(checkUnitsAvailibilty()){
             this.product.addLocation(shelfNumField.getText(),Integer.parseInt(unitsField.getText()));
             productDao.addProductShelf(this.product);
