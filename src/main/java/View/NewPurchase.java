@@ -7,6 +7,7 @@ import Controller.ProductDao;
 import Controller.ProductInvoiceManagerUtil;
 import Controller.UserManager;
 import Controller.WindowLoader;
+import CustomizedUtilities.TimeUtility;
 import Model.Cart;
 import Model.Customer;
 import Model.Invoice;
@@ -147,7 +148,6 @@ public class NewPurchase extends AnchorPane{
     private Cart cart;
     private Invoice invoice;
     private Customer customer;
-    private Hashtable<String, CartItem> customerCartItem = new Hashtable<>();
 
     public Invoice getInvoice() {
         return invoice;
@@ -167,11 +167,7 @@ public class NewPurchase extends AnchorPane{
             int amount = Integer.parseInt(am);
             Product product = inventoryTable.getSelectionModel().getSelectedItem();
             if(product.getUnits() >= amount) {
-                //Check if item already in cart
-                CartItem cartItem = this.customerCartItem.get(product.getProductId());
-                if(cartItem != null){
-                    cartItem.setUnits( cartItem.getUnits() + amount);
-                }
+
                 product.setUnits(product.getUnits() - amount);
                 inventoryTable.refresh();
                 if (product.getUnits() <= 0) {
@@ -179,13 +175,25 @@ public class NewPurchase extends AnchorPane{
                 }
                 amountField.clear();
 
-                if(cartItem == null) {
+                //Check if item already in cart
+                if(this.cart.getProducts().containsKey(product.getProductId())){
+                    for(CartItem cartItem : customerCart.getItems()){
+                        if(cartItem.getProduct().getProductId().equals(product.getProductId())){
+                            customerCart.getItems().remove(cartItem);
+                            int old_units = cartItem.getUnits();
+                            int total_units = old_units + amount;
+                            CartItem item = new CartItem(product.getProductName(), total_units, product.getPricePerUnit());
+                            item.setProduct(product);
+                            customerCart.getItems().add(item);
+                        }
+                    }
+                }else {
                     CartItem item = new CartItem(product.getProductName(), amount, product.getPricePerUnit());
                     item.setProduct(product);
                     customerCart.getItems().add(item);
                 }
 
-                cart.addProduct(product, amount);
+                this.cart.addProduct(product,amount);
             }else{
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Insufficient units.", ButtonType.OK);
                 alert.getDialogPane().getScene().getStylesheets().addAll(Context.getContext().getCurrentTheme());
@@ -207,6 +215,7 @@ public class NewPurchase extends AnchorPane{
 
             int index = customerCart.getSelectionModel().getSelectedIndex();
             customerCart.getItems().remove(index);
+            cart.removeProduct(product);
         }else{
             int removed_amt = Integer.parseInt(amtField);
             int remaining_amt = cartItem.getUnits() - removed_amt;
@@ -215,7 +224,8 @@ public class NewPurchase extends AnchorPane{
                 inventoryTable.getItems().add(product);
             }
             product.setUnits(product.getUnits() + removed_amt);
-
+            cart.removeProduct(product);
+            cart.addProduct(product,remaining_amt);
             int index = customerCart.getSelectionModel().getSelectedIndex();
            if(cartItem.getUnits() == 0){
                customerCart.getItems().remove(index);
@@ -258,20 +268,24 @@ public class NewPurchase extends AnchorPane{
         alert.getDialogPane().getScene().getStylesheets().addAll(Context.getContext().getCurrentTheme());
         alert.setTitle("Confirmation Dialog");
         //TODO show invoice details
-        alert.setGraphic(new ImageView(new Image("D:\\Java\\CarWorkshop\\src\\main\\resources")));
+        //alert.setGraphic(new ImageView(new Image("D:\\Java\\CarWorkshop\\src\\main\\resources")));
         alert.setHeaderText("Look, a Confirmation Dialog");
         alert.setContentText("Are you ok with this?");
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK){
+
             this.cart = customer.getCart();
-            this.invoice.setCart(this.customer.getCart());
+            this.invoice.setCart(this.cart);
 
             if( customerDao.getCustomer(customerPhoneNumber) == null ){
                 customerDao.addCustomer(this.customer);
             }else{
                 customerDao.updateCustomer(this.customer);
             }
+            this.invoice.setCustomerId( this.customer.getMobileNumber());
+            this.invoice.setTotalPaid( this.cart.getTotal());
+            this.invoice.setDate(TimeUtility.getCurrentDate());
             invoiceDao.addInvoice(this.invoice);
 
             //Products units/shelfs

@@ -62,6 +62,7 @@ public class Cart {
 //TODO
     public void removeProduct(Product product){
         int units = products.remove(product.getProductId());
+
         setTotal(getTotal() - (units * product.getPricePerUnit()));
     }
 
