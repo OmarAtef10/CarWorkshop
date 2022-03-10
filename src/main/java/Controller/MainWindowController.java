@@ -176,7 +176,7 @@ public class MainWindowController {
             productsTable.getItems().clear();
             productsTable.getItems().addAll(window.getSearchResults());
         });
-        ;
+
     }
 
     @FXML
@@ -415,7 +415,6 @@ public class MainWindowController {
         UserDao userDao = new UserDao();
 
         usersTable.getItems().addAll(userDao.getAll());
-
 
     }
 

@@ -13,6 +13,8 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <fx:root minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="969.0" styleClass="background" type="AnchorPane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -133,12 +135,19 @@
                            <children>
                               <HBox alignment="CENTER_LEFT" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
-                                    <TextField fx:id="productNameSearchField" editable="false" promptText="%product_name" HBox.hgrow="ALWAYS">
+                                    <Button mnemonicParsing="false" onAction="#revertBtnPressed">
                                        <HBox.margin>
-                                          <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                        </HBox.margin>
-                                    </TextField>
-                                    <Button fx:id="shelfEntryBtn" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#shelfEntryBtnPressed" text="%shelf_manual" />
+                                       <graphic>
+                                          <ImageView fitHeight="150.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../revert.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </Button>
+                                    <Button fx:id="seatchBtn" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#searchBtnPressed" text="%search" />
                                  </children>
                               </HBox>
                               <TableView fx:id="inventoryTable" layoutX="18.6" prefHeight="224.0" prefWidth="425.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="9.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="57.19999999999999" />

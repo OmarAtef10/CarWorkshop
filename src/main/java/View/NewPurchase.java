@@ -1,12 +1,7 @@
 package View;
 
 import Context.Context;
-import Controller.CustomerDao;
-import Controller.InvoiceDao;
-import Controller.ProductDao;
-import Controller.ProductInvoiceManagerUtil;
-import Controller.UserManager;
-import Controller.WindowLoader;
+import Controller.*;
 import CustomizedUtilities.TimeUtility;
 import Model.Cart;
 import Model.Customer;
@@ -24,8 +19,6 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
@@ -95,7 +88,6 @@ public class NewPurchase extends AnchorPane{
         stage.show();
         return stage;
     }
-
 
     @FXML
     private ResourceBundle resourceBundle;
@@ -200,9 +192,8 @@ public class NewPurchase extends AnchorPane{
                 alert.show();
             }
         }
-
+        totalCalculator();
     }
-//TODO
     public void removeFromCartBtnPressed(ActionEvent e) {
         CartItem cartItem = customerCart.getSelectionModel().getSelectedItem();
         Product product = cartItem.getProduct();
@@ -230,6 +221,7 @@ public class NewPurchase extends AnchorPane{
            if(cartItem.getUnits() == 0){
                customerCart.getItems().remove(index);
            }
+           totalCalculator();
         }
 
         inventoryTable.refresh();
@@ -238,10 +230,27 @@ public class NewPurchase extends AnchorPane{
     }
 
     public void manualAdjustTotalBtnPressed(ActionEvent e) {
-
+        totalField.setEditable(true);
     }
 
-    public void shelfEntryBtnPressed(ActionEvent e) {
+    public void totalCalculator(){
+        totalField.setEditable(false);
+        totalField.setDisable(false);
+        totalField.setText(new String(String.valueOf(cart.getTotal())));
+    }
+
+    @FXML
+    void revertBtnPressed(ActionEvent event) {
+        inventoryTable.getItems().clear();
+        initData();
+    }
+
+    public void searchBtnPressed(ActionEvent e) {
+        SearchWindow searchWindow = new SearchWindow();
+        searchWindow.show().setOnHidden((arg0) -> {
+            inventoryTable.getItems().clear();
+            inventoryTable.getItems().addAll(searchWindow.getSearchResults());
+        });
 
     }
 
@@ -253,6 +262,7 @@ public class NewPurchase extends AnchorPane{
         String customerName = nameField.getText();
         String customerPhoneNumber = phoneField.getText();
         String carModel = carModelField.getText();
+        cart.setTotal(Double.parseDouble(totalField.getText()));
         if (!customerName.equals("") || !customerPhoneNumber.equals("") || !carModel.equals("")) {
             this.customer.setName(customerName);
             this.customer.setMobileNumber(customerPhoneNumber);
@@ -268,7 +278,7 @@ public class NewPurchase extends AnchorPane{
         alert.getDialogPane().getScene().getStylesheets().addAll(Context.getContext().getCurrentTheme());
         alert.setTitle("Confirmation Dialog");
         //TODO show invoice details
-        //alert.setGraphic(new ImageView(new Image("D:\\Java\\CarWorkshop\\src\\main\\resources")));
+        //alert.setGraphic(new ImageView(new Image("..\\resources\\view\\cena.gif")));
         alert.setHeaderText("Look, a Confirmation Dialog");
         alert.setContentText("Are you ok with this?");
 
