@@ -20,6 +20,8 @@ import javafx.stage.WindowEvent;
 //TODO User data / shelf data/ stock updates need to be shown on UI tables after each update!
 public class MainWindowController {
 
+    private InvoiceDetailsWindow window = new InvoiceDetailsWindow();
+
     @FXML
     private ResourceBundle resources;
 
@@ -341,6 +343,17 @@ public class MainWindowController {
                 Report report = selectedRow.getItem();
                 if (event.getClickCount() == 1 && !selectedRow.isEmpty()) {
                     ReportInvoicesGetter(report);
+                }
+            });
+            return selectedRow;
+        });
+
+        invoicesTable.setRowFactory((w) -> {
+            TableRow<Invoice> selectedRow = new TableRow<>();
+            selectedRow.setOnMouseClicked((click) -> {
+                Invoice invoice = selectedRow.getItem();
+                if (click.getClickCount() == 2 && !selectedRow.isEmpty()) {
+                    window.show(invoice);
                 }
             });
             return selectedRow;
