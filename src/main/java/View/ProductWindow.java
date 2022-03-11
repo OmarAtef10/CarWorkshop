@@ -15,9 +15,18 @@ public class ProductWindow {
     public final static String FXML_NAME = ProductWindow.class.getSimpleName() + ".fxml";
     private final FXMLLoader loader;
     private ProductWindowController controller;
+    Parent root;
 
     public ProductWindow(){
         loader = WindowLoader.getLoader(FXML_NAME);
+        try {
+            root = loader.load();
+            controller = loader.getController();
+            root.getStylesheets().addAll(Context.getContext().getCurrentTheme());
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     public void setProduct(Product product){
@@ -29,18 +38,9 @@ public class ProductWindow {
     }
 
     public Stage view(){
-        Parent root;
         Stage stage = new Stage();
-        try {
-            root = loader.load();
-            controller = loader.getController();
-            root.getStylesheets().addAll(Context.getContext().getCurrentTheme());
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        stage.setScene(new Scene(root));
+        stage.show();
 
         return stage;
     }

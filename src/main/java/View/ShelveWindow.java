@@ -50,6 +50,9 @@ public class ShelveWindow extends VBox{
             loader.setRoot(this);
             loader.setController(this);
             loader.load();
+            stage = new Stage();
+            stage.setScene(new Scene(this));
+            stage.getScene().getStylesheets().addAll(Context.getContext().getCurrentTheme());
             
         } catch (MalformedURLException e) {
             // TODO Auto-generated catch block
@@ -61,9 +64,6 @@ public class ShelveWindow extends VBox{
     }
 
     public Stage show(){
-        stage = new Stage();
-        stage.setScene(new Scene(this));
-        stage.getScene().getStylesheets().addAll(Context.getContext().getCurrentTheme());
         stage.show();
         return stage;
     }
@@ -75,14 +75,14 @@ public class ShelveWindow extends VBox{
 
     @FXML
     void saveBtnPressed(ActionEvent event) {
-        if(this.product == null){
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Please select a product.", ButtonType.OK);
+        if(product.getLocations().get(shelfNumField.getText()) != null){
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Shelf already exists", ButtonType.OK);
             alert.getDialogPane().getScene().getStylesheets().addAll(Context.getContext().getCurrentTheme());
             alert.show();
             return;
         }
         if(checkUnitsAvailibilty()){
-            this.product.addLocation(shelfNumField.getText(),Integer.parseInt(unitsField.getText()));
+            this.product.addLocation(shelfNumField.getText(), Integer.parseInt(unitsField.getText()));
             productDao.addProductShelf(this.product);
         }else{
             Alert alert = new Alert(Alert.AlertType.ERROR, "Insufficient units", ButtonType.OK);

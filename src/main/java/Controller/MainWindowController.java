@@ -1,6 +1,7 @@
 package Controller;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
@@ -8,6 +9,7 @@ import Context.Context;
 import Model.*;
 import View.*;
 import View.ProductWindow;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -15,6 +17,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 //TODO User data / shelf data/ stock updates need to be shown on UI tables after each update!
@@ -44,7 +47,7 @@ public class MainWindowController {
     private Button newPurchaseBtn;
 
     @FXML
-    private ListView<?> productInfoTable;
+    private ListView<String> productInfoTable;
 
     @FXML
     private TableView<Product> productsTable;
@@ -98,6 +101,10 @@ public class MainWindowController {
         productDao.deleteProduct(product.getProductName(), product.getVendor());
     }
 
+    void update() {
+        initData();
+    }
+
     @FXML
     void createBtnPressed(ActionEvent event) {
         ProductWindow productWindow = new ProductWindow();
@@ -113,33 +120,51 @@ public class MainWindowController {
     @FXML
     void editProductBtnPressed(ActionEvent event) {
         Product product = productsTable.getSelectionModel().getSelectedItem();
+        int productInd = productsTable.getSelectionModel().getSelectedIndex();
         ProductWindow window = new ProductWindow();
-        window.view();
         window.setProduct(product);
         window.setEditMode(true);
+        window.view().setOnHidden((arg0) -> {
+            Product newProduct = window.getProduct();
+            productsTable.getItems().set(productInd, newProduct);
+            updateRelatedProductInfo(newProduct);
+        });;
     }
 
     @FXML
     void shelfBtnPressed(ActionEvent event) {
         ShelveWindow window = new ShelveWindow();
         window.show();
-        window.setProduct(productsTable.getSelectionModel().getSelectedItem());
-        revertBtnPressed(new ActionEvent());
+        Product product = productsTable.getSelectionModel().getSelectedItem();
+        int productInd = productsTable.getSelectionModel().getSelectedIndex();
+        window.setProduct(product);
+        window.show().setOnHidden((arg0) -> {
+            Product newProduct = window.getProduct();
+            productsTable.getItems().set(productInd, newProduct);
+            updateRelatedProductInfo(newProduct);
+        });
     }
 
     @FXML
     void stockProductBtnPressed(ActionEvent event) {
         AddStockWindow window = new AddStockWindow();
-        window.show();
-        window.setProduct(productsTable.getSelectionModel().getSelectedItem());
-        revertBtnPressed(new ActionEvent());
+        Product product = productsTable.getSelectionModel().getSelectedItem();
+        int productInd = productsTable.getSelectionModel().getSelectedIndex();
+
+        window.setProduct(product);
+        window.show().setOnHidden((arg0) -> {
+            Product newProduct = window.getProduct();
+            productsTable.getItems().set(productInd, newProduct);
+            updateRelatedProductInfo(newProduct);
+        });
     }
 
     @FXML
     void newPurchaseBtnPressed(ActionEvent event) {
         NewPurchase purchaseWindow = new NewPurchase();
-        purchaseWindow.show();
-        // revertBtnPressed(event);
+        purchaseWindow.show().setOnHidden((arg0) -> {
+            update();
+        });
     }
 
     @FXML
@@ -165,7 +190,7 @@ public class MainWindowController {
             UserManager.getInstance().deleteUser(user.getUserName());
             usersTable.getItems().remove(user);
         } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "You can't delete current logged in user!", ButtonType.OK);
+            Alert alert = new Alert(Alert.AlertType.ERROR, "You can't delete currently logged in user!", ButtonType.OK);
             alert.getDialogPane().getStylesheets().addAll(Context.getContext().getCurrentTheme());
             alert.show();
         }
@@ -178,21 +203,21 @@ public class MainWindowController {
             productsTable.getItems().clear();
             productsTable.getItems().addAll(window.getSearchResults());
         });
-
     }
 
     @FXML
     void searchUserBtnPressed(ActionEvent event) {
-
+        throw new UnsupportedOperationException("search user method isn't implmented");
     }
 
     @FXML
     void updateUserBtnPressed(ActionEvent event) {
         User user = usersTable.getSelectionModel().getSelectedItem();
         UserWindow userWindow = new UserWindow();
-        userWindow.view();
         userWindow.setUser(user);
-
+        userWindow.view().setOnHidden((arg0) -> {
+            update();
+        });
     }
 
     @FXML
@@ -237,8 +262,10 @@ public class MainWindowController {
 
     @FXML
     void revertBtnPressed(ActionEvent event) {
-        productsTable.getItems().clear();
-        usersTable.getItems().clear();
+        editProductBtn.setDisable(true);
+        stockProductBtn.setDisable(true);
+        shelfBtn.setDisable(true);
+        removeBtn.setDisable(true);
         initData();
     }
 
@@ -291,7 +318,6 @@ public class MainWindowController {
             return new SimpleStringProperty(arg0.getValue().getKey());
         });
 
-
         TableColumn<HashMap.Entry<String, Integer>, String> shelfUnitCol = new TableColumn<>("Units");
         shelfUnitCol.setCellValueFactory((arg0) -> {
             return new SimpleStringProperty(arg0.getValue().getValue().toString());
@@ -300,15 +326,13 @@ public class MainWindowController {
         shelvesTable.getColumns().addAll(shelfCol, shelfUnitCol);
         shelvesTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-
-        //UsersMenu
+        // UsersMenu
 
         TableColumn<User, String> nameColumn = new TableColumn<User, String>("UserName");
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("UserName"));
 
         TableColumn<User, String> passwordColumn = new TableColumn<User, String>("Password");
         passwordColumn.setCellValueFactory(new PropertyValueFactory<>("Password"));
-
 
         TableColumn<User, String> roleColumn = new TableColumn<User, String>("Role");
         roleColumn.setCellValueFactory(new PropertyValueFactory<>("Role"));
@@ -326,8 +350,7 @@ public class MainWindowController {
             return selectedRow;
         });
 
-
-        //Reports Table
+        // Reports Table
 
         TableColumn<Report, String> reportIdColumn = new TableColumn<Report, String>("Report ID");
         reportIdColumn.setCellValueFactory(new PropertyValueFactory<>("reportId"));
@@ -359,7 +382,7 @@ public class MainWindowController {
             return selectedRow;
         });
 
-        //Invoices Table
+        // Invoices Table
         TableColumn<Invoice, String> invoiceIdCol = new TableColumn<Invoice, String>("Invoice ID");
         invoiceIdCol.setCellValueFactory(new PropertyValueFactory<>("invoiceId"));
 
@@ -368,7 +391,6 @@ public class MainWindowController {
 
         invoicesTable.getColumns().addAll(invoiceIdCol, totalCol);
         invoicesTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-
 
         // Check buttons
         if (UserManager.getInstance().getCurrentUser().getRole() != Role.ADMIN) {
@@ -380,36 +402,47 @@ public class MainWindowController {
 
     }
 
-    //TODO
+    // TODO
     private void updateRelatedProductInfo(Product product) {
-        //history table
+        // history table
         historyTable.getItems().clear();
         historyTable.getItems().addAll(product.getProductHistory());
-        //locations table
+        // locations table
         shelvesTable.getItems().clear();
         shelvesTable.getItems().addAll(product.getLocations().entrySet());
 
-        //buttons
+        productInfoTable.getItems().clear();
+        productInfoTable.getItems().add("Name: " + product.getProductName());
+        productInfoTable.getItems().add("Vendor: " + product.getVendor());
+        productInfoTable.getItems().add("Units: " + product.getUnits());
+        productInfoTable.getItems().add("Price Per Unit: " + product.getPricePerUnit());
+        productInfoTable.getItems().add("Market Price: " + product.getMarketPrice());
+        if(product instanceof Oil){
+            Oil oilProduct = (Oil) product;
+            productInfoTable.getItems().add("Milage: " + oilProduct.getViscosity());
+            productInfoTable.getItems().add("Viscosity: " + oilProduct.getViscosity());
+        }
+
+        // buttons
         editProductBtn.setDisable(false);
         stockProductBtn.setDisable(false);
         shelfBtn.setDisable(false);
         removeBtn.setDisable(false);
     }
 
-    private void updateRelatedUserInfo(User user) { //TODO TODO TODO
-        //reports table
+    private void updateRelatedUserInfo(User user) { // TODO TODO TODO
+        // reports table
         ReportDao reportDao = new ReportDao();
         reportTable.getItems().clear();
         reportTable.getItems().addAll(reportDao.getReportsByUsername(user.getUserName()));
-        //reportTable.getItems().addAll(user.getSessionReport());
-        //invoices table
+        // reportTable.getItems().addAll(user.getSessionReport());
+        // invoices table
         invoicesTable.getItems().clear();
-        //invoicesTable.getItems().addAll(user.getLocations().entrySet());
+        // invoicesTable.getItems().addAll(user.getLocations().entrySet());
 
-        //reports table
+        // reports table
         removeUserBtn.setDisable(false);
         updateUserBtn.setDisable(false);
-
 
     }
 
@@ -419,16 +452,31 @@ public class MainWindowController {
 
     }
 
-
     void initData() {
-        ProductDao dao = new ProductDao();
-        // TODO: remove hardcode
-        productsTable.getItems().addAll(dao.getAll());
+        Thread thread = new Thread(new Runnable() {
+            private ArrayList<Product> products;
+            private ArrayList<User> users;
+            ProductDao dao = new ProductDao();
+            UserDao userDao = new UserDao();
 
-        UserDao userDao = new UserDao();
+            @Override
+            public void run() {
+                products = dao.getAll();
+                users = userDao.getAll();
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        productsTable.getItems().clear();
+                        usersTable.getItems().clear();
 
-        usersTable.getItems().addAll(userDao.getAll());
+                        productsTable.getItems().addAll(products);
+                        usersTable.getItems().addAll(users);
 
+                    }
+                });
+            }
+        });
+        thread.start();
     }
 
 }

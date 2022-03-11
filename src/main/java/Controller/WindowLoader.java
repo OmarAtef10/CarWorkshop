@@ -6,8 +6,10 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import Context.Context;
+import View.InvoiceDetailsWindow;
 import View.LoginWindow;
 import View.MainWindow;
+import View.NewPurchase;
 import View.ProductWindow;
 import javafx.fxml.FXMLLoader;
 
@@ -24,6 +26,8 @@ public class WindowLoader {
             put(MainWindow.FXML_NAME, createLoader(MainWindow.FXML_NAME, currLocale));
             put(ProductWindow.FXML_NAME, createLoader(ProductWindow.FXML_NAME, currLocale));
             put(LoginWindow.FXML_NAME, createLoader(LoginWindow.FXML_NAME, currLocale));
+            put(InvoiceDetailsWindow.FXML_NAME, createLoader(InvoiceDetailsWindow.FXML_NAME, currLocale));
+            put(NewPurchase.FXML_NAME, createLoader(NewPurchase.FXML_NAME, currLocale));
         }};
     }
 

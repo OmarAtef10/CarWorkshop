@@ -15,10 +15,12 @@ public class UserWindow {
     public final static String FXML_NAME = UserWindow.class.getSimpleName() + ".fxml";
     private final FXMLLoader loader;
     private UserWindowController controller;
+    private Parent root;
 
     public UserWindow(){
         loader = WindowLoader.getLoader(FXML_NAME);
         try {
+            root = loader.load();
             controller = loader.getController();
         } catch (Exception e) {
             // TODO Auto-generated catch block
@@ -27,18 +29,10 @@ public class UserWindow {
     }
 
     public Stage view(){
-        Parent root;
         Stage stage = new Stage();
-        try {
-            root = loader.load();
-            controller = loader.getController();
-            root.getStylesheets().addAll(Context.getContext().getCurrentTheme());
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        root.getStylesheets().addAll(Context.getContext().getCurrentTheme());
+        stage.setScene(new Scene(root));
+        stage.show();
 
         return stage;
     }
