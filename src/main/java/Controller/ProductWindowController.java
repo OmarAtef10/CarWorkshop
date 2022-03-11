@@ -186,7 +186,7 @@ public class ProductWindowController {
                 this.product = new ServicePart(
                         nameField.getText(),
                         vendorField.getText(),
-                        Integer.parseInt(unitPriceField.getText()),
+                        Integer.parseInt(unitsField.getText()),
                         Double.parseDouble(unitPriceField.getText()),
                         Double.parseDouble(marketPriceField.getText())
                 );
