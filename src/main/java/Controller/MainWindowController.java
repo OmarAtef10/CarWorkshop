@@ -24,6 +24,8 @@ import javafx.stage.WindowEvent;
 public class MainWindowController {
 
     private InvoiceDetailsWindow window = new InvoiceDetailsWindow();
+    
+    private boolean userPressedLogout = false;
 
     @FXML
     private ResourceBundle resources;
@@ -63,6 +65,9 @@ public class MainWindowController {
 
     @FXML
     private Button searchBtn;
+    
+    @FXML
+    private Button logoutBtn;
 
     @FXML
     private Button editProductBtn;
@@ -93,6 +98,16 @@ public class MainWindowController {
 
     @FXML
     private Button removeBtn;
+
+    @FXML
+    void logoutBtnPressed(ActionEvent event){
+        userPressedLogout = true;
+        ((Stage) logoutBtn.getScene().getWindow()).close();
+    }
+
+    public boolean isUserPressedLogout() {
+        return userPressedLogout;
+    }
 
     @FXML
     void removeBtnPressed(ActionEvent event) {

@@ -39,11 +39,22 @@ public class MainWindow {
     public static final String FXML_NAME = MainWindow.class.getSimpleName() + ".fxml";
     private FXMLLoader loader = null;
     private MainWindowController controller;
+    private Parent root;
+    Stage stage;
+
+    public boolean isUserPressedLogout(){
+        return controller.isUserPressedLogout();
+    }
     
     public MainWindow(){
         loader = WindowLoader.getLoader(FXML_NAME);
         try {
+            root = loader.load();
             controller = loader.getController();
+            root.getStylesheets().addAll(Context.getContext().getCurrentTheme());
+            stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setMaximized(true);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -51,24 +62,7 @@ public class MainWindow {
     }
 
     public Stage view(){
-        Parent root;
-        Stage stage = new Stage();
-        try {
-            root = loader.load();
-            root.getStylesheets().addAll(Context.getContext().getCurrentTheme());
-            stage.setScene(new Scene(root));
-            stage.setMaximized(true);
-            stage.show();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent windowEvent) {
-                UserManager.getInstance().logout();
-            }
-        });
+        stage.show();
         return stage;
     }
 

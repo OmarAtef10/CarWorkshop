@@ -42,10 +42,23 @@ public class LoginWindowController {
             String username = usernameField.getText();
             String password = passwordField.getText();
             UserManager.getInstance().login(username, password);
+
             if(UserManager.userLoggedIn()){
                 MainWindow window = new MainWindow();
-                window.view();
-                ((Stage) cancelBtn.getScene().getWindow()).close();
+                Stage stage = ((Stage) cancelBtn.getScene().getWindow());
+                window.view().setOnHidden((arg0) -> {
+                    UserManager.getInstance().logout();
+
+                    if(window.isUserPressedLogout()){
+                        usernameField.clear();
+                        passwordField.clear();
+                        stage.show();
+                    
+                    }
+                    else
+                        Platform.exit();
+                });
+                stage.hide();
             }
         } catch (Exception e) {
             Alert alert = new Alert(AlertType.ERROR, e.getMessage(), ButtonType.OK);
