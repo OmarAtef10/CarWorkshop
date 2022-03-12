@@ -143,7 +143,7 @@ public class CSV_Handler implements ICSVService{
             objj[1]=p.getProductName();
             objj[2]= products.get(key);
             objj[3] =( products.get(key) * p.getPricePerUnit() );
-            objj[4]=( ( products.get(key) * p.getPricePerUnit() ) - ( p.getMarketPrice()*p.getUnits() ) );
+            objj[4]=( ( products.get(key) * p.getPricePerUnit() ) - ( p.getMarketPrice()*products.get(key) ) );
             reportData.put( String.valueOf(counter) ,objj );
             counter++;
         }

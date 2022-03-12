@@ -15,6 +15,10 @@ public class BackupUtility {
         File source = new File(s+"\\db");
         String fname = TimeUtility.getReformedDate(TimeUtility.getCurrentDate());
         try {
+            File f = new File(s + "\\BACKUP\\" + fname);
+            if(f.exists()){
+                return;
+            }
             Files.createDirectory(Paths.get(s + "\\BACKUP\\" + fname));
             File dest = new File(s+"\\BACKUP\\"+fname);
             FileUtils.copyDirectory(source, dest);
