@@ -48,7 +48,6 @@ public class LoginWindowController {
                 Stage stage = ((Stage) cancelBtn.getScene().getWindow());
                 window.view().setOnHidden((arg0) -> {
                     UserManager.getInstance().logout();
-
                     if(window.isUserPressedLogout()){
                         usernameField.clear();
                         passwordField.clear();

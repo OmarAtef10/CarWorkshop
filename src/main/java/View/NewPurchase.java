@@ -243,6 +243,11 @@ public class NewPurchase extends AnchorPane{
             this.customer.setCarModel(carModel);
             this.customer.setCurrentMileage(currentMileage);
             this.customer.setNextMileage(nextMileage);
+            if (!customerDao.updateCustomer(customer)){
+                customerDao.addCustomer(customer);
+            }else{
+                customerDao.updateCustomer(customer);
+            }
 
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Wrong Information", ButtonType.OK);
