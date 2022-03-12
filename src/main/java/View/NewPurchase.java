@@ -92,6 +92,12 @@ public class NewPurchase extends AnchorPane{
     private TextField carModelField;
 
     @FXML
+    private  TextField currentMileageField;
+
+    @FXML
+    private TextField nextMileageField;
+
+    @FXML
     private TextField totalField;
 
     @FXML
@@ -228,11 +234,16 @@ public class NewPurchase extends AnchorPane{
         String customerName = nameField.getText();
         String customerPhoneNumber = phoneField.getText();
         String carModel = carModelField.getText();
+        String currentMileage = currentMileageField.getText();
+        String nextMileage = nextMileageField.getText();
         cart.setTotal(Double.parseDouble(totalField.getText()));
-        if (!customerName.equals("") || !customerPhoneNumber.equals("") || !carModel.equals("")) {
+        if (!customerName.equals("") || !customerPhoneNumber.equals("") || !carModel.equals("") || !currentMileage.equals("") || !nextMileage.equals("")) {
             this.customer.setName(customerName);
             this.customer.setMobileNumber(customerPhoneNumber);
             this.customer.setCarModel(carModel);
+            this.customer.setCurrentMileage(currentMileage);
+            this.customer.setNextMileage(nextMileage);
+
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Wrong Information", ButtonType.OK);
             alert.getDialogPane().getScene().getStylesheets().addAll(Context.getContext().getCurrentTheme());
@@ -286,6 +297,8 @@ public class NewPurchase extends AnchorPane{
         assert removeFromCartBtn != null : "fx:id=\"removeFromCartBtn\" was not injected: check your FXML file 'NewPurchase.fxml'.";
         assert nameField != null : "fx:id=\"nameField\" was not injected: check your FXML file 'NewPurchase.fxml'.";
         assert phoneField != null : "fx:id=\"phoneField\" was not injected: check your FXML file 'NewPurchase.fxml'.";
+        assert currentMileageField != null : "fx:id=\"currentMileageField\" was not injected: check your FXML file 'NewPurchase.fxml'.";
+        assert nextMileageField != null : "fx:id=\"nextMileageField\" was not injected: check your FXML file 'NewPurchase.fxml'.";
         assert carModelField != null : "fx:id=\"carModelField\" was not injected: check your FXML file 'NewPurchase.fxml'.";
         assert totalField != null : "fx:id=\"totalField\" was not injected: check your FXML file 'NewPurchase.fxml'.";
         assert amountField != null : "fx:id=\"amountField\" was not injected: check your FXML file 'NewPurchase.fxml'.";

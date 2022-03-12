@@ -8,6 +8,8 @@ public class Customer {
     private String mobileNumber;
     private String carModel;
     private Cart cart;
+    private String currentMileage;
+    private String nextMileage;
 
     public Customer(){
         this.cart = new Cart();
@@ -17,6 +19,16 @@ public class Customer {
         this.name = name;
         this.mobileNumber = mobileNumber;
         this.carModel=carModel;
+        setCurrentMileage("");
+        setNextMileage("");
+        this.cart = new Cart();
+    }
+    public Customer( String name, String mobileNumber, String carModel, String currentMileage, String nextMileage){
+        this.name = name;
+        this.mobileNumber = mobileNumber;
+        this.carModel=carModel;
+        this.currentMileage=currentMileage;
+        this.nextMileage=nextMileage;
         this.cart = new Cart();
     }
 
@@ -27,6 +39,8 @@ public class Customer {
             customer.name = resultSet.getString("name");
             customer.mobileNumber = resultSet.getString("phone");
             customer.carModel =  resultSet.getString("carModel");
+            customer.currentMileage = resultSet.getString("currentMileage");
+            customer.nextMileage = resultSet.getString("nextMileage");
             customer.cart = new Cart();
         }catch (Exception e){
             e.printStackTrace();
@@ -71,5 +85,21 @@ public class Customer {
 
     public Cart getCart() {
         return cart;
+    }
+
+    public String getCurrentMileage() {
+        return currentMileage;
+    }
+
+    public void setCurrentMileage(String currentMileage) {
+        this.currentMileage = currentMileage;
+    }
+
+    public String getNextMileage() {
+        return nextMileage;
+    }
+
+    public void setNextMileage(String nextMileage) {
+        this.nextMileage = nextMileage;
     }
 }

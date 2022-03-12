@@ -1,5 +1,7 @@
 package Service;
 
+import Context.DBContext;
+import Controller.CustomerDao;
 import CustomizedUtilities.TimeUtility;
 import Model.*;
 
@@ -39,10 +41,13 @@ public class SQLiteService implements IDataBaseService {
         String customersTable = "CREATE TABLE Customers (" +
                 "name VARCHAR(45)," +
                 "phone VARCHAR(45) PRIMARY KEY," +
-                "carModel VARCHAR(45)" +
+                "carModel VARCHAR(45)," +
+                "currentMileage VARCHAR(45)," +
+                "nextMileage VARCHAR(45)" +
                 //"invoiceId INTEGER," +
                 // "FOREIGN KEY(invoiceId) REFERENCES Invoices(invoiceId) ON DELETE CASCADE" +
                 ");";
+
 
         String usersTable = "CREATE TABLE Users(" +
                 "username VARCHAR(45) PRIMARY KEY NOT NULL," +
@@ -347,15 +352,15 @@ public class SQLiteService implements IDataBaseService {
     }
 
     @Override
-    public boolean updateShelf(String shelfName,int units) {
+    public boolean updateShelf(String shelfName, int units) {
         String query = "UPDATE ShelfProduct SET units = ? WHERE shelfNumber =?;";
         try {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(query);
-            preparedStatement.setInt(1,units);
-            preparedStatement.setString(2,shelfName);
+            preparedStatement.setInt(1, units);
+            preparedStatement.setString(2, shelfName);
             preparedStatement.executeUpdate();
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
@@ -766,13 +771,15 @@ public class SQLiteService implements IDataBaseService {
 
     @Override
     public boolean addCustomer(Customer customer) {
-        String addCustomer = "INSERT INTO Customers (name,phone,carModel) VALUES (?,?,?);";
+        String addCustomer = "INSERT INTO Customers (name,phone,carModel,currentMileage,nextMileage) VALUES (?,?,?,?,?);";
 
         try {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(addCustomer);
             preparedStatement.setString(1, customer.getName());
             preparedStatement.setString(2, customer.getMobileNumber());
             preparedStatement.setString(3, customer.getCarModel());
+            preparedStatement.setString(4, customer.getCurrentMileage());
+            preparedStatement.setString(5, customer.getNextMileage());
             preparedStatement.executeUpdate();
             return true;
         } catch (Exception e) {
@@ -780,16 +787,17 @@ public class SQLiteService implements IDataBaseService {
         }
         return false;
     }
-//TODO
+
+    //TODO
     @Override
     public Customer getCustomer(String phone) {
-        String getCustomer = "SELECT name,phone,carModel FROM Customers WHERE phone = ?;";
+        String getCustomer = "SELECT name,phone,carModel,currentMileage,nextMileage FROM Customers WHERE phone = ?;";
 
         try {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(getCustomer);
             preparedStatement.setString(1, phone);
             ResultSet resultSet = preparedStatement.executeQuery();
-            if(resultSet.next()){
+            if (resultSet.next()) {
                 return Customer.fromResultSet(resultSet);
             }
             return null;
@@ -815,15 +823,17 @@ public class SQLiteService implements IDataBaseService {
 
     @Override
     public boolean updateCustomer(Customer customer) {
-        String query = "UPDATE Customers SET carModel = ?, name=? WHERE phone = ?;";
+        String query = "UPDATE Customers SET carModel = ?, name=? , currentMileage = ? , nextMileage = ? WHERE phone = ?;";
         try {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(query);
             preparedStatement.setString(1, customer.getCarModel());
-            preparedStatement.setString(2,customer.getName());
-            preparedStatement.setString(3,customer.getMobileNumber());
+            preparedStatement.setString(2, customer.getName());
+            preparedStatement.setString(3, customer.getCurrentMileage());
+            preparedStatement.setString(4, customer.getNextMileage());
+            preparedStatement.setString(5, customer.getMobileNumber());
             preparedStatement.executeUpdate();
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
