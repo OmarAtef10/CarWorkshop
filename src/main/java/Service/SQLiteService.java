@@ -123,6 +123,13 @@ public class SQLiteService implements IDataBaseService {
             statement.execute(shelfProductTable);
             statement.execute(reportsTable);
             statement.execute(reportInvoicesTable);
+
+            String adminQuery= "INSERT INTO Users (username,password,role) VALUES(?,?,?);";
+            PreparedStatement preparedStatement =dbConnection.prepareStatement(adminQuery);
+            preparedStatement.setString(1,"admin");
+            preparedStatement.setString(2,"admin");
+            preparedStatement.setString(3,Role.ADMIN.toString());
+            preparedStatement.executeUpdate();
         } catch (Exception err) {
             err.printStackTrace();
         }
@@ -733,7 +740,7 @@ public class SQLiteService implements IDataBaseService {
 
     @Override
     public ArrayList<Invoice> getDailyUserInvoices(String username, String date) {
-        //FIXME: This doesn't work and getReformedDate return the date with an extra space  -> DONE
+
         String reformedDate = TimeUtility.getReformedDate(date);
         ArrayList<Invoice> invoices = new ArrayList<>();
         String getDailyUserInvoices = "SELECT * FROM Invoices WHERE username = ? AND date LIKE '" + reformedDate + "%';";
@@ -753,7 +760,7 @@ public class SQLiteService implements IDataBaseService {
 
     @Override
     public ArrayList<Invoice> getDailyInvoices(String date) {
-        String reformedDate = date.substring(0, date.indexOf("::"));
+        String reformedDate = TimeUtility.getReformedDate(date);
         ArrayList<Invoice> invoices = new ArrayList<>();
         String getDailyInvoices = "SELECT * FROM Invoices WHERE date LIKE '" + reformedDate + "%';";
         try {

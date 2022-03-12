@@ -260,7 +260,7 @@ public class NewPurchase extends AnchorPane{
         alert.getDialogPane().getScene().getStylesheets().addAll(Context.getContext().getCurrentTheme());
         alert.setTitle("Confirmation Dialog");
         //TODO show invoice details
-        alert.setGraphic(new ImageView(new Image("D:\\jetbrains\\java projects\\CarWorkshop\\src\\main\\resources\\cena.gif")));
+        //alert.setGraphic(new ImageView(new Image("D:\\jetbrains\\java projects\\CarWorkshop\\src\\main\\resources\\cena.gif")));
         alert.setHeaderText("Look, a Confirmation Dialog");
         alert.setContentText("Are you ok with this?");
 

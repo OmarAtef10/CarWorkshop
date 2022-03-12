@@ -1,5 +1,6 @@
 package Controller;
 
+import CustomizedUtilities.BackupUtility;
 import CustomizedUtilities.TimeUtility;
 import Model.Action;
 import Model.Report;
@@ -55,6 +56,7 @@ public class UserManager {
 
     public User login(String username, String password) throws Exception {
         String currentSessionStart = TimeUtility.getCurrentDate();
+        BackupUtility.backup();
 
         UserDao userDao = new UserDao();
         User user = userDao.getUser(username);
@@ -81,8 +83,9 @@ public class UserManager {
         Report userReport = new Report(currentUser.getUserName(), TimeUtility.getCurrentDate());
 
         ReportDao reportDao = new ReportDao();
-        reportDao.addReport(userReport);
-
+        if(userReport.getInvoices().size() != 0){
+            reportDao.addReport(userReport);
+        }
         currentUser = null;
     }
 
