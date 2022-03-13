@@ -1,18 +1,13 @@
 package View;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Optional;
 
 import Context.Context;
-import Controller.CustomerDao;
-import Controller.ProductDao;
 import Controller.WindowLoader;
-import CustomizedUtilities.TimeUtility;
-import Model.Customer;
 import Model.Invoice;
-import Model.Product;
+import Model.InvoiceDetail;
+import Service.PDF_Invoice;
+import Service.PrinterHelper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -139,8 +134,13 @@ public class InvoiceDetailsWindow extends VBox{
 
         Optional<Printer> chosenPrinter = printerPrompt.showAndWait();
         chosenPrinter.ifPresent(printer -> {
+            PDF_Invoice pdf_invoice = new PDF_Invoice(details);
+            String invoice_path = pdf_invoice.getInvoicePDF();
             //TODO: PRINT HERE
+            PrinterHelper printerHelper = new PrinterHelper(invoice_path,printer.getName());
+            printerHelper.start();
         });
+        closeBtnPressed(new ActionEvent());
     }
 
     public InvoiceDetail getDetails() {
@@ -154,97 +154,3 @@ public class InvoiceDetailsWindow extends VBox{
 }
 
 
-class InvoiceDetail {
-    String invoiceId;
-    String customerName;
-    String customerPhone;
-    String customerCarModel;
-    String cashierName;
-    String invoiceDate;
-    double invoiceTotal;
-    ArrayList<CartItem> items;
-
-    public InvoiceDetail(Invoice invoice){
-        CustomerDao dao = new CustomerDao();
-        ProductDao dao2 = new ProductDao();
-        Customer customer = dao.getCustomer(invoice.getCustomerId());
-        items = new ArrayList<>();
-        
-        setCashierName(invoice.getUserName());
-        setCustomerCarModel(customer.getCarModel());
-        setCustomerName(customer.getName());
-        setCustomerPhone(customer.getMobileNumber());
-        setInvoiceDate(invoice.getDate());
-        setInvoiceId(invoice.getInvoiceId());
-        setInvoiceTotal(invoice.getTotalPaid());
-        
-        HashMap<String, Integer> products =  invoice.getCart().getProducts();
-        for(String id: products.keySet()){
-            Product product = dao2.getOrNull(id);
-            CartItem item = new CartItem(product.getProductName(), products.get(id), product.getPricePerUnit());
-            items.add(item);
-        }
-    }
-
-    public InvoiceDetail(String invoiceId, String customerName, String customerPhone, String customerCarModel,
-            String cashierName, String invoiceDate, double invoiceTotal) {
-        this.invoiceId = invoiceId;
-        this.customerName = customerName;
-        this.customerPhone = customerPhone;
-        this.customerCarModel = customerCarModel;
-        this.cashierName = cashierName;
-        this.invoiceDate = invoiceDate;
-        this.invoiceTotal = invoiceTotal;
-    }
-
-    public InvoiceDetail(){}
-
-    public String getInvoiceId() {
-        return invoiceId;
-    }
-    public void setInvoiceId(String invoiceId) {
-        this.invoiceId = invoiceId;
-    }
-    public String getCustomerName() {
-        return customerName;
-    }
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
-    }
-    public String getCustomerPhone() {
-        return customerPhone;
-    }
-    public void setCustomerPhone(String customerPhone) {
-        this.customerPhone = customerPhone;
-    }
-    public String getCustomerCarModel() {
-        return customerCarModel;
-    }
-    public void setCustomerCarModel(String customerCarModel) {
-        this.customerCarModel = customerCarModel;
-    }
-    public String getCashierName() {
-        return cashierName;
-    }
-    public void setCashierName(String cashierName) {
-        this.cashierName = cashierName;
-    }
-    public String getInvoiceDate() {
-        return invoiceDate;
-    }
-    public void setInvoiceDate(String invoiceDate) {
-        this.invoiceDate = invoiceDate;
-    }
-    public double getInvoiceTotal() {
-        return invoiceTotal;
-    }
-    public void setInvoiceTotal(double invoiceTotal) {
-        this.invoiceTotal = invoiceTotal;
-    }
-    public ArrayList<CartItem> getItems() {
-        return items;
-    }
-    public void setItems(ArrayList<CartItem> items) {
-        this.items = items;
-    }
-}

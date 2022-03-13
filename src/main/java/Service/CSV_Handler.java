@@ -30,13 +30,6 @@ enum CSV_MODES {
 public class CSV_Handler implements ICSVService {
     private CSV_MODES MODE = null;
 
-    public static void main(String[] args) {
-        DBContext.getDBContext().setDbService(new SQLiteService());
-
-        CSV_Handler cc = new CSV_Handler();
-        cc.getMonthlyReportCSV();
-    }
-
     @Override
     public void getMonthlyReportCSV() {
         this.MODE = CSV_MODES.MONTHLY;
