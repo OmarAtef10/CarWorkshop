@@ -17,6 +17,7 @@ public class UserManager {
     private User currentUser = null;
     private static UserManager userManager;
     private UserDao userDao = null;
+    public static String workshopName = "CarWorkshopManagementSystem";
 
     private UserManager() {
         this.userDao = new UserDao();
