@@ -1,6 +1,8 @@
 package View;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
 
 import Context.Context;
 import Controller.CustomerDao;
@@ -13,7 +15,9 @@ import Model.Product;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.print.Printer;
 import javafx.scene.Scene;
+import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -131,7 +135,18 @@ public class InvoiceDetailsWindow extends VBox{
 
     @FXML
     void printBtnPressed(ActionEvent event) {
-        //TODO: PRINT HERE
+
+        ChoiceDialog<Printer> printerPrompt = new ChoiceDialog<Printer>(Printer.getDefaultPrinter() ,Printer.getAllPrinters());
+        printerPrompt.setTitle("Print Invoice");
+        printerPrompt.setHeaderText(null);
+        printerPrompt.setGraphic(null);
+        printerPrompt.setContentText("Choose printer: ");
+        printerPrompt.getDialogPane().getStylesheets().addAll(Context.getContext().getCurrentTheme());
+
+        Optional<Printer> chosenPrinter = printerPrompt.showAndWait();
+        chosenPrinter.ifPresent(printer -> {
+            System.out.println(printer.getName());
+        });
     }
 
 }

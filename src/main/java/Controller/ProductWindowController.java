@@ -66,7 +66,7 @@ public class ProductWindowController {
     @FXML
     private TextField viscField;
 
-    private Product product;
+    private Product product = null;
     private boolean edit_mode = false;
     private ProductDao productDao = new ProductDao();
 

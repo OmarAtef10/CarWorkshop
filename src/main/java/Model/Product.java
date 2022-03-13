@@ -25,6 +25,7 @@ public abstract class Product {
         this.marketPrice = marketPrice;
         this.productId = UUID_Utility.generateId();
         this.locations = new Hashtable<>();
+        productHistory = new ArrayList<>();
     }
 
 

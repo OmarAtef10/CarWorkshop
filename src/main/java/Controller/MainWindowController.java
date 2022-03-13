@@ -113,7 +113,9 @@ public class MainWindowController {
     void removeBtnPressed(ActionEvent event) {
         ProductDao productDao = new ProductDao();
         Product product = productsTable.getSelectionModel().getSelectedItem();
+        int prodInd = productsTable.getSelectionModel().getSelectedIndex();
         productDao.deleteProduct(product.getProductName(), product.getVendor());
+        productsTable.getItems().remove(prodInd);
     }
 
     void update() {
@@ -126,7 +128,11 @@ public class MainWindowController {
         productWindow.view().setOnHidden(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent windowEvent) {
-                productsTable.getItems().add(productWindow.getProduct());
+                Product product = productWindow.getProduct();
+                if(product!=null)
+                    productsTable.getItems().add(product);
+                productsTable.refresh();
+                productsTable.getSelectionModel().clearSelection();
             }
         });
         productWindow.setEditMode(false);
@@ -142,6 +148,7 @@ public class MainWindowController {
         window.view().setOnHidden((arg0) -> {
             Product newProduct = window.getProduct();
             productsTable.getItems().set(productInd, newProduct);
+            productsTable.refresh();
             updateRelatedProductInfo(newProduct);
         });;
     }
