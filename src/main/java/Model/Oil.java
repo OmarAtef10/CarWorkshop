@@ -73,6 +73,10 @@ public class Oil extends Product {
         this.expiryDate = expiryDate;
     }
 
+    public void setNameUpdate(){
+        String productName = this.getVendor() + " " + mileage + " " + viscosity;
+        this.setProductName(productName);
+    }
     @Override
     public String toString() {
         return "Oil{" +

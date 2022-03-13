@@ -10,20 +10,23 @@ import java.nio.file.Paths;
 
 public class BackupUtility {
     public static void backup(){
-        Path currentRelativePath = Paths.get("");
-        String s = currentRelativePath.toAbsolutePath().toString();
-        File source = new File(s+"\\db");
-        String fname = TimeUtility.getReformedDate(TimeUtility.getCurrentDate());
-        try {
-            File f = new File(s + "\\BACKUP\\" + fname);
-            if(f.exists()){
-                return;
+        Thread thread = new Thread(() -> {
+            Path currentRelativePath = Paths.get("");
+            String s = currentRelativePath.toAbsolutePath().toString();
+            File source = new File(s+"\\db");
+            String fname = TimeUtility.getReformedDate(TimeUtility.getCurrentDate());
+            try {
+                File f = new File(s + "\\BACKUP\\" + fname);
+                if(f.exists()){
+                    return;
+                }
+                Files.createDirectory(Paths.get(s + "\\BACKUP\\" + fname));
+                File dest = new File(s+"\\BACKUP\\"+fname);
+                FileUtils.copyDirectory(source, dest);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            Files.createDirectory(Paths.get(s + "\\BACKUP\\" + fname));
-            File dest = new File(s+"\\BACKUP\\"+fname);
-            FileUtils.copyDirectory(source, dest);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        });
+        thread.start();
     }
 }

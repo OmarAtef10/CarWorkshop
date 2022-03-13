@@ -123,7 +123,6 @@ public class ProductWindowController {
                     || !milageField.getText().equals("")
                     || expiryField.getValue() != null) {
 
-
                 this.product.setVendor(vendorField.getText());
                 this.product.setUnits(Integer.parseInt(unitsField.getText()));
                 this.product.setPricePerUnit(Double.parseDouble(unitPriceField.getText()));
@@ -131,6 +130,7 @@ public class ProductWindowController {
                 ((Oil) this.product).setViscosity(viscField.getText());
                 ((Oil) this.product).setMileage(Integer.parseInt(milageField.getText()));
                 ((Oil) this.product).setExpiryDate(expiryField.getValue().toString());
+                ((Oil)this.product).setNameUpdate();
                 productDao.updateProduct(product);
                 success = true;
                 cancelBtnPressed(new ActionEvent());
