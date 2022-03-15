@@ -259,7 +259,6 @@ public class NewPurchase extends AnchorPane{
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.getDialogPane().getScene().getStylesheets().addAll(Context.getContext().getCurrentTheme());
         alert.setTitle("Confirmation Dialog");
-        //TODO show invoice details
         //alert.setGraphic(new ImageView(new Image("D:\\jetbrains\\java projects\\CarWorkshop\\src\\main\\resources\\cena.gif")));
         alert.setHeaderText("Look, a Confirmation Dialog");
         alert.setContentText("Are you ok with this?");
@@ -278,13 +277,15 @@ public class NewPurchase extends AnchorPane{
             this.invoice.setCustomerId( this.customer.getMobileNumber());
             this.invoice.setTotalPaid( this.cart.getTotal());
             this.invoice.setDate(TimeUtility.getCurrentDate());
+            InvoiceDetailsWindow invoiceDetailsWindow = new InvoiceDetailsWindow();
+            invoiceDetailsWindow.show(invoice);
             invoiceDao.addInvoice(this.invoice);
 
             //Products units/shelfs
             ProductInvoiceManagerUtil productInvoiceManagerUtil = new ProductInvoiceManagerUtil(this.invoice);
             productInvoiceManagerUtil.updateShelves();
 
-            cancelBtnPressed(new ActionEvent());
+//            cancelBtnPressed(new ActionEvent());
         } else {
             return;
         }

@@ -30,8 +30,8 @@ public class PDF_Invoice {
         this.invoiceDetail = invoiceDetail;
     }
 
-    public String getInvoicePDF(){
-        FILE = s+"\\Invoice.pdf";
+    public String getInvoicePDF() {
+        FILE = s + "\\Invoice.pdf";
         try {
             Document document = new Document();
             PdfWriter.getInstance(document, new FileOutputStream(FILE));
@@ -62,24 +62,28 @@ public class PDF_Invoice {
         ArrayList<CartItem> cartItems = this.invoiceDetail.getItems();
         ArrayList<String> formattedItems = new ArrayList<>();
         formattedItems.add(
-          String.format("%20s %20s %20s %20s","PRODUCT NAME","PRICE","UNITS","TOTAL")
+                String.format("%20s %20s %20s %20s", "PRODUCT NAME", "PRICE", "UNITS", "TOTAL")
         );
-        if(cartItems!=null) {
+        if (cartItems != null) {
+            double grandTotal = 0.0;
             for (int i = 1; i <= cartItems.size(); i++) {
-                CartItem cartItem = cartItems.get(i-1);
+                CartItem cartItem = cartItems.get(i - 1);
                 double total = cartItem.getUnits() * cartItem.getPrice();
+                grandTotal += total;
                 formattedItems.add(
                         String.format("%25s %25s %25s %25s", cartItem.getName() + ": ",
                                 cartItem.getPrice() + ": ", cartItem.getUnits() + ": ", total)
                 );
             }
+            formattedItems.add(String.format("\n%25s", "TOTAL PAID : "));
+            formattedItems.add(String.format("%25s", grandTotal));
         }
-        for(int i=0; i<formattedItems.size(); i++){
-            preface.add(new Paragraph(formattedItems.get(i),smallNormal));
+        for (int i = 0; i < formattedItems.size(); i++) {
+            preface.add(new Paragraph(formattedItems.get(i), smallNormal));
         }
         addEmptyLine(preface, 2);
         //Add cashier name
-        preface.add(new Paragraph("Cashier name: " + UserManager.getInstance().getCurrentUser().getUserName()+
+        preface.add(new Paragraph("Cashier name: " + UserManager.getInstance().getCurrentUser().getUserName() +
                 " \n" + new Date(), smallBold));
         addEmptyLine(preface, 2);
 
