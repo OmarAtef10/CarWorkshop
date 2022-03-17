@@ -285,7 +285,7 @@ public class NewPurchase extends AnchorPane{
             ProductInvoiceManagerUtil productInvoiceManagerUtil = new ProductInvoiceManagerUtil(this.invoice);
             productInvoiceManagerUtil.updateShelves();
 
-//            cancelBtnPressed(new ActionEvent());
+            cancelBtnPressed(new ActionEvent());
         } else {
             return;
         }

@@ -292,7 +292,7 @@ public class SQLiteService implements IDataBaseService {
             }
             return false;
         } else {
-            String updateProduct = "UPDATE Product SET price = ?, marketPrice = ? ,units = ? " +
+            String updateProduct = "UPDATE Product SET price = ?, marketPrice = ? ,units = ?,vendor=? " +
                     "WHERE productId = ?;";
 
             try {
@@ -300,7 +300,8 @@ public class SQLiteService implements IDataBaseService {
                 preparedStatement.setDouble(1, product.getPricePerUnit());
                 preparedStatement.setDouble(2, product.getMarketPrice());
                 preparedStatement.setInt(3, product.getUnits());
-                preparedStatement.setString(4, product.getProductId());
+                preparedStatement.setString(4, product.getVendor());
+                preparedStatement.setString(5, product.getProductId());
                 preparedStatement.executeUpdate();
 
                 ProductHistoryItem productHistoryItem = new ProductHistoryItem(product.getProductId(), product.getUnits(), null);

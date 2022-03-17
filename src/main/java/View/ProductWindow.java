@@ -16,12 +16,14 @@ public class ProductWindow {
     private final FXMLLoader loader;
     private ProductWindowController controller;
     Parent root;
+    private boolean mode;
 
-    public ProductWindow(){
+    public ProductWindow(boolean mode){
         loader = WindowLoader.getLoader(FXML_NAME);
         try {
             root = loader.load();
             controller = loader.getController();
+            controller.setEditMode(mode);
             root.getStylesheets().addAll(Context.getContext().getCurrentTheme());
         } catch (IOException e) {
             // TODO Auto-generated catch block
@@ -34,7 +36,7 @@ public class ProductWindow {
     }
 
     public void setEditMode(boolean mode){
-        controller.setEditMode(mode);
+        this.mode = mode;
     }
 
     public Stage view(){

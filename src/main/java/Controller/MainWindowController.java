@@ -124,7 +124,7 @@ public class MainWindowController {
 
     @FXML
     void createBtnPressed(ActionEvent event) {
-        ProductWindow productWindow = new ProductWindow();
+        ProductWindow productWindow = new ProductWindow(false);
         productWindow.view().setOnHidden(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent windowEvent) {
@@ -142,9 +142,8 @@ public class MainWindowController {
     void editProductBtnPressed(ActionEvent event) {
         Product product = productsTable.getSelectionModel().getSelectedItem();
         int productInd = productsTable.getSelectionModel().getSelectedIndex();
-        ProductWindow window = new ProductWindow();
+        ProductWindow window = new ProductWindow(true);
         window.setProduct(product);
-        window.setEditMode(true);
         window.view().setOnHidden((arg0) -> {
             Product newProduct = window.getProduct();
             productsTable.getItems().set(productInd, newProduct);

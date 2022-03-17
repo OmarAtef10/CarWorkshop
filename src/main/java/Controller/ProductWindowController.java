@@ -81,6 +81,9 @@ public class ProductWindowController {
             typeCombobox.setValue("Oil");
         } else {
             typeCombobox.setValue("Service Part");
+            milageField.setDisable(true);
+            viscField.setDisable(true);
+            expiryField.setDisable(true);
         }
         nameField.setText(product.getProductName());
         unitsField.setText(String.valueOf(product.getUnits()));
@@ -113,6 +116,7 @@ public class ProductWindowController {
         if (!edit_mode) {
             createProduct();
             cancelBtnPressed(new ActionEvent());
+            this.edit_mode=false;
             return;
         }
 
@@ -137,6 +141,7 @@ public class ProductWindowController {
             }
 
         } else if (typeCombobox.getValue().equals("Service Part")) {
+
             if (!vendorField.getText().equals("") || !unitsField.getText().equals("")
                     || !unitPriceField.getText().equals("") || !marketPriceField.getText().equals("")
                     || !nameField.getText().equals("")) {
