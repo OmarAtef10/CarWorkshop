@@ -3,10 +3,7 @@ package View;
 import Context.Context;
 import Controller.*;
 import CustomizedUtilities.TimeUtility;
-import Model.Cart;
-import Model.Customer;
-import Model.Invoice;
-import Model.Product;
+import Model.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -29,7 +26,7 @@ import java.net.URL;
 import java.util.*;
 
 
-public class NewPurchase extends AnchorPane{
+public class NewPurchase extends AnchorPane {
 
     //IDEA: Add chechboxes in products row for the user to select before pressing new purchase
     public static String FXML_NAME = NewPurchase.class.getSimpleName() + ".fxml";
@@ -47,7 +44,7 @@ public class NewPurchase extends AnchorPane{
         }
     }
 
-    public Stage show(){
+    public Stage show() {
         stage = new Stage();
         stage.setScene(new Scene(this));
         stage.getScene().getStylesheets().addAll(Context.getContext().getCurrentTheme());
@@ -92,7 +89,7 @@ public class NewPurchase extends AnchorPane{
     private TextField carModelField;
 
     @FXML
-    private  TextField currentMileageField;
+    private TextField currentMileageField;
 
     @FXML
     private TextField nextMileageField;
@@ -127,10 +124,10 @@ public class NewPurchase extends AnchorPane{
 
     public void moveToCartBtnPressed(ActionEvent e) {
         String am = amountField.getText();
-        if(!am.equals("")){
+        if (!am.equals("")) {
             int amount = Integer.parseInt(am);
             Product product = inventoryTable.getSelectionModel().getSelectedItem();
-            if(product.getUnits() >= amount) {
+            if (product.getUnits() >= amount) {
 
                 product.setUnits(product.getUnits() - amount);
                 inventoryTable.refresh();
@@ -140,9 +137,9 @@ public class NewPurchase extends AnchorPane{
                 amountField.clear();
 
                 //Check if item already in cart
-                if(this.cart.getProducts().containsKey(product.getProductId())){
-                    for(CartItem cartItem : customerCart.getItems()){
-                        if(cartItem.getProduct().getProductId().equals(product.getProductId())){
+                if (this.cart.getProducts().containsKey(product.getProductId())) {
+                    for (CartItem cartItem : customerCart.getItems()) {
+                        if (cartItem.getProduct().getProductId().equals(product.getProductId())) {
                             customerCart.getItems().remove(cartItem);
                             int old_units = cartItem.getUnits();
                             int total_units = old_units + amount;
@@ -151,14 +148,14 @@ public class NewPurchase extends AnchorPane{
                             customerCart.getItems().add(item);
                         }
                     }
-                }else {
+                } else {
                     CartItem item = new CartItem(product.getProductName(), amount, product.getPricePerUnit());
                     item.setProduct(product);
                     customerCart.getItems().add(item);
                 }
 
-                this.cart.addProduct(product,amount);
-            }else{
+                this.cart.addProduct(product, amount);
+            } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Insufficient units.", ButtonType.OK);
                 alert.getDialogPane().getScene().getStylesheets().addAll(Context.getContext().getCurrentTheme());
                 alert.show();
@@ -166,11 +163,12 @@ public class NewPurchase extends AnchorPane{
         }
         totalCalculator();
     }
+
     public void removeFromCartBtnPressed(ActionEvent e) {
         CartItem cartItem = customerCart.getSelectionModel().getSelectedItem();
         Product product = cartItem.getProduct();
         String amtField = amountField.getText();
-        if(amtField.equals("")) {
+        if (amtField.equals("")) {
             if (product.getUnits() == 0) {
                 inventoryTable.getItems().add(product);
             }
@@ -179,7 +177,7 @@ public class NewPurchase extends AnchorPane{
             int index = customerCart.getSelectionModel().getSelectedIndex();
             customerCart.getItems().remove(index);
             cart.removeProduct(product);
-        }else{
+        } else {
             int removed_amt = Integer.parseInt(amtField);
             int remaining_amt = cartItem.getUnits() - removed_amt;
             cartItem.setUnits(remaining_amt);
@@ -188,12 +186,12 @@ public class NewPurchase extends AnchorPane{
             }
             product.setUnits(product.getUnits() + removed_amt);
             cart.removeProduct(product);
-            cart.addProduct(product,remaining_amt);
+            cart.addProduct(product, remaining_amt);
             int index = customerCart.getSelectionModel().getSelectedIndex();
-           if(cartItem.getUnits() == 0){
-               customerCart.getItems().remove(index);
-           }
-           totalCalculator();
+            if (cartItem.getUnits() == 0) {
+                customerCart.getItems().remove(index);
+            }
+            totalCalculator();
         }
 
         inventoryTable.refresh();
@@ -205,7 +203,7 @@ public class NewPurchase extends AnchorPane{
         totalField.setEditable(true);
     }
 
-    public void totalCalculator(){
+    public void totalCalculator() {
         totalField.setEditable(false);
         totalField.setDisable(false);
         totalField.setText(new String(String.valueOf(cart.getTotal())));
@@ -243,9 +241,9 @@ public class NewPurchase extends AnchorPane{
             this.customer.setCarModel(carModel);
             this.customer.setCurrentMileage(currentMileage);
             this.customer.setNextMileage(nextMileage);
-            if (!customerDao.updateCustomer(customer)){
+            if (!customerDao.updateCustomer(customer)) {
                 customerDao.addCustomer(customer);
-            }else{
+            } else {
                 customerDao.updateCustomer(customer);
             }
 
@@ -264,18 +262,18 @@ public class NewPurchase extends AnchorPane{
         alert.setContentText("Are you ok with this?");
 
         Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK){
+        if (result.get() == ButtonType.OK) {
 
             this.cart = customer.getCart();
             this.invoice.setCart(this.cart);
 
-            if( customerDao.getCustomer(customerPhoneNumber) == null ){
+            if (customerDao.getCustomer(customerPhoneNumber) == null) {
                 customerDao.addCustomer(this.customer);
-            }else{
+            } else {
                 customerDao.updateCustomer(this.customer);
             }
-            this.invoice.setCustomerId( this.customer.getMobileNumber());
-            this.invoice.setTotalPaid( this.cart.getTotal());
+            this.invoice.setCustomerId(this.customer.getMobileNumber());
+            this.invoice.setTotalPaid(this.cart.getTotal());
             this.invoice.setDate(TimeUtility.getCurrentDate());
             InvoiceDetailsWindow invoiceDetailsWindow = new InvoiceDetailsWindow();
             invoiceDetailsWindow.show(invoice);
@@ -284,6 +282,7 @@ public class NewPurchase extends AnchorPane{
             //Products units/shelfs
             ProductInvoiceManagerUtil productInvoiceManagerUtil = new ProductInvoiceManagerUtil(this.invoice);
             productInvoiceManagerUtil.updateShelves();
+
 
             cancelBtnPressed(new ActionEvent());
         } else {
@@ -333,16 +332,16 @@ public class NewPurchase extends AnchorPane{
     private void initTables() {
         TableColumn<Product, String> nameCol = new TableColumn<>("Product");
         nameCol.setCellValueFactory(new PropertyValueFactory<>("productName"));
-    
+
         TableColumn<Product, Integer> unitsCol = new TableColumn<>("Units");
         unitsCol.setCellValueFactory(new PropertyValueFactory<>("units"));
 
         TableColumn<Product, Double> priceCol = new TableColumn<>("Price");
         priceCol.setCellValueFactory(new PropertyValueFactory<>("pricePerUnit"));
-        
+
         TableColumn<CartItem, String> cartNameCol = new TableColumn<>("Product");
         cartNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-    
+
         TableColumn<CartItem, Integer> cartUnitsCol = new TableColumn<>("Units");
         cartUnitsCol.setCellValueFactory(new PropertyValueFactory<>("units"));
 

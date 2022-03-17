@@ -134,12 +134,19 @@ public class InvoiceDetailsWindow extends VBox{
 
         Optional<Printer> chosenPrinter = printerPrompt.showAndWait();
         chosenPrinter.ifPresent(printer -> {
-            PDF_Invoice pdf_invoice = new PDF_Invoice(details);
-            String invoice_path = pdf_invoice.getInvoicePDF();
-            //TODO: PRINT HERE
-            PrinterHelper printerHelper = new PrinterHelper(invoice_path,printer.getName());
-            printerHelper.start();
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    PDF_Invoice pdf_invoice = new PDF_Invoice(details);
+                    String invoice_path = pdf_invoice.getInvoicePDF();
+                    //TODO: PRINT HERE
+                    PrinterHelper printerHelper = new PrinterHelper(invoice_path,printer.getName());
+                    printerHelper.start();
+                }
+            });
+            thread.start();
         });
+
         closeBtnPressed(new ActionEvent());
     }
 
