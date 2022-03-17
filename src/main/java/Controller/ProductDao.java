@@ -3,6 +3,7 @@ package Controller;
 import Context.DBContext;
 import Model.Product;
 import Model.ProductHistoryItem;
+import org.sqlite.core.DB;
 // import org.sqlite.core.DB;
 
 import java.util.ArrayList;
@@ -26,6 +27,10 @@ public class ProductDao {
 
     public boolean updateProduct(Product product){
         return DBContext.getDBContext().getDbService().updateProduct(product);
+    }
+
+    public int getProductShelfedUnits(Product product){
+        return DBContext.getDBContext().getDbService().getProductShelfedUnits(product);
     }
 
     public Product getOrNull(String productId){

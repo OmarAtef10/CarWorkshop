@@ -279,6 +279,10 @@ public class MainWindowController {
         stockProductBtn.setDisable(true);
         shelfBtn.setDisable(true);
         removeBtn.setDisable(true);
+        if(UserManager.getInstance().getCurrentUser().getRole() == Role.EMPLOYEE){
+            createProdcutBtn.setDisable(true);
+        }
+
     }
 
     @FXML
@@ -425,6 +429,7 @@ public class MainWindowController {
 
     // TODO
     private void updateRelatedProductInfo(Product product) {
+
         // history table
         historyTable.getItems().clear();
         historyTable.getItems().addAll(product.getProductHistory());
@@ -445,10 +450,13 @@ public class MainWindowController {
         }
 
         // buttons
-        editProductBtn.setDisable(false);
+        if(UserManager.getInstance().getCurrentUser().getRole().equals(Role.ADMIN)){
+            editProductBtn.setDisable(false);
+            removeBtn.setDisable(false);
+        }
         stockProductBtn.setDisable(false);
         shelfBtn.setDisable(false);
-        removeBtn.setDisable(false);
+
     }
 
     private void updateRelatedUserInfo(User user) { // TODO TODO TODO

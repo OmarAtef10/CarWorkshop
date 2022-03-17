@@ -124,11 +124,11 @@ public class SQLiteService implements IDataBaseService {
             statement.execute(reportsTable);
             statement.execute(reportInvoicesTable);
 
-            String adminQuery= "INSERT INTO Users (username,password,role) VALUES(?,?,?);";
-            PreparedStatement preparedStatement =dbConnection.prepareStatement(adminQuery);
-            preparedStatement.setString(1,"admin");
-            preparedStatement.setString(2,"admin");
-            preparedStatement.setString(3,Role.ADMIN.toString());
+            String adminQuery = "INSERT INTO Users (username,password,role) VALUES(?,?,?);";
+            PreparedStatement preparedStatement = dbConnection.prepareStatement(adminQuery);
+            preparedStatement.setString(1, "admin");
+            preparedStatement.setString(2, "admin");
+            preparedStatement.setString(3, Role.ADMIN.toString());
             preparedStatement.executeUpdate();
         } catch (Exception err) {
             err.printStackTrace();
@@ -403,6 +403,23 @@ public class SQLiteService implements IDataBaseService {
         }
 
         return null;
+    }
+
+    @Override
+    public int getProductShelfedUnits(Product product) {
+        int totalUnits = 0;
+        String query = "SELECT units FROM ShelfProduct WHERE productId =?";
+        try {
+            PreparedStatement preparedStatement = dbConnection.prepareStatement(query);
+            preparedStatement.setString(1, product.getProductId());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                totalUnits += resultSet.getInt("units");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return totalUnits;
     }
 
     @Override

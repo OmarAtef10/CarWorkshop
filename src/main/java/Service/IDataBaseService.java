@@ -28,7 +28,7 @@ public interface IDataBaseService {
     public Hashtable<String,Integer> getProductShelf(String productName , String vendor);
     public Hashtable<String,Integer> getProductShelf(String productId);
     public boolean removeProductShelf(String shelfName);
-
+    public int getProductShelfedUnits(Product product);
 
     public boolean addUser(User user);
     public User getUser(String username);

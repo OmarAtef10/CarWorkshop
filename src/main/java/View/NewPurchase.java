@@ -281,9 +281,28 @@ public class NewPurchase extends AnchorPane {
 
             //Products units/shelfs
             ProductInvoiceManagerUtil productInvoiceManagerUtil = new ProductInvoiceManagerUtil(this.invoice);
-            productInvoiceManagerUtil.updateShelves();
+            try {
+                productInvoiceManagerUtil.updateShelves();
+            }catch (Exception x){
+                Alert shelfAlert = new Alert(Alert.AlertType.ERROR, "Current Units need to be shelved first", ButtonType.OK);
+                shelfAlert.getDialogPane().getScene().getStylesheets().addAll(Context.getContext().getCurrentTheme());
+                shelfAlert.show();
+            }
 
+            Hashtable<String,Integer> shelfesUnits = productInvoiceManagerUtil.getReturnShelves();
+            StringBuilder shelves = new StringBuilder();
+            for(String shelfName : shelfesUnits.keySet()){
+                shelves.append("Shelf Name: ");
+                shelves.append(shelfName);
+                shelves.append(" Units:");
+                shelves.append(shelfesUnits.get(shelfName));
+                shelves.append("\n");
+            }
+            String retShelf = shelves.toString();
 
+            Alert shelfAlert = new Alert(Alert.AlertType.INFORMATION, retShelf, ButtonType.OK);
+            shelfAlert.getDialogPane().getScene().getStylesheets().addAll(Context.getContext().getCurrentTheme());
+            shelfAlert.show();
             cancelBtnPressed(new ActionEvent());
         } else {
             return;
@@ -325,7 +344,9 @@ public class NewPurchase extends AnchorPane {
         inventoryTable.getItems().clear();
         ProductDao dao = new ProductDao();
         ArrayList<Product> products = dao.getAll();
-        System.out.println(products.size());
+        for(int i=0; i<products.size(); i++){
+            products.get(i).setUnits( new ProductDao().getProductShelfedUnits(products.get(i)) );
+        }
         inventoryTable.getItems().addAll(products);
     }
 
