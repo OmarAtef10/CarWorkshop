@@ -792,6 +792,40 @@ public class SQLiteService implements IDataBaseService {
         }
         return null;
     }
+
+    @Override
+    public ArrayList<Invoice> getInvoiceByUsername(String username) {
+        ArrayList<Invoice>invoices = new ArrayList<>();
+
+        String getInvoicesByUsername = "SELECT * from Invoices WHERE username ="+username;
+        try {
+            ResultSet resultSet = statement.executeQuery(getInvoicesByUsername);
+            while (resultSet.next()){
+                invoices.add(Invoice.fromResultSet(resultSet));
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return invoices;
+    }
+
+    @Override
+    public ArrayList<Invoice> getAll() {
+        ArrayList<Invoice>invoices = new ArrayList<>();
+
+        String getAll = "SELECT * FROM INVOICES";
+
+        try {
+            ResultSet resultSet = statement.executeQuery(getAll);
+            while (resultSet.next()){
+                invoices.add(Invoice.fromResultSet(resultSet));
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return invoices;
+    }
+
     /////////////////////////////////////////////////////////////////////////
 
     @Override
@@ -987,6 +1021,26 @@ public class SQLiteService implements IDataBaseService {
             e.printStackTrace();
         }
         return products;
+    }
+
+    @Override
+    public ArrayList<Invoice> searchBtnQuery(String invoiceID, String date, String username) {
+        ArrayList<Invoice> invoices = new ArrayList<>();
+
+        String sqlQuery = "SELECT * FROM Invoices WHERE ";
+        sqlQuery += "invoiceId like " + (invoiceID.equals("") ? "\"%\" " : ("\"" + invoiceID + "\" "));
+        sqlQuery += "AND username like " + (username.equals("") ? "\"%\" " : ("\"" + username + "\" "));
+        sqlQuery += "AND date like " + (date.equals("") ? "\"%\" " : ("\"" + date +"%" + "\" "));
+
+        try {
+            ResultSet resultSet = statement.executeQuery(sqlQuery);
+            while (resultSet.next()){
+                invoices.add(Invoice.fromResultSet(resultSet));
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return invoices;
     }
 }
 

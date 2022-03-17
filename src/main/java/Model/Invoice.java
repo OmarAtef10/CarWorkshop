@@ -44,6 +44,10 @@ public class Invoice {
         return null;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
     public void setInvoiceId(String invoiceID) {
         this.invoiceId = invoiceID;
     }

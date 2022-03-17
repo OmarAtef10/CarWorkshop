@@ -23,8 +23,8 @@ import javafx.stage.WindowEvent;
 //TODO User data / shelf data/ stock updates need to be shown on UI tables after each update!
 public class MainWindowController {
 
-    private InvoiceDetailsWindow window = new InvoiceDetailsWindow();
-    
+    private InvoiceDetailsWindow invoiceDetailsWindow = new InvoiceDetailsWindow();
+
     private boolean userPressedLogout = false;
 
     @FXML
@@ -65,7 +65,7 @@ public class MainWindowController {
 
     @FXML
     private Button searchBtn;
-    
+
     @FXML
     private Button logoutBtn;
 
@@ -111,14 +111,14 @@ public class MainWindowController {
     @FXML
     private Button exportDailyBtn;
 
-    @FXML 
+    @FXML
     private Button exportMonthlyBtn;
 
     @FXML
-    private TableView<?> allInvoicesTable;
+    private TableView<Invoice> allInvoicesTable;
 
     @FXML
-    void logoutBtnPressed(ActionEvent event){
+    void logoutBtnPressed(ActionEvent event) {
         userPressedLogout = true;
         ((Stage) logoutBtn.getScene().getWindow()).close();
     }
@@ -147,7 +147,7 @@ public class MainWindowController {
             @Override
             public void handle(WindowEvent windowEvent) {
                 Product product = productWindow.getProduct();
-                if(product!=null)
+                if (product != null)
                     productsTable.getItems().add(product);
                 productsTable.refresh();
                 productsTable.getSelectionModel().clearSelection();
@@ -167,7 +167,8 @@ public class MainWindowController {
             productsTable.getItems().set(productInd, newProduct);
             productsTable.refresh();
             updateRelatedProductInfo(newProduct);
-        });;
+        });
+        ;
     }
 
     @FXML
@@ -237,16 +238,38 @@ public class MainWindowController {
 
     //TODOS new Funcations
     @FXML
-    void getDailyReport(ActionEvent event){}
+    void getDailyReport(ActionEvent event) {
+
+    }
 
     @FXML
-    void getMonthlyReport(ActionEvent event){}
+    void getMonthlyReport(ActionEvent event) {
+
+    }
 
     @FXML
-    void searchInvoicesBtnPressed(ActionEvent event){}
+    void searchInvoicesBtnPressed(ActionEvent event) {
+        InvoiceDao invoiceDao = new InvoiceDao();
+        ArrayList<Invoice> invoices = new ArrayList<>();
+        String id = invoiceIdField.getText();
+        String date = "";
+        if (soldInDate.getValue() != null) {
+            date = soldInDate.getValue().toString();
+        }
+        String username = soldByField.getText();
+        invoices = invoiceDao.searchBtn(id, date, username);
+        allInvoicesTable.getItems().clear();
+        allInvoicesTable.getItems().addAll(invoices);
+
+        soldInDate.setValue(null);
+        soldByField.clear();
+        invoiceIdField.clear();
+    }
 
     @FXML
-    void revertInvoicesBtnPressed(ActionEvent event){}
+    void revertInvoicesBtnPressed(ActionEvent event) {
+        initData();
+    }
 
     @FXML
     void searchBtnPressed(ActionEvent event) {
@@ -259,7 +282,7 @@ public class MainWindowController {
 
     @FXML
     void searchUserBtnPressed(ActionEvent event) {
-        throw new UnsupportedOperationException("search user method isn't implmented");
+        throw new UnsupportedOperationException("search user method isn't implemented");
     }
 
     @FXML
@@ -310,7 +333,7 @@ public class MainWindowController {
         stockProductBtn.setDisable(true);
         shelfBtn.setDisable(true);
         removeBtn.setDisable(true);
-        if(UserManager.getInstance().getCurrentUser().getRole() == Role.EMPLOYEE){
+        if (UserManager.getInstance().getCurrentUser().getRole() == Role.EMPLOYEE) {
             createProdcutBtn.setDisable(true);
         }
 
@@ -432,7 +455,7 @@ public class MainWindowController {
             selectedRow.setOnMouseClicked((click) -> {
                 Invoice invoice = selectedRow.getItem();
                 if (click.getClickCount() == 2 && !selectedRow.isEmpty()) {
-                    window.show(invoice);
+                    invoiceDetailsWindow.show(invoice);
                 }
             });
             return selectedRow;
@@ -456,6 +479,41 @@ public class MainWindowController {
         updateUserBtn.setDisable(true);
         removeUserBtn.setDisable(true);
 
+
+        //Invoices menu
+        TableColumn<Invoice, String> invoiceWindowIdCol = new TableColumn<Invoice, String>("Invoice ID");
+        invoiceWindowIdCol.setCellValueFactory(new PropertyValueFactory<>("invoiceId"));
+
+        TableColumn<Invoice, String> invoiceUsername = new TableColumn<>("UserName");
+        invoiceUsername.setCellValueFactory(new PropertyValueFactory<>("userName"));
+
+        TableColumn<Invoice, Double> totalWindowCol = new TableColumn<Invoice, Double>("Total");
+        totalWindowCol.setCellValueFactory(new PropertyValueFactory<>("totalPaid"));
+
+        TableColumn<Invoice, String> invoiceCustomerPhoneCol = new TableColumn<>("Customer Phone");
+        invoiceCustomerPhoneCol.setCellValueFactory(new PropertyValueFactory<>("phone"));
+
+        TableColumn<Invoice, String> dateCol = new TableColumn<>("Date");
+        dateCol.setCellValueFactory(new PropertyValueFactory<>("date"));
+
+
+        allInvoicesTable.getColumns().addAll(invoiceWindowIdCol, invoiceUsername, totalWindowCol, invoiceCustomerPhoneCol, dateCol);
+        allInvoicesTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        allInvoicesTable.setRowFactory((w) -> {
+            TableRow<Invoice> selectedRow = new TableRow<>();
+            selectedRow.setOnMouseClicked((click) -> {
+                Invoice invoice = selectedRow.getItem();
+                if (click.getClickCount() == 2 && !selectedRow.isEmpty()) {
+                    invoiceDetailsWindow.show(invoice);
+                }
+            });
+            return selectedRow;
+        });
+
+        soldInDate.setEditable(false);
+
+
     }
 
     // TODO
@@ -474,14 +532,14 @@ public class MainWindowController {
         productInfoTable.getItems().add("Units: " + product.getUnits());
         productInfoTable.getItems().add("Price Per Unit: " + product.getPricePerUnit());
         productInfoTable.getItems().add("Market Price: " + product.getMarketPrice());
-        if(product instanceof Oil){
+        if (product instanceof Oil) {
             Oil oilProduct = (Oil) product;
-            productInfoTable.getItems().add("Milage: " + oilProduct.getViscosity());
+            productInfoTable.getItems().add("Mileage: " + oilProduct.getViscosity());
             productInfoTable.getItems().add("Viscosity: " + oilProduct.getViscosity());
         }
 
         // buttons
-        if(UserManager.getInstance().getCurrentUser().getRole().equals(Role.ADMIN)){
+        if (UserManager.getInstance().getCurrentUser().getRole().equals(Role.ADMIN)) {
             editProductBtn.setDisable(false);
             removeBtn.setDisable(false);
         }
@@ -512,22 +570,35 @@ public class MainWindowController {
 
     }
 
+    private void initInvoiceTab() {
+        InvoiceDao invoiceDao = new InvoiceDao();
+
+        allInvoicesTable.getItems().clear();
+        allInvoicesTable.getItems().addAll(invoiceDao.getAll());
+    }
+
     void initData() {
         Thread thread = new Thread(new Runnable() {
             private ArrayList<Product> products;
             private ArrayList<User> users;
+            private ArrayList<Invoice> invoices;
             ProductDao dao = new ProductDao();
             UserDao userDao = new UserDao();
+            InvoiceDao invoiceDao = new InvoiceDao();
 
             @Override
             public void run() {
                 products = dao.getAll();
                 users = userDao.getAll();
+                invoices = invoiceDao.getAll();
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
                         productsTable.getItems().clear();
                         usersTable.getItems().clear();
+
+                        allInvoicesTable.getItems().clear();
+                        allInvoicesTable.getItems().addAll(invoices);
 
                         productsTable.getItems().addAll(products);
                         usersTable.getItems().addAll(users);

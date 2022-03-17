@@ -51,7 +51,10 @@ public interface IDataBaseService {
     public boolean deleteInvoice(String id);
     public boolean addInvoiceProduct(Invoice invoice);
     public ArrayList<Invoice> getDailyUserInvoices(String username,String date);
+    public ArrayList<Invoice>getInvoiceByUsername(String username);
     public ArrayList<Invoice> getDailyInvoices(String date);
+    public ArrayList<Invoice>searchBtnQuery(String invoiceID,String date,String username);
+    public ArrayList<Invoice> getAll();
     public Cart getCart(Invoice invoice);
 
     public boolean addCustomer(Customer customer);
