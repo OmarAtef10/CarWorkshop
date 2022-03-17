@@ -100,6 +100,24 @@ public class MainWindowController {
     private Button removeBtn;
 
     @FXML
+    private TextField invoiceIdField;
+
+    @FXML
+    private TextField soldByField;
+
+    @FXML
+    private DatePicker soldInDate;
+
+    @FXML
+    private Button exportDailyBtn;
+
+    @FXML 
+    private Button exportMonthlyBtn;
+
+    @FXML
+    private TableView<?> allInvoicesTable;
+
+    @FXML
     void logoutBtnPressed(ActionEvent event){
         userPressedLogout = true;
         ((Stage) logoutBtn.getScene().getWindow()).close();
@@ -216,6 +234,19 @@ public class MainWindowController {
             alert.show();
         }
     }
+
+    //TODOS new Funcations
+    @FXML
+    void getDailyReport(ActionEvent event){}
+
+    @FXML
+    void getMonthlyReport(ActionEvent event){}
+
+    @FXML
+    void searchInvoicesBtnPressed(ActionEvent event){}
+
+    @FXML
+    void revertInvoicesBtnPressed(ActionEvent event){}
 
     @FXML
     void searchBtnPressed(ActionEvent event) {
