@@ -1,12 +1,17 @@
 package Controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
 import Context.Context;
 import Model.*;
+import Service.CSV_Handler;
+import Service.ICSVService;
 import View.*;
 import View.ProductWindow;
 import javafx.application.Platform;
@@ -17,6 +22,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -239,11 +245,34 @@ public class MainWindowController {
     //TODOS new Funcations
     @FXML
     void getDailyReport(ActionEvent event) {
-
+        FileChooser chooser = new FileChooser();
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Excel files (*.xlsx)", "*.xlsx");
+        chooser.getExtensionFilters().add(extFilter);
+        chooser.setInitialFileName(LocalDate.now().toString());
+        File selectedDir = chooser.showSaveDialog(exportMonthlyBtn.getScene().getWindow());
+        if(selectedDir!=null){
+            String path = selectedDir.getAbsolutePath().toString();
+            ICSVService icsvService = new CSV_Handler(path);
+            icsvService.getDailyReportCSV();
+        }
     }
 
     @FXML
     void getMonthlyReport(ActionEvent event) {
+        FileChooser chooser = new FileChooser();
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Excel files (*.xlsx)", "*.xlsx");
+        chooser.getExtensionFilters().add(extFilter);
+        chooser.setInitialFileName(LocalDate.now().toString());
+        File selectedDir = chooser.showSaveDialog(exportMonthlyBtn.getScene().getWindow());
+        if(selectedDir!=null){
+            String path = selectedDir.getAbsolutePath().toString();
+            ICSVService icsvService = new CSV_Handler(path);
+            icsvService.getMonthlyReportCSV();
+        }
+    }
+
+    @FXML
+    void excelExportBtnPressed() {
 
     }
 

@@ -29,6 +29,11 @@ enum CSV_MODES {
 
 public class CSV_Handler implements ICSVService {
     private CSV_MODES MODE = null;
+    private String savePath;
+
+    public CSV_Handler(String savePath) {
+        this.savePath = savePath;
+    }
 
     @Override
     public void getMonthlyReportCSV() {
@@ -133,6 +138,7 @@ public class CSV_Handler implements ICSVService {
             return;
         }
         ProductDao productDao = new ProductDao();
+
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet spreadsheet = workbook.createSheet("Report Data");
         XSSFRow row;
@@ -149,19 +155,19 @@ public class CSV_Handler implements ICSVService {
             row_data[1] = p.getProductName();
             row_data[2] = products.get(key);
             row_data[3] = (products.get(key) * p.getPricePerUnit());
-            grand_total += ((Double)row_data[3]);
+            grand_total += ((Double) row_data[3]);
             row_data[4] = ((products.get(key) * p.getPricePerUnit()) - (p.getMarketPrice() * products.get(key)));
-            grand_total_profit += ((Double)row_data[4]);
+            grand_total_profit += ((Double) row_data[4]);
             reportData.put(String.valueOf(counter), row_data);
             counter++;
         }
         Object[] row_totals = new Object[5];
-        row_totals[0]= "";
-        row_totals[1]="";
-        row_totals[2]="Grand Totals:";
-        row_totals[3]=grand_total;
-        row_totals[4]=grand_total_profit;
-        reportData.put(String.valueOf(counter),row_totals);
+        row_totals[0] = "";
+        row_totals[1] = "";
+        row_totals[2] = "Grand Totals:";
+        row_totals[3] = grand_total;
+        row_totals[4] = grand_total_profit;
+        reportData.put(String.valueOf(counter), row_totals);
 
         Set<String> keyid = reportData.keySet();
 
@@ -186,18 +192,19 @@ public class CSV_Handler implements ICSVService {
                 }
             }
         }
-
-        Path currentRelativePath = Paths.get("");
-        String s = currentRelativePath.toAbsolutePath().toString();
-        FileOutputStream out = null;
-        if (this.MODE == CSV_MODES.MONTHLY) {
-            out = new FileOutputStream(
-                    new File(s + "/MonthlyReportM" + LocalDateTime.now().getMonthValue() + "Y" + LocalDateTime.now().getYear() + ".xlsx"));
-        } else {
-            out = new FileOutputStream(
-                    new File(s + "/DailyReportD" + LocalDateTime.now().getDayOfMonth() + "M" + LocalDateTime.now().getMonthValue() + ".xlsx"));
-        }
-        workbook.write(out);
-        out.close();
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    FileOutputStream out = null;
+                    out = new FileOutputStream(new File(savePath));
+                    workbook.write(out);
+                    out.close();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread.start();
     }
 }
