@@ -61,8 +61,13 @@ public class PDF_Invoice {
 
         ArrayList<CartItem> cartItems = this.invoiceDetail.getItems();
         ArrayList<String> formattedItems = new ArrayList<>();
+        String strFormat = "%-25s %-25s %-25s %-25s";
+        String s1= "PRODUCT NAME"+insertEmptySpace(40 - "PRODUCT NAME".length());
+        String s2="PRICE"+insertEmptySpace(40 - "PRICE".length());
+        String s3="UNITS"+insertEmptySpace(40 - "UNITS".length());
+        String s4="TOTAL"+insertEmptySpace(40 - "TOTAL".length());
         formattedItems.add(
-                String.format("%20s %20s %20s %20s", "PRODUCT NAME", "PRICE", "UNITS", "TOTAL")
+                (s1+s2+s3+s4)
         );
         if (cartItems != null) {
             double grandTotal = 0.0;
@@ -70,13 +75,18 @@ public class PDF_Invoice {
                 CartItem cartItem = cartItems.get(i - 1);
                 double total = cartItem.getUnits() * cartItem.getPrice();
                 grandTotal += total;
+
+                String ss1= cartItem.getName()+insertEmptySpace(40 - cartItem.getName().length());
+                String ss2=cartItem.getPrice()+insertEmptySpace(40 - String.valueOf(cartItem.getPrice()).length());
+                String ss3=cartItem.getUnits()+insertEmptySpace(40 - String.valueOf(cartItem.getUnits()).length());
+                String ss4=total+insertEmptySpace(40 - String.valueOf(total).length());
+
                 formattedItems.add(
-                        String.format("%25s %25s %25s %25s", cartItem.getName() + ": ",
-                                cartItem.getPrice() + ": ", cartItem.getUnits() + ": ", total)
+                        (ss1+ss2+ss3+ss4)
                 );
             }
-            formattedItems.add(String.format("\n%25s", "TOTAL PAID : "));
-            formattedItems.add(String.format("%25s", grandTotal));
+            formattedItems.add(String.format("\n%-25s", "TOTAL PAID : "));
+            formattedItems.add(String.format("%-25s", grandTotal));
         }
         for (int i = 0; i < formattedItems.size(); i++) {
             preface.add(new Paragraph(formattedItems.get(i), smallNormal));
@@ -95,5 +105,13 @@ public class PDF_Invoice {
         for (int i = 0; i < number; i++) {
             paragraph.add(new Paragraph(" "));
         }
+    }
+
+    private static String insertEmptySpace(int n){
+        StringBuilder stringBuilder = new StringBuilder();
+        for(int i=0; i<n; i++){
+            stringBuilder.append(" ");
+        }
+        return stringBuilder.toString();
     }
 }
