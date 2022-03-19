@@ -189,7 +189,6 @@ public class MainWindowController {
             productsTable.getItems().set(productInd, newProduct);
             updateRelatedProductInfo(newProduct);
         });
-        revertBtnPressed(event);
     }
 
     @FXML
