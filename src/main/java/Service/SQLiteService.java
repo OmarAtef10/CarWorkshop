@@ -374,6 +374,7 @@ public class SQLiteService implements IDataBaseService {
         return false;
     }
 
+
     @Override
     public Hashtable<String, Integer> getProductShelf(String productName, String vendor) {
         Product product = getProduct(productName);
@@ -451,6 +452,22 @@ public class SQLiteService implements IDataBaseService {
             e.printStackTrace();
         }
         return false;
+    }
+
+    @Override
+    public ArrayList<String> getAllShelves() {
+        ArrayList<String> shelves = new ArrayList<>();
+        String getAllShelves = "SELECT  shelfNumber FROM ShelfProduct";
+        try {
+            ResultSet resultSet = statement.executeQuery(getAllShelves);
+            while (resultSet.next()) {
+                shelves.add(resultSet.getString("shelfNumber"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return shelves;
+
     }
 
     /////////////////////////////////////////////////////////////////////////////
@@ -795,15 +812,15 @@ public class SQLiteService implements IDataBaseService {
 
     @Override
     public ArrayList<Invoice> getInvoiceByUsername(String username) {
-        ArrayList<Invoice>invoices = new ArrayList<>();
+        ArrayList<Invoice> invoices = new ArrayList<>();
 
-        String getInvoicesByUsername = "SELECT * from Invoices WHERE username ="+username;
+        String getInvoicesByUsername = "SELECT * from Invoices WHERE username =" + username;
         try {
             ResultSet resultSet = statement.executeQuery(getInvoicesByUsername);
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 invoices.add(Invoice.fromResultSet(resultSet));
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return invoices;
@@ -811,16 +828,16 @@ public class SQLiteService implements IDataBaseService {
 
     @Override
     public ArrayList<Invoice> getAll() {
-        ArrayList<Invoice>invoices = new ArrayList<>();
+        ArrayList<Invoice> invoices = new ArrayList<>();
 
         String getAll = "SELECT * FROM INVOICES";
 
         try {
             ResultSet resultSet = statement.executeQuery(getAll);
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 invoices.add(Invoice.fromResultSet(resultSet));
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return invoices;
@@ -1030,14 +1047,14 @@ public class SQLiteService implements IDataBaseService {
         String sqlQuery = "SELECT * FROM Invoices WHERE ";
         sqlQuery += "invoiceId like " + (invoiceID.equals("") ? "\"%\" " : ("\"" + invoiceID + "\" "));
         sqlQuery += "AND username like " + (username.equals("") ? "\"%\" " : ("\"" + username + "\" "));
-        sqlQuery += "AND date like " + (date.equals("") ? "\"%\" " : ("\"" + date +"%" + "\" "));
+        sqlQuery += "AND date like " + (date.equals("") ? "\"%\" " : ("\"" + date + "%" + "\" "));
 
         try {
             ResultSet resultSet = statement.executeQuery(sqlQuery);
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 invoices.add(Invoice.fromResultSet(resultSet));
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return invoices;

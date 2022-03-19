@@ -2,6 +2,7 @@ package View;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.Hashtable;
 
 import Context.Context;
@@ -75,7 +76,15 @@ public class ShelveWindow extends VBox{
 
     @FXML
     void saveBtnPressed(ActionEvent event) {
-        if(product.getLocations().get(shelfNumField.getText()) != null){
+        ProductDao productDao = new ProductDao();
+        ArrayList<String> shelves = productDao.getAllShelves();
+        if (product.getLocations().containsKey(shelfNumField.getText())){
+            int oldAmt = product.getLocations().get(shelfNumField.getText());
+            int newAmt = Integer.parseInt(unitsField.getText());
+            int total = oldAmt+newAmt;
+            productDao.updateShelf(shelfNumField.getText(),total);
+        }
+        else if(shelves.contains(shelfNumField.getText())){
             Alert alert = new Alert(Alert.AlertType.ERROR, "Shelf already exists", ButtonType.OK);
             alert.getDialogPane().getScene().getStylesheets().addAll(Context.getContext().getCurrentTheme());
             alert.show();

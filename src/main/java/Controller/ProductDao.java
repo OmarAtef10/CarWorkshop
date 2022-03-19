@@ -90,4 +90,7 @@ public class ProductDao {
     public ArrayList<Product> searchByQuery(String productName, String milage, String type, String vendor){
         return DBContext.getDBContext().getDbService().searchByQuery(productName,milage, type, vendor);
     }
+    public ArrayList<String> getAllShelves(){
+        return DBContext.getDBContext().getDbService().getAllShelves();
+    }
 }   

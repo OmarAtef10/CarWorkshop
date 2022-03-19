@@ -85,6 +85,8 @@ public class PDF_Invoice {
             table.setWidthPercentage(90f);
 
             //insert column headings
+            insertCell(table, "Invoice ID: " + invoiceDetail.getInvoiceId(), Element.ALIGN_LEFT, 4, bfBold12);
+
             insertCell(table, "Product Name", Element.ALIGN_LEFT, 1, bfBold12);
             insertCell(table, "Price", Element.ALIGN_LEFT, 1, bfBold12);
             insertCell(table, "Units", Element.ALIGN_LEFT, 1, bfBold12);
@@ -92,22 +94,23 @@ public class PDF_Invoice {
             table.setHeaderRows(1);
 
             //create section heading by cell merging
-            insertCell(table, "Invoice ID: " + invoiceDetail.getInvoiceId(), Element.ALIGN_LEFT, 4, bfBold12);
             double orderTotal = 0, total = 0;
             int items_sz = invoiceDetail.getItems().size();
             ArrayList<CartItem> items = invoiceDetail.getItems();
 
-            for (int x = 0; x < items_sz; x++) {
+            //just some random data to fill
+            for(int x=0; x<items_sz; x++){
+
                 insertCell(table, items.get(x).getName(), Element.ALIGN_LEFT, 1, bf12);
                 insertCell(table, String.valueOf(items.get(x).getPrice()), Element.ALIGN_LEFT, 1, bf12);
-                insertCell(table, String.valueOf(items.get(0).getUnits()), Element.ALIGN_LEFT, 1, bf12);
-
-                total = items.get(x).getPrice() * items.get(x).getUnits();
-                orderTotal += items.get(x).getPrice() * items.get(x).getUnits();
+                insertCell(table, String.valueOf(items.get(x).getUnits()), Element.ALIGN_LEFT, 1, bf12);
+                total = items.get(x).getPrice()*items.get(x).getUnits();
+                orderTotal+=total;
                 insertCell(table, df.format(total), Element.ALIGN_RIGHT, 1, bf12);
             }
             //merge the cells to create a footer for that section
-            insertCell(table, "Order Total: " + df.format(orderTotal), Element.ALIGN_RIGHT, 1, bfBold12);
+            insertCell(table, "Order Total: ", Element.ALIGN_RIGHT, 3, bfBold12);
+            insertCell(table, df.format(orderTotal), Element.ALIGN_RIGHT, 1, bfBold12);
 
             //add the PDF table to the paragraph
             paragraph.add(table);
