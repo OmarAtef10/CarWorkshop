@@ -2,6 +2,7 @@ package Context;
 
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class Context {
     private static HashMap<String, Locale> availableLocales = new HashMap<String, Locale>(){{
@@ -23,6 +24,8 @@ public class Context {
     private static String[] defaultTheme = themes.get("dark");
 
     private String[] currTheme = defaultTheme;
+
+    private ResourceBundle localBundle;
     
     public void setLocale(Locale locale){
         Locale locale_ = availableLocales.get(locale.getLanguage());
@@ -54,7 +57,9 @@ public class Context {
         return currTheme;
     }
     
-    private Context(){}
+    private Context(){
+        localBundle = ResourceBundle.getBundle("i18n.Locale", currLocale);
+    }
 
     public static Context getContext(){
         if(context == null)
@@ -62,4 +67,13 @@ public class Context {
         return context;
     }
 
+    /**
+     * Get the string that is represented by given tag
+     * @param tag A tag that must exist in all locale.properties files
+     * @return String - Value of given tag or the given tag
+     * @throws MissingResourceException if the value of tag isn't found
+     */
+    public String getString(String tag) {
+        return localBundle.getString(tag);
+    }
 }
